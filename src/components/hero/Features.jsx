@@ -31,7 +31,10 @@ const Features = () => {
 
   return (
     <>
-      <section className="py-20 border-t border-white/5 bg-slate-900/50">
+      <section
+        className="py-20 border-t border-white/5 bg-slate-900/50"
+        id="features"
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {features.map((feature, i) => (

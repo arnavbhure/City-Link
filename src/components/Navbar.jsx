@@ -34,15 +34,15 @@ export function Navbar() {
           : "bg-transparent py-5"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 h-18">
         <div className="flex items-center justify-between text-3xl">
           <div className="shrink-0 flex items-center cursor-pointer group">
-            <div className="relative flex items-center justify-center w-30 h-20 rounded-xl pt-4 text-white">
+            <div className="relative flex items-center justify-center w-24 h-24 rounded-xl pt-4 text-white">
               <a href="/">
                 <img
                   src="/citylink white.png"
                   alt="CityLink logo"
-                  className="h-30 w-30 object-contain"
+                  className="h-24 w-24 object-contain"
                 />
               </a>
             </div>
@@ -105,11 +105,11 @@ export function Navbar() {
             </div>
           </div>
 
-          <div className="md:hidden flex items-center gap-2">
+          <div className="md:hidden flex items-center gap-1">
             <button
               type="button"
               onClick={toggleTheme}
-              className="theme-toggle px-3 py-3"
+              className="theme-toggle px-2 py-2"
               aria-label={`Switch to ${nextThemeLabel.toLowerCase()}`}
               title={nextThemeLabel}
             >
@@ -139,7 +139,7 @@ export function Navbar() {
       <div
         className={`md:hidden absolute top-full left-0 right-0 overflow-hidden transition-all duration-300 ease-in-out ${
           isMobileMenuOpen
-            ? "max-h-[30rem] opacity-100 bg-black/95 backdrop-blur-xl border-b border-white/10"
+            ? "max-h-120 opacity-100 bg-black/95 backdrop-blur-xl border-b border-white/10"
             : "max-h-0 opacity-0"
         }`}
       >

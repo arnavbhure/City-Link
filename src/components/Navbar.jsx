@@ -34,13 +34,18 @@ export function Navbar() {
           {/* Logo */}
           <div className="shrink-0 flex items-center  cursor-pointer group">
             <div className="relative flex items-center justify-center w-30 h-20 rounded-xl pt-4 text-white ">
-              <img src="/public/citylink white.png" alt="" />
+              <a href="/">
+                <img src="/citylink white.png" alt="" />
+              </a>
             </div>
             <span
               className="text-white text-5xl font-bold tracking-tight"
               style={{ fontFamily: "Montserrat" }}
             >
-              City<span className="text-indigo-400">Link</span>
+              <a href="/">
+                {" "}
+                City<span className="text-indigo-400">Link</span>
+              </a>
             </span>
           </div>
 
@@ -61,19 +66,20 @@ export function Navbar() {
             </div>
 
             <div className="flex items-center space-x-7 ml-4 pl-4 border-l border-white/10 ">
-              <button
+              <a
+                href="/login"
                 className="hover:cursor-pointer  text-slate-100 hover:text-indigo-300 font-medium transition-colors duration-200 active:scale-95 "
                 style={{ fontSize: "1.15rem" }}
               >
-                {" "}
                 Sign In
-              </button>
-              <button
+              </a>
+              <a
+                href="/signup"
                 className="hover:cursor-pointer bg-indigo-600 text-lg bg-blend-color-burn hover:bg-indigo-500 text-white font-medium px-5 py-2 rounded-full border border-white/10 backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:shadow-white/5 active:scale-95"
                 style={{ fontSize: "1.01rem" }}
               >
                 Get Started
-              </button>
+              </a>
             </div>
           </div>
 
@@ -113,17 +119,18 @@ export function Navbar() {
           ))}
 
           <div className="pt-4 mt-2 border-t border-white/10 flex flex-col space-y-3">
-            <button
+            <a
+              href="/login"
               className="text-lg w-full text-center px-4 py-3 text-slate-300 hover:text-white font-medium rounded-md hover:bg-white/5 transition-colors duration-200 active:scale-95"
-              onClick={() => {
-                alert("Clicked ");
-              }}
             >
               Sign in
-            </button>
-            <button className="w-full text-center px-4 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-md transition-colors duration-200 active:scale-95">
+            </a>
+            <a
+              href="/signup"
+              className="w-full text-center px-4 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-md transition-colors duration-200 active:scale-95"
+            >
               Get Started
-            </button>
+            </a>
           </div>
         </div>
       </div>

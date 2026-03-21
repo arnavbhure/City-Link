@@ -6,6 +6,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "./components/hero/HomePage.jsx";
 import About from "./components/hero/About.jsx";
 import ContactUs from "./components/hero/ContactUs.jsx";
+import Legal from "./components/hero/Legal.jsx";
+import SignUp from "./components/auth/SignUp.jsx";
+import Login from "./components/auth/Login.jsx";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +18,9 @@ const router = createBrowserRouter([
       { index: true, element: <HomePage /> },
       { path: "/about", element: <About /> },
       { path: "/contact", element: <ContactUs /> },
+      { path: "/legal", element: <Legal /> },
+      { path: "/signup", element: <SignUp /> },
+      { path: "/login", element: <Login /> },
     ],
   },
 ]);

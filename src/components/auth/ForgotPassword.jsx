@@ -96,13 +96,8 @@ const ForgotPassword = () => {
                   <ShieldCheck className="h-5 w-5" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-semibold text-white">
-                    Keep it simple
-                  </h2>
                   <p className="mt-2 leading-7 text-slate-400">
-                    This page stays intentionally minimal so the reset flow feels
-                    calm, clear, and consistent with the rest of the auth
-                    experience.
+                    Get your account recoverd in simple steps.
                   </p>
                 </div>
               </div>

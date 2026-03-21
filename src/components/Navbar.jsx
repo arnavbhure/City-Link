@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Menu, MoonStar, SunMedium, X } from "lucide-react";
+import { useTheme } from "./theme/useTheme";
 
 export function Navbar() {
+  const { theme, toggleTheme } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -21,6 +23,9 @@ export function Navbar() {
     { name: "Contact", href: "/contact" },
   ];
 
+  const isDarkTheme = theme === "dark";
+  const nextThemeLabel = isDarkTheme ? "Light mode" : "Dark mode";
+
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${
@@ -31,11 +36,14 @@ export function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18">
         <div className="flex items-center justify-between text-3xl">
-          {/* Logo */}
-          <div className="shrink-0 flex items-center  cursor-pointer group">
-            <div className="relative flex items-center justify-center w-30 h-20 rounded-xl pt-4 text-white ">
+          <div className="shrink-0 flex items-center cursor-pointer group">
+            <div className="relative flex items-center justify-center w-30 h-20 rounded-xl pt-4 text-white">
               <a href="/">
-                <img src="/citylink white.png" alt="" />
+                <img
+                  src="/citylink white.png"
+                  alt="CityLink logo"
+                  className="h-30 w-30 object-contain"
+                />
               </a>
             </div>
             <span
@@ -49,7 +57,6 @@ export function Navbar() {
             </span>
           </div>
 
-          {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8 h-20">
             <div className="flex space-x-13">
               {navLinks.map((link) => (
@@ -65,10 +72,25 @@ export function Navbar() {
               ))}
             </div>
 
-            <div className="flex items-center space-x-7 ml-4 pl-4 border-l border-white/10 ">
+            <div className="flex items-center space-x-4 ml-4 pl-4 border-l border-white/10">
+              <button
+                type="button"
+                onClick={toggleTheme}
+                className="theme-toggle"
+                aria-label={`Switch to ${nextThemeLabel.toLowerCase()}`}
+                title={nextThemeLabel}
+              >
+                {isDarkTheme ? (
+                  <SunMedium className="w-4 h-4 theme-toggle-icon" />
+                ) : (
+                  <MoonStar className="w-4 h-4 theme-toggle-icon" />
+                )}
+                <span>{nextThemeLabel}</span>
+              </button>
+
               <a
                 href="/login"
-                className="hover:cursor-pointer  text-slate-100 hover:text-indigo-300 font-medium transition-colors duration-200 active:scale-95 "
+                className="hover:cursor-pointer text-slate-100 hover:text-indigo-300 font-medium transition-colors duration-200 active:scale-95"
                 style={{ fontSize: "1.15rem" }}
               >
                 Sign In
@@ -83,11 +105,26 @@ export function Navbar() {
             </div>
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center">
+          <div className="md:hidden flex items-center gap-2">
             <button
+              type="button"
+              onClick={toggleTheme}
+              className="theme-toggle px-3 py-3"
+              aria-label={`Switch to ${nextThemeLabel.toLowerCase()}`}
+              title={nextThemeLabel}
+            >
+              {isDarkTheme ? (
+                <SunMedium className="w-4 h-4 theme-toggle-icon" />
+              ) : (
+                <MoonStar className="w-4 h-4 theme-toggle-icon" />
+              )}
+            </button>
+
+            <button
+              type="button"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="text-slate-300 hover:text-white p-2 rounded-md hover:bg-white/5 transition-colors"
+              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
             >
               {isMobileMenuOpen ? (
                 <X className="w-6 h-6" />
@@ -99,11 +136,10 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       <div
         className={`md:hidden absolute top-full left-0 right-0 overflow-hidden transition-all duration-300 ease-in-out ${
           isMobileMenuOpen
-            ? "max-h-96 opacity-100 bg-black/95 backdrop-blur-xl border-b border-white/10"
+            ? "max-h-[30rem] opacity-100 bg-black/95 backdrop-blur-xl border-b border-white/10"
             : "max-h-0 opacity-0"
         }`}
       >
@@ -119,6 +155,20 @@ export function Navbar() {
           ))}
 
           <div className="pt-4 mt-2 border-t border-white/10 flex flex-col space-y-3">
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="theme-toggle theme-toggle-mobile"
+              aria-label={`Switch to ${nextThemeLabel.toLowerCase()}`}
+            >
+              {isDarkTheme ? (
+                <SunMedium className="w-4 h-4 theme-toggle-icon" />
+              ) : (
+                <MoonStar className="w-4 h-4 theme-toggle-icon" />
+              )}
+              <span>{nextThemeLabel}</span>
+            </button>
+
             <a
               href="/login"
               className="text-lg w-full text-center px-4 py-3 text-slate-300 hover:text-white font-medium rounded-md hover:bg-white/5 transition-colors duration-200 active:scale-95"

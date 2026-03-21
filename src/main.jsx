@@ -10,12 +10,14 @@ import Legal from "./components/hero/Legal.jsx";
 import SignUp from "./components/auth/SignUp.jsx";
 import Login from "./components/auth/Login.jsx";
 import ForgotPassword from "./components/auth/ForgotPassword.jsx";
-import DashBoard from "./components/auth/DashBoard/DashBoard.jsx";
+import DashBoard from "./components/DashBoard/DashBoard.jsx";
+import ErrorPage, { RouteErrorBoundary } from "./ErrorPage.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <RouteErrorBoundary />,
     children: [
       { index: true, element: <HomePage /> },
       { path: "/about", element: <About /> },
@@ -25,6 +27,7 @@ const router = createBrowserRouter([
       { path: "/login", element: <Login /> },
       { path: "/forgot-password", element: <ForgotPassword /> },
       { path: "/dashboard", element: <DashBoard /> },
+      { path: "*", element: <ErrorPage embedded /> },
     ],
   },
 ]);

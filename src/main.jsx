@@ -9,6 +9,8 @@ import ContactUs from "./components/hero/ContactUs.jsx";
 import Legal from "./components/hero/Legal.jsx";
 import SignUp from "./components/auth/SignUp.jsx";
 import Login from "./components/auth/Login.jsx";
+import ForgotPassword from "./components/auth/ForgotPassword.jsx";
+import DashBoard from "./components/auth/DashBoard/DashBoard.jsx";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +23,8 @@ const router = createBrowserRouter([
       { path: "/legal", element: <Legal /> },
       { path: "/signup", element: <SignUp /> },
       { path: "/login", element: <Login /> },
+      { path: "/forgot-password", element: <ForgotPassword /> },
+      { path: "/dashboard", element: <DashBoard /> },
     ],
   },
 ]);

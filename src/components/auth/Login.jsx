@@ -110,7 +110,7 @@ const Login = () => {
                 Access your account.
               </h2>
               <p className="mt-3 leading-7 text-slate-400">
-                Welcome back—continue your journey with CityLink
+                Welcome back, continue your journey with CityLink.
               </p>
             </div>
 
@@ -137,7 +137,7 @@ const Login = () => {
                     Password
                   </span>
                   <a
-                    href="/contact"
+                    href="/forgot-password"
                     className="text-sm font-medium text-indigo-300 transition hover:text-indigo-200"
                   >
                     Forgot password?

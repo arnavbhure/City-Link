@@ -71,9 +71,12 @@ const Features = () => {
               Ready to find your perfect roommate and home?
             </p>
 
-            <button className="px-6 py-3 bg-white text-black rounded-xl font-semibold hover:bg-gray-200 transition hover:cursor-pointer">
+            <a
+              href="/signup"
+              className="px-6 py-3 bg-white text-black rounded-xl font-semibold hover:bg-gray-200 transition hover:cursor-pointer"
+            >
               Get Started
-            </button>
+            </a>
           </div>
         </div>
       </section>

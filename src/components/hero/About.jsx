@@ -107,7 +107,7 @@ const About = () => {
 
             <div className="mt-10 flex flex-col gap-4 sm:flex-row">
               <Link
-                to="/"
+                to="/signup"
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5 font-semibold text-slate-950 transition hover:bg-slate-200"
               >
                 Get Started

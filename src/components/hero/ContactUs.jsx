@@ -226,8 +226,7 @@ const ContactUs = () => {
             </h2>
             <p className="mt-4 max-w-2xl leading-8 text-slate-300">
               Use the form to share your question, feedback, collaboration
-              request, or trust concern. The layout is polished and ready to be
-              connected to your preferred backend or email workflow.
+              request, or trust concern.
             </p>
 
             <form className="mt-10 space-y-6" onSubmit={handleSubmit}>

@@ -1,3 +1,5 @@
+import AnimatedContent from "./AnimatedText";
+
 const Heading = () => {
   return (
     <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
@@ -12,31 +14,57 @@ const Heading = () => {
           Introducing CityLink – Your Student Community Hub
         </div>
 
-        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-8">
-          Find Your People,
-          <br className="hidden md:block" />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">
-            Find Your Place.
-          </span>
-        </h1>
+        <AnimatedContent
+          distance={700}
+          direction="horizontal"
+          reverse
+          duration={2.5}
+          ease="power3.out"
+          initialOpacity={0.5}
+          animateOpacity
+          scale={1}
+          threshold={0.1}
+          delay={0}
+        >
+          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-8">
+            Find Your People,
+            <br className="hidden md:block" />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">
+              {" "}
+              Find Your Place.
+            </span>
+          </h1>
+        </AnimatedContent>
 
-        <p className="max-w-2xl mx-auto text-lg md:text-xl text-slate-400 mb-10 leading-relaxed">
-          Discover verified roommates, trusted housing, and community-powered
-          services — all in one platform built for students moving to a new
-          city.
-        </p>
+        <AnimatedContent
+          distance={700}
+          direction="horizontal"
+          duration={2.5}
+          ease="power3.out"
+          initialOpacity={0.5}
+          animateOpacity
+          scale={1}
+          threshold={0.1}
+          delay={0}
+        >
+          <p className="max-w-2xl mx-auto text-lg md:text-xl text-slate-400 mb-10 leading-relaxed">
+            Discover verified roommates, trusted housing, and community-powered
+            services — all in one platform built for students moving to a new
+            city.
+          </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <a
-            href="/signup"
-            className="w-full sm:w-auto px-8 py-4 bg-white text-black font-semibold rounded-full hover:bg-slate-200 transition-colors duration-200"
-          >
-            Get Started
-          </a>
-          <button className="w-full sm:w-auto px-8 py-4 bg-white/5 hover:bg-white/10 text-white font-semibold rounded-full border border-white/10 backdrop-blur-sm transition-all duration-200">
-            Explore Community
-          </button>
-        </div>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a
+              href="/signup"
+              className="w-full sm:w-auto px-8 py-4 bg-white text-black font-semibold rounded-full hover:bg-slate-200 transition-colors duration-200"
+            >
+              Get Started
+            </a>
+            <button className="w-full sm:w-auto px-8 py-4 bg-white/5 hover:bg-white/10 text-white font-semibold rounded-full border border-white/10 backdrop-blur-sm transition-all duration-200">
+              Explore Community
+            </button>
+          </div>
+        </AnimatedContent>
       </div>
     </section>
   );

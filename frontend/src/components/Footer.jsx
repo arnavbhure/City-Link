@@ -100,7 +100,16 @@ const Footer = () => {
             {/* The heart uses the theme accent color (indigo) */}
             <Heart className="w-4 h-4 text-indigo-400" />
 
-            <span className="text-white font-medium">by ~arnavbhure</span>
+            <span className="text-white font-medium">
+              by ~
+              <a
+                href="https://www.linkedin.com/in/arnavbhure/"
+                target="_blank"
+                className="text-indigo-100 hover:text-indigo-300"
+              >
+                arnavbhure
+              </a>
+            </span>
           </div>
         </div>
       </div>

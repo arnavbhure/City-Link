@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ArrowRight, House, ShieldCheck, Sparkles, Users } from "lucide-react";
 import { Link } from "react-router-dom";
+import login from "../../api/auth/login";
 
 const reasons = [
   {
@@ -32,10 +33,12 @@ const initialForm = {
 const Login = () => {
   const [formData, setFormData] = useState(initialForm);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errors, setError] = useState("");
 
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
 
+    setError("");
     setIsSubmitted(false);
     setFormData((current) => ({
       ...current,
@@ -47,13 +50,15 @@ const Login = () => {
     event.preventDefault();
     // api call for backend
     try {
-      console.log(formData);
-      const res = await login(formData);
-      console.log(res.data);
-
+      const response = await login(formData);
+      if (!response.success) {
+        setError(response.message || "Login failed. Please try again.");
+        return;
+      }
+      setError("");
       setIsSubmitted(true);
     } catch (err) {
-      console.log(err);
+      setError(err.message || "Login failed. Please try again later.");
     }
   };
 
@@ -146,7 +151,7 @@ const Login = () => {
                     Password
                   </span>
                   <a
-                    href="/forgot-password"
+                    href=""
                     className="text-sm font-medium text-indigo-300 transition hover:text-indigo-200"
                   >
                     Forgot password?
@@ -164,23 +169,15 @@ const Login = () => {
                 />
               </label>
 
-              <label className="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-4">
-                <input
-                  type="checkbox"
-                  name="rememberMe"
-                  checked={formData.rememberMe}
-                  onChange={handleChange}
-                  className="h-4 w-4 rounded border-white/20 bg-slate-900"
-                />
-                <span className="text-sm leading-6 text-slate-300">
-                  Keep me signed in on this device.
-                </span>
-              </label>
-
-              {isSubmitted ? (
+              {isSubmitted && !errors ? (
                 <div className="rounded-2xl border border-emerald-400/20 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
-                  Login UI is ready. Connect this form to your auth flow to make
-                  sign-in live.
+                  Login Successful! Redirecting...
+                </div>
+              ) : null}
+
+              {errors ? (
+                <div className="rounded-2xl border border-rose-400/20 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
+                  {errors}
                 </div>
               ) : null}
 

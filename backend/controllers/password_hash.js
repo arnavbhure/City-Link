@@ -1,10 +1,11 @@
-const crypto = require("crypto");
+const bcrypt = require("bcrypt");
 
-const hashPassword = (password) => {
-  const salt = crypto.randomBytes(16).toString("hex");
-  const hashedPassword = crypto.scryptSync(password, salt, 64).toString("hex");
-
-  return `${salt}:${hashedPassword}`;
+const hashPassword = async (password) => {
+  return await bcrypt.hash(password, 11);
 };
 
-module.exports = { hashPassword };
+const comparePassword = async (password, storedPasswordHash) => {
+  return await bcrypt.compare(password, storedPasswordHash);
+};
+
+module.exports = { hashPassword, comparePassword };

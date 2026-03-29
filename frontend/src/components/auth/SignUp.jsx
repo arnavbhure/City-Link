@@ -8,6 +8,7 @@ import {
   Users,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import api from "../../api/axios";
 
 const benefits = [
   {
@@ -36,6 +37,11 @@ const initialForm = {
   password: "",
   confirmPassword: "",
   agree: false,
+  college: "",
+  city: "",
+  course: "",
+  age: "",
+  clg_year: "1",
 };
 
 const SignUp = () => {
@@ -54,9 +60,9 @@ const SignUp = () => {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-
+    console.log("Form data submitted:", formData);
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match yet.");
       return;
@@ -67,9 +73,19 @@ const SignUp = () => {
       return;
     }
 
+    try {
+      const repsonse = await api.post("/auth/signup", formData);
+      console.log("API response:", repsonse.data);
+      setIsSubmitted(true);
+      setFormData(initialForm);
+    } catch (err) {
+      setError(
+        err.response?.data?.message || "Signup failed. Please try again later.",
+      );
+      return;
+    }
+
     setError("");
-    setIsSubmitted(true);
-    setFormData(initialForm);
   };
 
   return (
@@ -204,6 +220,89 @@ const SignUp = () => {
                   />
                 </label>
               </div>
+              <label className="block">
+                <span className="mb-2 block text-sm font-medium text-slate-300">
+                  College
+                </span>
+                <input
+                  type="text"
+                  name="college"
+                  value={formData.college}
+                  onChange={handleChange}
+                  placeholder="College Name"
+                  required
+                  className="w-full rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-white outline-none transition placeholder:text-slate-500 focus:border-indigo-400/50 focus:bg-slate-950"
+                />
+              </label>
+              <div className="grid gap-5 sm:grid-cols-2">
+                <label className="block">
+                  <span className="mb-2 block text-sm font-medium text-slate-300">
+                    City
+                  </span>
+                  <input
+                    type="text"
+                    name="city"
+                    value={formData.city}
+                    onChange={handleChange}
+                    placeholder="City"
+                    required
+                    className="w-full rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-white outline-none transition placeholder:text-slate-500 focus:border-indigo-400/50 focus:bg-slate-950"
+                  />
+                </label>
+
+                <label className="block">
+                  <span className="mb-2 block text-sm font-medium text-slate-300">
+                    Course
+                  </span>
+                  <input
+                    type="text"
+                    name="course"
+                    value={formData.course}
+                    onChange={handleChange}
+                    placeholder="B.Tech, MBA, MBBS etc."
+                    required
+                    className="w-full rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-white outline-none transition placeholder:text-slate-500 focus:border-indigo-400/50 focus:bg-slate-950"
+                  />
+                </label>
+              </div>
+
+              <div className="grid gap-5 sm:grid-cols-2">
+                <label className="block">
+                  <span className="mb-2 block text-sm font-medium text-slate-300">
+                    Age
+                  </span>
+                  <input
+                    type="number"
+                    name="age"
+                    min="18"
+                    max="100"
+                    value={formData.age}
+                    onChange={handleChange}
+                    placeholder="Age"
+                    required
+                    className="w-full rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-white outline-none transition placeholder:text-slate-500 focus:border-indigo-400/50 focus:bg-slate-950"
+                  />
+                </label>
+
+                <label className="block">
+                  <span className="mb-2 block text-sm font-medium text-slate-300">
+                    Year
+                  </span>
+                  <select
+                    name="clg_year"
+                    className="w-full rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-white outline-none transition placeholder:text-slate-500 focus:border-indigo-400/50 focus:bg-slate-950"
+                    onChange={handleChange}
+                    value={formData.clg_year}
+                    required
+                  >
+                    <option value="1">1st Year</option>
+                    <option value="2">2nd Year</option>
+                    <option value="3">3rd Year</option>
+                    <option value="4">4th Year</option>
+                    <option value="5">5th Year</option>
+                  </select>
+                </label>
+              </div>
 
               <label className="flex items-start gap-3 rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-4">
                 <input
@@ -270,24 +369,6 @@ const SignUp = () => {
               >
                 Back to home
               </Link>
-            </div>
-
-            <div className="mt-6 rounded-[1.75rem] border border-white/10 bg-slate-900/70 p-5">
-              <div className="flex gap-4">
-                <div className="rounded-2xl border border-indigo-400/20 bg-indigo-500/10 p-3 text-indigo-300">
-                  <ShieldCheck className="h-5 w-5" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-white">
-                    Student-first trust
-                  </h3>
-                  <p className="mt-2 leading-7 text-slate-400">
-                    The signup page stays simple, but the message still reflects
-                    CityLink's focus on safer housing, better matches, and more
-                    confidence before the move.
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
         </div>

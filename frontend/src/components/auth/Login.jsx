@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { ArrowRight, House, ShieldCheck, Sparkles, Users } from "lucide-react";
 import { Link } from "react-router-dom";
-import { login } from "../../api/login";
 
 const reasons = [
   {
@@ -211,12 +210,10 @@ const Login = () => {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-white">
-                    Built for trust
+                    Welcome back
                   </h3>
                   <p className="mt-2 leading-7 text-slate-400">
-                    The login page stays intentionally simple while still
-                    reflecting CityLink's focus on safer housing journeys and a
-                    more dependable student experience.
+                    Continue your journey to safe and reliable student housing.
                   </p>
                 </div>
               </div>

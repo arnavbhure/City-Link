@@ -1,13 +1,14 @@
-const http = require("http");
+require("dotenv").config();
 const express = require("express");
-
+const authRouter = require("./routes/authRouter");
 const app = express();
-const PORT = 5000;
 
-const server = http.createServer(app);
-
+const PORT = process.env.PORT;
+// const MONGO_URL = process.env.MONGO_URL;
 app.use(express.json());
+// auth router use
+app.use("/auth", authRouter);
 
-server.listen(PORT, () => {
-  console.log(`server started at http://localhost:${PORT}/`);
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
 });

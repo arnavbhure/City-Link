@@ -100,7 +100,7 @@ export function Navbar() {
                 className="hover:cursor-pointer bg-indigo-600 text-lg bg-blend-color-burn hover:bg-indigo-500 text-white font-medium px-5 py-2 rounded-full border border-white/10 backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:shadow-white/5 active:scale-95"
                 style={{ fontSize: "1.01rem" }}
               >
-                Get Started
+                Sign Up
               </a>
             </div>
           </div>

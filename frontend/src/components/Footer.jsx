@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Heart } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -49,7 +50,10 @@ const Footer = () => {
             <h3 className="mb-3 font-semibold text-white">Company</h3>
             <ul className="space-y-2 text-sm text-slate-400">
               <li>
-                <Link to="/about" className="transition-colors hover:text-white">
+                <Link
+                  to="/about"
+                  className="transition-colors hover:text-white"
+                >
                   About
                 </Link>
               </li>
@@ -69,12 +73,18 @@ const Footer = () => {
             <h3 className="mb-3 font-semibold text-white">Legal</h3>
             <ul className="space-y-2 text-sm text-slate-400">
               <li>
-                <a href="/legal#privacy" className="transition-colors hover:text-white">
+                <a
+                  href="/legal#privacy"
+                  className="transition-colors hover:text-white"
+                >
                   Privacy Policy
                 </a>
               </li>
               <li>
-                <a href="/legal#terms" className="transition-colors hover:text-white">
+                <a
+                  href="/legal#terms"
+                  className="transition-colors hover:text-white"
+                >
                   Terms of Service
                 </a>
               </li>
@@ -84,6 +94,14 @@ const Footer = () => {
 
         <div className="mt-10 border-t border-white/10 pt-6 text-center text-sm text-slate-500">
           &copy; {new Date().getFullYear()} CityLink. All rights reserved.
+          <div className="mt-3 flex items-center justify-center gap-2 text-sm text-slate-400">
+            <span className="text-slate-400">Made with</span>
+
+            {/* The heart uses the theme accent color (indigo) */}
+            <Heart className="w-4 h-4 text-indigo-400" />
+
+            <span className="text-white font-medium">by ~arnavbhure</span>
+          </div>
         </div>
       </div>
     </footer>

@@ -6,7 +6,7 @@ import {
   Sparkles,
   Users,
 } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { signup } from "../../api/auth/signup";
 
 const benefits = [
@@ -54,6 +54,7 @@ const SignUp = () => {
 
     setError("");
     setIsSubmitted(false);
+    setPostSignup("");
     setFormData((current) => ({
       ...current,
       [name]: type === "checkbox" ? checked : value,

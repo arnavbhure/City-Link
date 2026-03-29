@@ -14,7 +14,7 @@ const signupController = async (req, res) => {
     }
 
     // if user exists already
-    const existingUser = await getUserByEmail(req.email);
+    const existingUser = await getUserByEmail(userDetails.email);
     if (existingUser) {
       return res.status(400).json({ message: "Email already exists" });
     }
@@ -30,12 +30,23 @@ const signupController = async (req, res) => {
     //newuser creating
     const newuser = await createUser(user);
     const { password_hash, ...safeUser } = newuser;
-    // sending verification email
-    await sendVerificationEmail(newuser.email, token);
-    return res.status(201).json({
-      message: "Verification email sent. Please check your inbox.",
-      user: safeUser,
-    });
+
+    try {
+      await sendVerificationEmail(newuser.email, token);
+      return res.status(201).json({
+        message: "Verification email sent. Please check your inbox.",
+        user: safeUser,
+        emailSent: true,
+      });
+    } catch (emailError) {
+      console.error("Verification Email Failed:", emailError);
+      return res.status(201).json({
+        message:
+          "Account created successfully, but the verification email could not be sent right now.",
+        user: safeUser,
+        emailSent: false,
+      });
+    }
   } catch (error) {
     console.error("SignUp Failed:", error);
     if (res.headersSent) {

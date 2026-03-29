@@ -25,7 +25,7 @@ const sendVerificationEmail = async (email, token) => {
     );
     return true;
   } catch (error) {
-    throw new Error("Something went wrong while sending verification email");
+    throw new Error("Failed to send verification email: " + error.message);
   }
 };
 module.exports = sendVerificationEmail;

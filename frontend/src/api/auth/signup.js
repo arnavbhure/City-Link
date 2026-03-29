@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import api from "../axios";
 
 export const signup = async (formData) => {
@@ -6,7 +7,11 @@ export const signup = async (formData) => {
     return response.data;
   } catch (error) {
     if (error.response) {
-      throw new Error(error.response?.data?.message || "Signup failed");
+      const message =
+        error.response.data.message ||
+        error.response.data.errors?.[0]?.msg ||
+        "Signup failed";
+      throw new Error(message);
     }
     throw error;
   }

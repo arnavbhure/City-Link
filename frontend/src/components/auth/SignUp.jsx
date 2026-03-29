@@ -3,12 +3,11 @@ import {
   ArrowRight,
   GraduationCap,
   House,
-  ShieldCheck,
   Sparkles,
   Users,
 } from "lucide-react";
-import { Link } from "react-router-dom";
-import api from "../../api/axios";
+import { Link, useNavigate } from "react-router-dom";
+import { signup } from "../../api/auth/signup";
 
 const benefits = [
   {
@@ -48,6 +47,7 @@ const SignUp = () => {
   const [formData, setFormData] = useState(initialForm);
   const [error, setError] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [postSignup, setPostSignup] = useState("");
 
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
@@ -62,7 +62,6 @@ const SignUp = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("Form data submitted:", formData);
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match yet.");
       return;
@@ -74,18 +73,15 @@ const SignUp = () => {
     }
 
     try {
-      const repsonse = await api.post("/auth/signup", formData);
-      console.log("API response:", repsonse.data);
+      const response = await signup(formData);
+      setPostSignup(response.message);
+      setError("");
       setIsSubmitted(true);
       setFormData(initialForm);
     } catch (err) {
-      setError(
-        err.response?.data?.message || "Signup failed. Please try again later.",
-      );
+      setError(err.message || "Signup failed. Please try again later.");
       return;
     }
-
-    setError("");
   };
 
   return (
@@ -339,8 +335,7 @@ const SignUp = () => {
 
               {isSubmitted ? (
                 <div className="rounded-2xl border border-emerald-400/20 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
-                  Signup UI is ready. Connect this form to your auth flow to
-                  make account creation live.
+                  {postSignup}
                 </div>
               ) : null}
 

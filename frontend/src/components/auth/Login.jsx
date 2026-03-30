@@ -29,7 +29,6 @@ const reasons = [
 const initialForm = {
   email: "",
   password: "",
-  rememberMe: false,
 };
 
 const Login = () => {

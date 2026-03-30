@@ -15,6 +15,7 @@ const authRouter = express.Router();
 
 authRouter.post("/signup", signupValidator, validateRequest, signupController);
 authRouter.post("/login", loginValidator, validateRequest, loginController);
+
 authRouter.post(
   "/resend-verification",
   resendVerificationValidator,

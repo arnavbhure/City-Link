@@ -1,5 +1,5 @@
 const { getUserByEmail } = require("../models/userModel");
-const { comparePassword } = require("./password_hash");
+const { comparePassword, hashPassword } = require("./password_hash");
 const { createAuthToken } = require("../services/authToken");
 
 const loginController = async (req, res) => {
@@ -15,8 +15,12 @@ const loginController = async (req, res) => {
           "Email not verified. Please verify your email before logging in.",
       });
     }
+    const isPasswordValid = await comparePassword(
+      password,
+      existinguser.password_hash,
+    );
 
-    if (!comparePassword(password, existinguser.password_hash)) {
+    if (!isPasswordValid) {
       return res
         .status(400)
         .json({ success: false, message: "Incorrect password" });

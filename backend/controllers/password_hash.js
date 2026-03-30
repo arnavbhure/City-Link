@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 
 const hashPassword = async (password) => {
-  return await bcrypt.hash(password, 11);
+  return await bcrypt.hash(password, 10);
 };
 
 const comparePassword = async (password, storedPasswordHash) => {

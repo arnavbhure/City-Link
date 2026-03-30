@@ -45,4 +45,13 @@ const getUserByEmail = async (email) => {
 };
 //ends
 
-module.exports = { createUser, getUserByEmail };
+const updateVerificationToken = async (email, verificationToken) => {
+  const result = await pool.query(
+    `UPDATE users SET verification_token = $1 WHERE email = $2 RETURNING *`,
+    [verificationToken, email],
+  );
+
+  return result.rows[0];
+};
+
+module.exports = { createUser, getUserByEmail, updateVerificationToken };

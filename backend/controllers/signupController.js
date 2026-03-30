@@ -22,14 +22,14 @@ const signupController = async (req, res) => {
     const token = await verificationToken();
     const user = {
       ...userDetails,
-      password_hash: hashPassword(password),
+      password_hash: await hashPassword(password),
       verification_token: token,
       is_verified: false,
     };
 
     //newuser creating
     const newuser = await createUser(user);
-    const { password_hash, ...safeUser } = newuser;
+    const { password_hash, verification_token, ...safeUser } = newuser;
 
     try {
       await sendVerificationEmail(newuser.email, token);

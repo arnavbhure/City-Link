@@ -4,10 +4,22 @@ const { validateRequest } = require("../validators/signup/validateResult");
 const { signupController } = require("../controllers/signupController");
 const { loginValidator } = require("../validators/login/loginValidator");
 const { loginController } = require("../controllers/loginController");
+const {
+  resendVerificationController,
+} = require("../controllers/resendVerificationController");
+const {
+  resendVerificationValidator,
+} = require("../validators/login/resendVerificationValidator");
 
 const authRouter = express.Router();
 
 authRouter.post("/signup", signupValidator, validateRequest, signupController);
 authRouter.post("/login", loginValidator, validateRequest, loginController);
+authRouter.post(
+  "/resend-verification",
+  resendVerificationValidator,
+  validateRequest,
+  resendVerificationController,
+);
 
 module.exports = { authRouter };

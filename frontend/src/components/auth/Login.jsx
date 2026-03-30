@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowRight, House, ShieldCheck, Sparkles, Users } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import login from "../../api/auth/login";
+import resendVerification from "../../api/auth/resendVerification";
+import { clearStoredAuth, setStoredAuth } from "../../utils/auth";
 
 const reasons = [
   {
@@ -32,32 +34,86 @@ const initialForm = {
 
 const Login = () => {
   const [formData, setFormData] = useState(initialForm);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [loginStatus, setLoginStatus] = useState("idle");
   const [errors, setError] = useState("");
+  const [notice, setNotice] = useState("");
+  const [canResendVerification, setCanResendVerification] = useState(false);
+  const [isResendingVerification, setIsResendingVerification] = useState(false);
+  const [searchParams] = useSearchParams();
+  const verificationStatus = searchParams.get("verification");
+
+  useEffect(() => {
+    if (verificationStatus === "success") {
+      setNotice("Email verified successfully. You can log in now.");
+      setError("");
+    } else if (verificationStatus === "invalid") {
+      setError("This verification link is invalid or has already been used.");
+      setNotice("");
+    } else if (verificationStatus === "error") {
+      setError(
+        "Email verification failed. Please request a new verification email.",
+      );
+      setNotice("");
+    }
+  }, [verificationStatus]);
 
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
 
     setError("");
-    setIsSubmitted(false);
+    setNotice("");
+    setCanResendVerification(false);
+    setLoginStatus("idle");
     setFormData((current) => ({
       ...current,
       [name]: type === "checkbox" ? checked : value,
     }));
   };
 
+  const handleResendVerification = async () => {
+    try {
+      setIsResendingVerification(true);
+      const response = await resendVerification(formData.email.trim());
+      setError("");
+      setNotice(response.message);
+      setCanResendVerification(false);
+    } catch (error) {
+      setError(
+        error.message ||
+          "Could not resend verification email. Please try again later.",
+      );
+    } finally {
+      setIsResendingVerification(false);
+    }
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoginStatus("idle");
+    setError("");
+    setNotice("");
+    setCanResendVerification(false);
     // api call for backend
     try {
       const response = await login(formData);
       if (!response.success) {
+        clearStoredAuth();
         setError(response.message || "Login failed. Please try again.");
+        setLoginStatus("error");
         return;
       }
+      setStoredAuth(response);
+      setCanResendVerification(false);
+      setNotice("");
       setError("");
-      setIsSubmitted(true);
+      setLoginStatus("success");
     } catch (err) {
+      clearStoredAuth();
+      setLoginStatus("error");
+      setCanResendVerification(
+        err.message?.includes("Email not verified") &&
+          Boolean(formData.email.trim()),
+      );
       setError(err.message || "Login failed. Please try again later.");
     }
   };
@@ -169,9 +225,15 @@ const Login = () => {
                 />
               </label>
 
-              {isSubmitted && !errors ? (
+              {loginStatus === "success" ? (
                 <div className="rounded-2xl border border-emerald-400/20 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
                   Login Successful! Redirecting...
+                </div>
+              ) : null}
+
+              {notice ? (
+                <div className="rounded-2xl border border-cyan-400/20 bg-cyan-500/10 px-4 py-3 text-sm text-cyan-100">
+                  {notice}
                 </div>
               ) : null}
 
@@ -179,6 +241,19 @@ const Login = () => {
                 <div className="rounded-2xl border border-rose-400/20 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
                   {errors}
                 </div>
+              ) : null}
+
+              {canResendVerification ? (
+                <button
+                  type="button"
+                  onClick={handleResendVerification}
+                  disabled={isResendingVerification}
+                  className="w-full rounded-full border border-white/10 bg-slate-900/80 px-5 py-3 text-sm font-medium text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-70"
+                >
+                  {isResendingVerification
+                    ? "Sending verification email..."
+                    : "Resend verification email"}
+                </button>
               ) : null}
 
               <button

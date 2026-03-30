@@ -1,5 +1,6 @@
 const { getUserByEmail } = require("../models/userModel");
 const { comparePassword } = require("./password_hash");
+const { createAuthToken } = require("../services/authToken");
 
 const loginController = async (req, res) => {
   try {
@@ -20,7 +21,17 @@ const loginController = async (req, res) => {
         .status(400)
         .json({ success: false, message: "Incorrect password" });
     }
-    return res.status(200).json({ success: true, message: "Login successful" });
+
+    const { password_hash, verification_token, ...safeUser } = existinguser;
+    const auth = createAuthToken(existinguser);
+
+    return res.status(200).json({
+      success: true,
+      message: "Login successful",
+      token: auth.token,
+      expiresAt: auth.expiresAt,
+      user: safeUser,
+    });
   } catch (error) {
     console.error("Login Failed:", error);
     return res

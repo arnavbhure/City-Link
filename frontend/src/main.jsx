@@ -12,6 +12,7 @@ import Login from "./components/auth/Login.jsx";
 import ForgotPassword from "./components/auth/ForgotPassword.jsx";
 import DashBoard from "./components/DashBoard/DashBoard.jsx";
 import ErrorPage, { RouteErrorBoundary } from "./ErrorPage.jsx";
+import ProtectedRoute from "./components/auth/ProtectedRoute.jsx";
 
 const router = createBrowserRouter([
   {
@@ -26,7 +27,10 @@ const router = createBrowserRouter([
       { path: "/signup", element: <SignUp /> },
       { path: "/login", element: <Login /> },
       { path: "/forgot-password", element: <ForgotPassword /> },
-      { path: "/dashboard", element: <DashBoard /> },
+      {
+        element: <ProtectedRoute />,
+        children: [{ path: "/dashboard", element: <DashBoard /> }],
+      },
       { path: "*", element: <ErrorPage embedded /> },
     ],
   },

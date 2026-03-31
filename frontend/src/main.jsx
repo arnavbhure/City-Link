@@ -13,6 +13,8 @@ import ForgotPassword from "./components/auth/ForgotPassword.jsx";
 import DashBoard from "./components/DashBoard/DashBoard.jsx";
 import ErrorPage, { RouteErrorBoundary } from "./ErrorPage.jsx";
 import ProtectedRoute from "./components/auth/ProtectedRoute.jsx";
+import { Provider } from "react-redux";
+import store from "./store/index.js";
 
 const router = createBrowserRouter([
   {
@@ -38,6 +40,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   </StrictMode>,
 );

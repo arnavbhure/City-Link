@@ -8,7 +8,6 @@ export function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const isLogin = true; // Placeholder for actual login state from Redux or context
 
   useEffect(() => {
     const handleScroll = () => {

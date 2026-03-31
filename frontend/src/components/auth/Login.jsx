@@ -4,6 +4,8 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import login from "../../api/auth/login";
 import resendVerification from "../../api/auth/resendVerification";
 import { clearStoredAuth } from "../../utils/auth";
+import { useDispatch } from "react-redux";
+import { isLoginActions } from "../../store/isLoggedIn";
 
 const reasons = [
   {
@@ -32,6 +34,7 @@ const initialForm = {
 };
 
 const Login = () => {
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState(initialForm);
   const [loginStatus, setLoginStatus] = useState("idle");
   const [errors, setError] = useState("");
@@ -101,7 +104,7 @@ const Login = () => {
         setLoginStatus("error");
         return;
       }
-
+      dispatch(isLoginActions.setLoginState({ user_id: response.user.id }));
       setCanResendVerification(false);
       setNotice("");
       setError("");

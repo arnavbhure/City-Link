@@ -13,15 +13,23 @@ export const getAuthToken = () => {
 };
 
 export const getAuthTokenExpiresAt = () => {
-  return localStorage.getItem("authTokenExpiresAt");
+  const expiresAt = localStorage.getItem("authTokenExpiresAt");
+  return expiresAt ? Number(expiresAt) : null;
 };
 
 export const isAuthTokenValid = () => {
+  const token = getAuthToken();
   const authTokenExpiresAt = getAuthTokenExpiresAt();
-  if (!authTokenExpiresAt) return false;
-  if (Date.now() > authTokenExpiresAt) {
+
+  if (!token || !authTokenExpiresAt || !Number.isFinite(authTokenExpiresAt)) {
     clearStoredAuth();
     return false;
   }
+
+  if (Date.now() >= authTokenExpiresAt) {
+    clearStoredAuth();
+    return false;
+  }
+
   return true;
 };

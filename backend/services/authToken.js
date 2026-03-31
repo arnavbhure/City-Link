@@ -9,7 +9,10 @@ const createAuthToken = (user) => {
   const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
-  const expiresAt = Date.now() + 24 * 60 * 60 * 1000;
+  const decodedToken = jwt.decode(token);
+  const expiresAt = decodedToken?.exp
+    ? decodedToken.exp * 1000
+    : Date.now() + 24 * 60 * 60 * 1000;
 
   return { token, expiresAt };
 };

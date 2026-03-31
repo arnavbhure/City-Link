@@ -45,6 +45,11 @@ const getUserByEmail = async (email) => {
 };
 //ends
 
+const getUserById = async (id) => {
+  const result = await pool.query(`SELECT * FROM users WHERE id = $1`, [id]);
+  return result.rows[0];
+};
+
 const updateVerificationToken = async (email, verificationToken) => {
   const result = await pool.query(
     `UPDATE users SET verification_token = $1 WHERE email = $2 RETURNING *`,
@@ -54,4 +59,9 @@ const updateVerificationToken = async (email, verificationToken) => {
   return result.rows[0];
 };
 
-module.exports = { createUser, getUserByEmail, updateVerificationToken };
+module.exports = {
+  createUser,
+  getUserByEmail,
+  getUserById,
+  updateVerificationToken,
+};

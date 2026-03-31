@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
-import { Menu, MoonStar, SunMedium, X } from "lucide-react";
-import { useTheme } from "./theme/useTheme";
+import { Menu, X } from "lucide-react";
 import { IsLoggedInMobile, IsLoggedInDesktop } from "./auth/isLogin";
 import { Link } from "react-router-dom";
 
 export function Navbar() {
-  const { theme, toggleTheme } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -23,9 +21,6 @@ export function Navbar() {
     { name: "About", href: "/about" },
     { name: "Contact", href: "/contact" },
   ];
-
-  const isDarkTheme = theme === "dark";
-  const nextThemeLabel = isDarkTheme ? "Light mode" : "Dark mode";
 
   return (
     <nav
@@ -74,40 +69,11 @@ export function Navbar() {
             </div>
 
             <div className="flex items-center space-x-4 ml-4 pl-4 border-l border-white/10">
-              <button
-                type="button"
-                onClick={toggleTheme}
-                className="theme-toggle"
-                aria-label={`Switch to ${nextThemeLabel.toLowerCase()}`}
-                title={nextThemeLabel}
-              >
-                {isDarkTheme ? (
-                  <SunMedium className="w-4 h-4 theme-toggle-icon" />
-                ) : (
-                  <MoonStar className="w-4 h-4 theme-toggle-icon" />
-                )}
-                <span>{nextThemeLabel}</span>
-              </button>
-
               <IsLoggedInDesktop />
             </div>
           </div>
 
           <div className="md:hidden flex items-center gap-1">
-            <button
-              type="button"
-              onClick={toggleTheme}
-              className="theme-toggle px-2 py-2"
-              aria-label={`Switch to ${nextThemeLabel.toLowerCase()}`}
-              title={nextThemeLabel}
-            >
-              {isDarkTheme ? (
-                <SunMedium className="w-4 h-4 theme-toggle-icon" />
-              ) : (
-                <MoonStar className="w-4 h-4 theme-toggle-icon" />
-              )}
-            </button>
-
             <button
               type="button"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -143,19 +109,6 @@ export function Navbar() {
           ))}
 
           <div className="pt-4 mt-2 border-t border-white/10 flex flex-col space-y-3">
-            <button
-              type="button"
-              onClick={toggleTheme}
-              className="theme-toggle theme-toggle-mobile"
-              aria-label={`Switch to ${nextThemeLabel.toLowerCase()}`}
-            >
-              {isDarkTheme ? (
-                <SunMedium className="w-4 h-4 theme-toggle-icon" />
-              ) : (
-                <MoonStar className="w-4 h-4 theme-toggle-icon" />
-              )}
-              <span>{nextThemeLabel}</span>
-            </button>
             <IsLoggedInMobile />
           </div>
         </div>

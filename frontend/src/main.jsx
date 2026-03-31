@@ -16,6 +16,10 @@ import ProtectedRoute from "./components/auth/ProtectedRoute.jsx";
 import { Provider } from "react-redux";
 import store from "./store/index.js";
 
+if (typeof document !== "undefined") {
+  document.documentElement.dataset.theme = "dark";
+}
+
 const router = createBrowserRouter([
   {
     path: "/",

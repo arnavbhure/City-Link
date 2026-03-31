@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { createElement } from "react";
 import {
   AlertTriangle,
   ArrowLeft,
@@ -45,31 +45,6 @@ const recoveryLinks = [
   },
 ];
 
-function getInitialTheme() {
-  if (typeof window === "undefined") {
-    return "dark";
-  }
-
-  const savedTheme = window.localStorage.getItem("citylink-theme");
-
-  if (savedTheme === "light" || savedTheme === "dark") {
-    return savedTheme;
-  }
-
-  return window.matchMedia("(prefers-color-scheme: light)").matches
-    ? "light"
-    : "dark";
-}
-
-const initialTheme = getInitialTheme();
-
-if (
-  typeof document !== "undefined" &&
-  !document.documentElement.dataset.theme
-) {
-  document.documentElement.dataset.theme = initialTheme;
-}
-
 function getErrorContent(error) {
   if (isRouteErrorResponse(error)) {
     if (error.status === 404) {
@@ -115,12 +90,6 @@ function ErrorPageLayout({ embedded = false, error = null }) {
   const navigate = useNavigate();
   const location = useLocation();
   const { code, badge, title, description } = getErrorContent(error);
-
-  useEffect(() => {
-    if (!document.documentElement.dataset.theme) {
-      document.documentElement.dataset.theme = initialTheme;
-    }
-  }, []);
 
   const handleGoBack = () => {
     if (window.history.length > 1) {
@@ -245,7 +214,7 @@ function ErrorPageLayout({ embedded = false, error = null }) {
                 >
                   <div className="flex gap-4">
                     <div className="rounded-2xl border border-indigo-400/20 bg-indigo-500/10 p-3 text-indigo-300">
-                      <Icon className="h-5 w-5" />
+                      {createElement(Icon, { className: "h-5 w-5" })}
                     </div>
                     <div className="min-w-0">
                       <h3 className="text-lg font-semibold text-white">
@@ -288,7 +257,7 @@ function ErrorPageLayout({ embedded = false, error = null }) {
             <img
               src="/citylink white.png"
               alt="CityLink logo"
-              className="h-10 w-10 object-contain theme-logo-image"
+              className="h-10 w-10 object-contain"
             />
             <span
               className="text-2xl font-bold tracking-tight text-white"

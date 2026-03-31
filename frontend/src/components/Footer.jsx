@@ -13,7 +13,7 @@ const Footer = () => {
                   <img
                     src="/citylink white.png"
                     alt="CityLink logo"
-                    className="w-15 h-15 object-contain theme-logo-image"
+                    className="w-15 h-15 object-contain"
                   />
                 </a>
               </div>

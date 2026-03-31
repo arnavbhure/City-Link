@@ -27,13 +27,13 @@ const loginController = async (req, res) => {
     }
 
     const { password_hash, verification_token, ...safeUser } = existinguser;
-    const auth = createAuthToken(existinguser);
+    const { token, expiresAt } = createAuthToken(existinguser);
 
     return res.status(200).json({
       success: true,
       message: "Login successful",
-      token: auth.token,
-      expiresAt: auth.expiresAt,
+      token,
+      expiresAt,
       user: safeUser,
     });
   } catch (error) {

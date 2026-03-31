@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
 import { Menu, MoonStar, SunMedium, X } from "lucide-react";
 import { useTheme } from "./theme/useTheme";
+import { IsLoggedInMobile, IsLoggedInDesktop } from "./auth/isLogin";
+import { Link } from "react-router-dom";
 
 export function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const isLogin = true; // Placeholder for actual login state from Redux or context
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -38,37 +40,37 @@ export function Navbar() {
         <div className="flex items-center justify-between text-3xl">
           <div className="shrink-0 flex items-center cursor-pointer group">
             <div className="relative flex items-center justify-center w-24 h-24 rounded-xl pt-4 text-white">
-              <a href="/">
+              <Link to="/">
                 <img
                   src="/citylink white.png"
                   alt="CityLink logo"
                   className="h-24 w-24 object-contain"
                 />
-              </a>
+              </Link>
             </div>
             <span
               className="text-white text-5xl font-bold tracking-tight"
               style={{ fontFamily: "Montserrat" }}
             >
-              <a href="/">
+              <Link to="/">
                 {" "}
                 City<span className="text-indigo-400">Link</span>
-              </a>
+              </Link>
             </span>
           </div>
 
           <div className="hidden md:flex items-center space-x-8 h-20">
             <div className="flex space-x-13">
               {navLinks.map((link) => (
-                <a
+                <Link
                   key={link.name}
-                  href={link.href}
+                  to={link.href}
                   className="text-slate-300 hover:text-white font-medium transition-colors duration-200 relative group"
                   style={{ fontSize: "1.04rem" }}
                 >
                   {link.name}
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-indigo-500 transition-all duration-300 group-hover:w-full"></span>
-                </a>
+                </Link>
               ))}
             </div>
 
@@ -88,20 +90,7 @@ export function Navbar() {
                 <span>{nextThemeLabel}</span>
               </button>
 
-              <a
-                href="/login"
-                className="hover:cursor-pointer text-slate-100 hover:text-indigo-300 font-medium transition-colors duration-200 active:scale-95"
-                style={{ fontSize: "1.15rem" }}
-              >
-                Sign In
-              </a>
-              <a
-                href="/signup"
-                className="hover:cursor-pointer bg-indigo-600 text-lg bg-blend-color-burn hover:bg-indigo-500 text-white font-medium px-5 py-2 rounded-full border border-white/10 backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:shadow-white/5 active:scale-95"
-                style={{ fontSize: "1.01rem" }}
-              >
-                Sign Up
-              </a>
+              <IsLoggedInDesktop />
             </div>
           </div>
 
@@ -145,13 +134,13 @@ export function Navbar() {
       >
         <div className="px-4 pt-2 pb-6 space-y-1 shadow-2xl">
           {navLinks.map((link) => (
-            <a
+            <Link
               key={link.name}
-              href={link.href}
+              to={link.href}
               className="block px-3 py-3 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-colors duration-200"
             >
               {link.name}
-            </a>
+            </Link>
           ))}
 
           <div className="pt-4 mt-2 border-t border-white/10 flex flex-col space-y-3">
@@ -168,19 +157,7 @@ export function Navbar() {
               )}
               <span>{nextThemeLabel}</span>
             </button>
-
-            <a
-              href="/login"
-              className="text-lg w-full text-center px-4 py-3 text-slate-300 hover:text-white font-medium rounded-md hover:bg-white/5 transition-colors duration-200 active:scale-95"
-            >
-              Sign in
-            </a>
-            <a
-              href="/signup"
-              className="w-full text-center px-4 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-md transition-colors duration-200 active:scale-95"
-            >
-              Get Started
-            </a>
+            <IsLoggedInMobile />
           </div>
         </div>
       </div>

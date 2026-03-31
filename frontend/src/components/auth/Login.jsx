@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { ArrowRight, House, ShieldCheck, Sparkles, Users } from "lucide-react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import login from "../../api/auth/login";
 import resendVerification from "../../api/auth/resendVerification";
-import { clearStoredAuth, setStoredAuth } from "../../utils/auth";
+import { clearStoredAuth } from "../../utils/auth";
 
 const reasons = [
   {
@@ -40,6 +40,7 @@ const Login = () => {
   const [isResendingVerification, setIsResendingVerification] = useState(false);
   const [searchParams] = useSearchParams();
   const verificationStatus = searchParams.get("verification");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (verificationStatus === "success") {
@@ -96,16 +97,18 @@ const Login = () => {
     try {
       const response = await login(formData);
       if (!response.success) {
-        clearStoredAuth();
         setError(response.message || "Login failed. Please try again.");
         setLoginStatus("error");
         return;
       }
-      setStoredAuth(response);
+
       setCanResendVerification(false);
       setNotice("");
       setError("");
       setLoginStatus("success");
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 1500);
     } catch (err) {
       clearStoredAuth();
       setLoginStatus("error");

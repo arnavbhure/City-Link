@@ -1,41 +1,27 @@
-const AUTH_STORAGE_KEY = "citylink-auth";
-
-export const getStoredAuth = () => {
-  try {
-    const auth = localStorage.getItem(AUTH_STORAGE_KEY);
-    return auth ? JSON.parse(auth) : null;
-  } catch {
-    return null;
-  }
-};
-
-export const setStoredAuth = (authData) => {
-  localStorage.setItem(
-    AUTH_STORAGE_KEY,
-    JSON.stringify({
-      token: authData.token,
-      expiresAt: authData.expiresAt,
-      user: authData.user,
-    }),
-  );
+export const storeAuthToken = (token, expiresAt) => {
+  localStorage.setItem("authToken", token);
+  localStorage.setItem("authTokenExpiresAt", expiresAt);
 };
 
 export const clearStoredAuth = () => {
-  localStorage.removeItem(AUTH_STORAGE_KEY);
+  localStorage.removeItem("authToken");
+  localStorage.removeItem("authTokenExpiresAt");
 };
 
-export const isAuthenticated = () => {
-  const auth = getStoredAuth();
+export const getAuthToken = () => {
+  return localStorage.getItem("authToken");
+};
 
-  if (!auth?.token || !auth?.expiresAt) {
-    return false;
-  }
+export const getAuthTokenExpiresAt = () => {
+  return localStorage.getItem("authTokenExpiresAt");
+};
 
-  const isExpired = new Date(auth.expiresAt).getTime() <= Date.now();
-  if (isExpired) {
+export const isAuthTokenValid = () => {
+  const authTokenExpiresAt = getAuthTokenExpiresAt();
+  if (!authTokenExpiresAt) return false;
+  if (Date.now() > authTokenExpiresAt) {
     clearStoredAuth();
     return false;
   }
-
   return true;
 };

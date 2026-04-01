@@ -3,28 +3,28 @@ import { useDispatch, useSelector } from "react-redux";
 import { isLoginActions } from "../../store/isLoggedIn";
 import { clearStoredAuth } from "../../utils/auth";
 import { useNavigate } from "react-router-dom";
+import ProfileDropdown from "./profileDropdown";
 
-export const IsLoggedInMobile = () => {
+export const LoggedInUserMenu = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isLogin = useSelector((store) => store.isLoggedIn.isLogin); // returns a value chjecks if user is logged in or not
 
-  // set isLogin = false
   const handleOnLogout = () => {
     dispatch(isLoginActions.removeLoginState());
     clearStoredAuth();
     navigate("/login");
   };
 
+  return <ProfileDropdown handleOnLogout={handleOnLogout} />;
+};
+
+export const IsLoggedInMobile = () => {
+  const isLogin = useSelector((store) => store.isLoggedIn.isLogin); // returns a value chjecks if user is logged in or not
+
   return (
     <>
       {isLogin ? (
-        <button
-          onClick={handleOnLogout}
-          className="hover:cursor-pointer bg-indigo-600 text-lg bg-blend-color-burn hover:bg-indigo-500 text-white font-medium px-5 py-2 rounded-full border border-white/10 backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:shadow-white/5 active:scale-95"
-        >
-          Logout
-        </button>
+        <LoggedInUserMenu />
       ) : (
         <>
           <a
@@ -46,26 +46,11 @@ export const IsLoggedInMobile = () => {
 };
 
 export const IsLoggedInDesktop = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const isLogin = useSelector((state) => state.isLoggedIn.isLogin); // returns a value chjecks if user is logged in or not
-
-  // set isLogin = false
-  const handleOnLogout = () => {
-    dispatch(isLoginActions.removeLoginState());
-    clearStoredAuth();
-    navigate("/login");
-  };
   return (
     <>
       {isLogin ? (
-        <button
-          onClick={handleOnLogout}
-          className="hover:cursor-pointer bg-indigo-600 text-lg bg-blend-color-burn hover:bg-indigo-500 text-white font-medium px-5 py-2 rounded-full border border-white/10 backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:shadow-white/5 active:scale-95"
-          style={{ fontSize: "1.15rem" }}
-        >
-          Logout
-        </button>
+        <LoggedInUserMenu />
       ) : (
         <>
           <a

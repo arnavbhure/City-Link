@@ -26,7 +26,7 @@ const navigationItems = [
   {
     icon: LifeBuoy,
     title: "Contact",
-    to: "/contact",
+    to: "/contactus",
     tone: "violet",
   },
 ];

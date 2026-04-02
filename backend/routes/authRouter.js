@@ -10,17 +10,18 @@ const {
 const {
   resendVerificationValidator,
 } = require("../validators/login/resendVerificationValidator");
+const sendUserInfoController = require("../controllers/sendUserInfoController");
 
 const authRouter = express.Router();
 
 authRouter.post("/signup", signupValidator, validateRequest, signupController);
 authRouter.post("/login", loginValidator, validateRequest, loginController);
-
 authRouter.post(
   "/resend-verification",
   resendVerificationValidator,
   validateRequest,
   resendVerificationController,
 );
+authRouter.get("/getUserInfo", sendUserInfoController);
 
 module.exports = { authRouter };

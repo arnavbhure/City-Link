@@ -6,6 +6,7 @@ import resendVerification from "../../api/auth/resendVerification";
 import { clearStoredAuth } from "../../utils/auth";
 import { useDispatch } from "react-redux";
 import { isLoginActions } from "../../store/isLoggedIn";
+import { userInfoActions } from "../../store/user/userSlice";
 
 const reasons = [
   {
@@ -104,6 +105,7 @@ const Login = () => {
         setLoginStatus("error");
         return;
       }
+      dispatch(userInfoActions.storeUserInfo(response.user));
       dispatch(isLoginActions.setLoginState({ user_id: response.user.id }));
       setCanResendVerification(false);
       setNotice("");

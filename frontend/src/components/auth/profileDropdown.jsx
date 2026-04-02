@@ -8,6 +8,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const navigationItems = [
   {
@@ -104,7 +105,7 @@ const ProfileDropdown = ({ handleOnLogout }) => {
     setOpen(false);
     handleOnLogout();
   };
-
+  const user = useSelector((state) => state.user);
   return (
     <div className="relative inline-flex" ref={dropdownRef}>
       <button
@@ -120,7 +121,7 @@ const ProfileDropdown = ({ handleOnLogout }) => {
         </div>
 
         <div className="hidden min-w-0 sm:block">
-          <p className="text-sm font-semibold text-white">Account</p>
+          <p className="text-sm font-semibold text-white">{user.full_name}</p>
           <p className="mt-0.5 text-xs text-slate-400">Menu</p>
         </div>
 
@@ -140,8 +141,8 @@ const ProfileDropdown = ({ handleOnLogout }) => {
               </div>
 
               <div className="min-w-0">
-                <p className="text-sm font-semibold text-white">
-                  CityLink account
+                <p className="text-sm font-semibold text-white break-all">
+                  {user.email}
                 </p>
                 <p className="mt-0.5 text-xs text-slate-400">Signed in</p>
               </div>

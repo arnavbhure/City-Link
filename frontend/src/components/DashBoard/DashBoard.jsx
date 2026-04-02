@@ -1,4 +1,5 @@
-import { createElement } from "react";
+import { createElement, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   ArrowRight,
   Building2,
@@ -8,10 +9,8 @@ import {
   Sparkles,
   Users,
 } from "lucide-react";
-
-const profile = {
-  name: "Arnav",
-};
+import loadUserInfo from "../../utils/loadUserInfo";
+import { userInfoActions } from "../../store/user/userSlice";
 
 const primaryActions = [
   {
@@ -171,6 +170,18 @@ const FeedCard = ({
 };
 
 const DashBoard = () => {
+  const dispatch = useDispatch();
+  // useEffect for getting user info after user refreshes page
+  useEffect(() => {
+    const fetchUser = async () => {
+      const user = await loadUserInfo();
+      if (user) {
+        dispatch(userInfoActions.storeUserInfo(user));
+      }
+    };
+    fetchUser();
+  }, [dispatch]);
+  const user = useSelector((state) => state.user);
   return (
     <div className="relative min-h-screen overflow-hidden bg-slate-950 text-white">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-104">
@@ -189,7 +200,7 @@ const DashBoard = () => {
 
             <h1 className="mt-5 text-[2.1rem] font-black leading-none tracking-tight text-white sm:mt-6 sm:text-5xl">
               Welcome back,{" "}
-              <span className="text-indigo-300">{profile.name}</span>
+              <span className="text-indigo-300">{user.full_name}</span>
             </h1>
             <p className="mt-4 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg sm:leading-8">
               Pick one action and move closer to your next room today.

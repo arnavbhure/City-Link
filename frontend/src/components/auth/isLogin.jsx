@@ -19,7 +19,7 @@ export const LoggedInUserMenu = () => {
 };
 
 export const IsLoggedInMobile = () => {
-  const isLogin = useSelector((store) => store.isLoggedIn.isLogin); // returns a value chjecks if user is logged in or not
+  const isLogin = useSelector((store) => store.isLoggedIn.isLogin); // returns a value checks if user is logged in or not
 
   return (
     <>

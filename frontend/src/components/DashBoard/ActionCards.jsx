@@ -8,6 +8,7 @@ const primaryActions = [
     description:
       "See students with similar budgets, routines, and move timelines.",
     cta: "Explore matches",
+    href: "dashboard/explore-roomates",
     accent: "bg-gradient-to-br from-indigo-500/18 via-white/5 to-cyan-400/10",
   },
   {
@@ -15,6 +16,7 @@ const primaryActions = [
     title: "Browse housing",
     description: "Open PGs, rooms, and flats that match your city and budget.",
     cta: "See housing",
+    href: "dashboard/explore-housing",
     accent: "bg-gradient-to-br from-slate-900/80 via-white/5 to-indigo-500/10",
   },
   {
@@ -23,11 +25,12 @@ const primaryActions = [
     description:
       "Publish an available room or flat and start getting responses fast.",
     cta: "Create listing",
+    href: "dashboard/post-listing",
     accent: "bg-gradient-to-br from-slate-900/80 via-white/5 to-fuchsia-500/10",
   },
 ];
 
-const ActionCard = ({ icon: Icon, title, description, cta, accent }) => {
+const ActionCard = ({ icon: Icon, title, description, cta, href, accent }) => {
   return (
     <button
       className={`group flex min-h-[190px] flex-col rounded-[1.55rem] border border-white/10 ${accent} p-5 text-left backdrop-blur-sm transition duration-200 hover:-translate-y-1 hover:border-white/20 sm:min-h-[220px] sm:rounded-[1.8rem] sm:p-7`}
@@ -44,11 +47,12 @@ const ActionCard = ({ icon: Icon, title, description, cta, accent }) => {
           {description}
         </p>
       </div>
-
-      <div className="mt-auto inline-flex items-center gap-2 pt-6 text-sm font-semibold text-white sm:pt-8">
-        {cta}
-        <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
-      </div>
+      <a href={href}>
+        <div className="mt-auto inline-flex items-center gap-2 pt-6 text-sm font-semibold text-white sm:pt-8">
+          {cta}
+          <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+        </div>{" "}
+      </a>
     </button>
   );
 };

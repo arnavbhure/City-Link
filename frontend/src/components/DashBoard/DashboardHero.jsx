@@ -13,7 +13,9 @@ const DashBoardHero = () => {
 
         <h1 className="mt-5 text-[2.1rem] font-black leading-none tracking-tight text-white sm:mt-6 sm:text-5xl">
           Welcome back,{" "}
-          <span className="text-indigo-300">{user.full_name}</span>
+          <span className="text-indigo-300">
+            {user.full_name?.split(" ")[0]}
+          </span>
         </h1>
         <p className="mt-4 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg sm:leading-8">
           Pick one action and move closer to your next room today.

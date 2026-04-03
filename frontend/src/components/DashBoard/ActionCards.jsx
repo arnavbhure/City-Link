@@ -8,7 +8,7 @@ const primaryActions = [
     description:
       "See students with similar budgets, routines, and move timelines.",
     cta: "Explore matches",
-    href: "dashboard/explore-roomates",
+    href: "/dashboard/explore-roomates",
     accent: "bg-gradient-to-br from-indigo-500/18 via-white/5 to-cyan-400/10",
   },
   {
@@ -16,7 +16,7 @@ const primaryActions = [
     title: "Browse housing",
     description: "Open PGs, rooms, and flats that match your city and budget.",
     cta: "See housing",
-    href: "dashboard/explore-housing",
+    href: "/dashboard/explore-housing",
     accent: "bg-gradient-to-br from-slate-900/80 via-white/5 to-indigo-500/10",
   },
   {
@@ -25,7 +25,7 @@ const primaryActions = [
     description:
       "Publish an available room or flat and start getting responses fast.",
     cta: "Create listing",
-    href: "dashboard/post-listing",
+    href: "/dashboard/post-listing",
     accent: "bg-gradient-to-br from-slate-900/80 via-white/5 to-fuchsia-500/10",
   },
 ];

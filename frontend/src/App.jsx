@@ -5,6 +5,8 @@ import Footer from "./components/Footer";
 import { Navbar } from "./components/Navbar";
 import { checkIfTokenValid } from "./services/checkIfLoggedin";
 import { isLoginActions } from "./store/isLoggedIn";
+import loadUserInfo from "./utils/loadUserInfo";
+import { userInfoActions } from "./store/user/userSlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -32,6 +34,17 @@ function App() {
     return () => {
       isMounted = false;
     };
+  }, [dispatch]);
+
+  // useEffect for getting user info after user refreshes page
+  useEffect(() => {
+    const fetchUser = async () => {
+      const user = await loadUserInfo();
+      if (user) {
+        dispatch(userInfoActions.storeUserInfo(user));
+      }
+    };
+    fetchUser();
   }, [dispatch]);
 
   return (

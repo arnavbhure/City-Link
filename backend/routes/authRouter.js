@@ -24,4 +24,4 @@ authRouter.post(
 );
 authRouter.get("/getUserInfo", sendUserInfoController);
 
-module.exports = { authRouter };
+module.exports = authRouter;

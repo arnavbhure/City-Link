@@ -1,11 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  ArrowLeft,
-  ArrowRight,
-  CheckCircle2,
-  Sparkles,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, CheckCircle2, Sparkles } from "lucide-react";
 import StepBudget from "./steps/StepBudget";
 import StepLifestyle from "./steps/StepLifestyle";
 import StepPreferences from "./steps/StepPreferences";
@@ -18,6 +13,7 @@ import {
   getStepErrors,
   initialFormState,
 } from "./utils/completeProfileUtils";
+import CompleteProfileResponse from "../../../api/CompleteProfile";
 
 const CompleteProfile = () => {
   const [formData, setFormData] = useState(initialFormState);
@@ -100,7 +96,7 @@ const CompleteProfile = () => {
     setCurrentStep((previous) => previous + 1);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (currentStep < TOTAL_STEPS - 1) {
@@ -119,8 +115,11 @@ const CompleteProfile = () => {
       return;
     }
 
-    console.log("Complete profile payload", formData);
-    setSubmitted(true);
+    const response = await CompleteProfileResponse(formData);
+    console.log(response);
+    if (response.success) {
+      setSubmitted(true);
+    }
   };
 
   const progressPercentage = ((currentStep + 1) / TOTAL_STEPS) * 100;
@@ -176,8 +175,8 @@ const CompleteProfile = () => {
               </h1>
               <p className="mt-4 text-base leading-8 text-slate-300">
                 The final onboarding payload has been logged to the console for
-                now. You can wire this submit handler to your API whenever
-                you are ready.
+                now. You can wire this submit handler to your API whenever you
+                are ready.
               </p>
 
               <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:justify-center">

@@ -132,6 +132,21 @@ const ExploreRoomates = () => {
     <div className="relative min-h-screen overflow-hidden bg-slate-950 text-white">
       <section className="relative px-4 pb-16 pt-28 sm:px-8 sm:pb-18 sm:pt-32 lg:px-10 lg:pt-36">
         <div className="mx-auto max-w-7xl space-y-6 sm:space-y-8">
+          {/*Div for Completting profile if user not completed his profile to be listed on the roomate list  */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-[1.6rem] border border-white/10 bg-slate-900/60 p-5 backdrop-blur-sm sm:rounded-[2rem] sm:p-8">
+            <h2 className="text-2xl font-bold text-white sm:text-3xl">
+              Complete Your Profile so others can see your Profile below
+            </h2>
+            <div className="shrink-0">
+              <a
+                href="/complete-profile"
+                className="hover:cursor-pointer inline-flex items-center gap-2 rounded-full border border-white/10 bg-white px-4 py-2 text-sm text-black transition-transform duration-300 hover:scale-105"
+              >
+                Complete Profile <ArrowRight className="h-4 w-4" />
+              </a>
+            </div>
+          </div>
+
           {/* Section for filtering the roomates on the basis of prefernces*/}
           <section className="grid gap-5 ">
             <div className="rounded-[1.6rem] border border-white/10 bg-slate-900/60 p-5 backdrop-blur-sm sm:rounded-[2rem] sm:p-8">

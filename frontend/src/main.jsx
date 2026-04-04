@@ -16,6 +16,7 @@ import ExploreRoomates from "./components/DashBoard/Roomates/ExploreRoomates.jsx
 import PostListing from "./components/DashBoard/PostListing.jsx";
 import ErrorPage, { RouteErrorBoundary } from "./ErrorPage.jsx";
 import ProtectedRoute from "./components/auth/ProtectedRoute.jsx";
+import CompleteProfile from "./components/DashBoard/CompleteProfile/CompleteProfile.jsx";
 import { Provider } from "react-redux";
 import store from "./store/index.js";
 
@@ -43,6 +44,7 @@ const router = createBrowserRouter([
           { path: "dashboard/explore-roomates", element: <ExploreRoomates /> },
           { path: "dashboard/explore-housing", element: <ExploreHousing /> },
           { path: "dashboard/post-listing", element: <PostListing /> },
+          { path: "/complete-profile", element: <CompleteProfile /> },
         ],
       },
       { path: "*", element: <ErrorPage embedded /> },

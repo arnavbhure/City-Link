@@ -6,14 +6,11 @@ const checkifLoggedIn = async () => {
   if (!isAuthTokenValid()) {
     return false;
   }
-
   const token = getAuthToken();
   const response = await jwtTokenVerify(token);
-
   if (response.success) {
     return true;
   }
-
   clearStoredAuth();
   return false;
 };
@@ -22,15 +19,12 @@ export const checkIfTokenValid = async () => {
   if (!isAuthTokenValid()) {
     return { success: false, user: null };
   }
-
   const token = getAuthToken();
   const response = await jwtTokenVerify(token);
-
   if (!response.success) {
     clearStoredAuth();
     return { success: false, user: null };
   }
-
   return response;
 };
 

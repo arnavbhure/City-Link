@@ -14,11 +14,11 @@ const completeProfileController = async (req, res) => {
         message: "Missing required profile data",
       });
     }
-    const lifestyle = await userLifeStyleModel({
+    await userLifeStyleModel({
       user_lifestyle,
       user_id,
     });
-    const preferences = await userPreferencesModel({
+    await userPreferencesModel({
       user_preferences,
       user_id,
     });
@@ -27,7 +27,6 @@ const completeProfileController = async (req, res) => {
       message: "Profile Submission Successful",
     });
   } catch (err) {
-    console.error("Profile Submission Failed:", err);
     return res.status(500).json({
       success: false,
       message: "Internal server error",

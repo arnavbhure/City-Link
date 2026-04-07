@@ -5,9 +5,10 @@ const CompleteProfileResponse = async (formData) => {
     const response = await api.post("/complete-profile", formData);
     return response.data;
   } catch (error) {
-    const message =
-      error?.response?.data?.message || "Profile Completion Failed";
-    throw new Error(message);
+    return {
+      success: false,
+      message: error?.response?.data?.message || "Profile Completion Failed",
+    };
   }
 };
 

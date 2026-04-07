@@ -36,7 +36,7 @@ const getRoommateThroughCity = async (id) => {
       AND u.id != $1;`,
     [id],
   );
-  console.log(response.rows);
+  console.log(response.rows[0]);
   return response.rows[0];
 };
 

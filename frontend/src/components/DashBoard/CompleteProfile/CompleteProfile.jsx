@@ -1,10 +1,11 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, ArrowRight, CheckCircle2, Sparkles } from "lucide-react";
 import StepBudget from "./steps/StepBudget";
 import StepLifestyle from "./steps/StepLifestyle";
 import StepPreferences from "./steps/StepPreferences";
 import StepReview from "./steps/StepReview";
+import ErrorMessage from "../../ErrorMessage";
 import {
   STEP_META,
   TOTAL_STEPS,
@@ -14,8 +15,19 @@ import {
   initialFormState,
 } from "./utils/completeProfileUtils";
 import CompleteProfileResponse from "../../../api/CompleteProfile";
+import { useSelector } from "react-redux";
 
 const CompleteProfile = () => {
+  const navigate = useNavigate();
+  const is_profile_completed = useSelector(
+    (state) => state.user.profile_listing_completed,
+  );
+  useEffect(() => {
+    if (is_profile_completed) {
+      navigate("/dashboard");
+    }
+  }, [is_profile_completed, navigate]);
+  const [errorMessage, setErrorMessage] = useState("");
   const [formData, setFormData] = useState(initialFormState);
   const [currentStep, setCurrentStep] = useState(0);
   const [stepDirection, setStepDirection] = useState(1);
@@ -119,7 +131,9 @@ const CompleteProfile = () => {
     console.log(response);
     if (response.success) {
       setSubmitted(true);
+      return;
     }
+    setErrorMessage(response.message);
   };
 
   const progressPercentage = ((currentStep + 1) / TOTAL_STEPS) * 100;
@@ -366,6 +380,8 @@ const CompleteProfile = () => {
                   <ArrowLeft className="h-4 w-4" />
                   Previous
                 </button>
+
+                <ErrorMessage message={errorMessage} />
 
                 <button
                   type="submit"

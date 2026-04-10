@@ -4,10 +4,10 @@ const getRoommateThroughCity = async (id) => {
   const response = await pool.query(
     `SELECT 
       u.id,
-      u.name,
-      u.university,
+      u.full_name AS name,
+      u.college AS university,
       u.course,
-      u.year,
+      u.clg_year AS year,
       u.city,
 
       p.budget_min,
@@ -26,18 +26,17 @@ const getRoommateThroughCity = async (id) => {
 
     FROM users u
 
-    JOIN users current_user ON current_user.id = $1
+    JOIN users viewer ON viewer.id = $1
     JOIN user_preferences p ON u.id = p.user_id
     JOIN user_lifestyle l ON u.id = l.user_id
 
     WHERE 
-      u.city = current_user.city
+      u.city = viewer.city
       AND u.open_for_listing = true
       AND u.id != $1;`,
     [id],
   );
-  console.log(response.rows[0]);
-  return response.rows[0];
+  return response.rows;
 };
 
 module.exports = getRoommateThroughCity;

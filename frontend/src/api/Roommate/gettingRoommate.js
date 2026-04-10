@@ -1,20 +1,22 @@
-import { useSelector } from "react-redux";
 import api from "../axios";
-import { useNavigate } from "react-router-dom";
 
-const gettingRoommate = async (city) => {
+const gettingRoommate = async (userId) => {
   try {
-    const user_id = useSelector((state) => state.user.id);
-    const navigate = useNavigate();
-    if (!user_id) {
-      navigate("/login");
-      return;
+    if (!userId) {
+      return {
+        success: false,
+        message: "User ID is required",
+      };
     }
-    const response = await api.get("/getting-roommate", { city, user_id });
+
+    const response = await api.get("/getting-roommate", {
+      params: { user_id: userId },
+    });
+
     return response.data;
   } catch (err) {
     return {
-      error: true,
+      success: false,
       message: err?.response?.data?.message || "Something went wrong",
     };
   }

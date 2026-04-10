@@ -5,4 +5,4 @@ const sendingRoommateRouter = express.Router();
 
 sendingRoommateRouter.get("/getting-roommate", sendingRoommateController);
 
-export default sendingRoommateRouter;
+module.exports = sendingRoommateRouter;

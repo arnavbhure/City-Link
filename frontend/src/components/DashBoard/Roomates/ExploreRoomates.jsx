@@ -5,102 +5,9 @@ import HeroRoomateMatch from "./HeroRoomateMatch";
 import gettingRoommate from "../../../api/Roommate/gettingRoommate";
 import { roommateActions } from "../../../store/Roommate/roommateSlice";
 
-const roommateProfiles = [
-  {
-    name: "Riya Sharma",
-    university: "Delhi University",
-    course: "Psychology, 2nd year",
-    city: "North Delhi",
-    budget: "INR 12k - 15k",
-    budgetValue: "INR 12k - 15k",
-    move: "This month",
-    moveValue: "This month",
-    lifestyle: "Quiet",
-    routine: "Early riser",
-    compatibility: "94%",
-    bio: "Keeps a tidy room, prefers calm evenings, and wants a place with a short campus commute.",
-    tags: ["Non-smoker", "Women-only", "Wants furnished setup"],
-  },
-  {
-    name: "Kabir Mehta",
-    university: "Christ University",
-    course: "BBA, 3rd year",
-    city: "Koramangala, Bengaluru",
-    budget: "Under INR 12k",
-    budgetValue: "Under INR 12k",
-    move: "Next month",
-    moveValue: "Next month",
-    lifestyle: "Balanced",
-    routine: "Prefers planned routines",
-    compatibility: "91%",
-    bio: "Looking for a shared flat near transit with enough quiet for study blocks and interview prep.",
-    tags: ["Vegetarian", "Likes shared chores", "Near metro preferred"],
-  },
-  {
-    name: "Aanya Verma",
-    university: "Savitribai Phule Pune University",
-    course: "Design, 1st year",
-    city: "Pune Central",
-    budget: "INR 15k+",
-    budgetValue: "INR 15k+",
-    move: "Immediate",
-    moveValue: "Immediate",
-    lifestyle: "Quiet",
-    routine: "Night owl",
-    compatibility: "89%",
-    bio: "Wants a safer locality, reliable Wi-Fi, and a flatmate who values boundaries and clear expectations.",
-    tags: ["Needs strong Wi-Fi", "Women-only", "Creative schedule"],
-  },
-  {
-    name: "Dev Patel",
-    university: "NMIMS",
-    course: "B.Com, 2nd year",
-    city: "Andheri East, Mumbai",
-    budget: "INR 15k+",
-    budgetValue: "INR 15k+",
-    move: "Next month",
-    moveValue: "Next month",
-    lifestyle: "Social",
-    routine: "Late classes + gym",
-    compatibility: "87%",
-    bio: "Searching for an upbeat shared place with clean common areas, flexible guest rules, and easy local transport.",
-    tags: ["Gym routine", "Co-ed okay", "Weekend social"],
-  },
-  {
-    name: "Sneha Iyer",
-    university: "IIT Madras",
-    course: "M.Tech, 1st year",
-    city: "Adyar, Chennai",
-    budget: "INR 12k - 15k",
-    budgetValue: "INR 12k - 15k",
-    move: "Immediate",
-    moveValue: "Immediate",
-    lifestyle: "Balanced",
-    routine: "Morning study blocks",
-    compatibility: "92%",
-    bio: "Prioritizes a well-managed apartment, calm weekdays, and roommates who communicate clearly about shared expenses.",
-    tags: ["Structured routines", "Women-only", "Bills tracked together"],
-  },
-  {
-    name: "Arjun Rao",
-    university: "IIIT Hyderabad",
-    course: "CSE, 4th year",
-    city: "Gachibowli, Hyderabad",
-    budget: "Under INR 12k",
-    budgetValue: "Under INR 12k",
-    move: "This month",
-    moveValue: "This month",
-    lifestyle: "Quiet",
-    routine: "Early riser",
-    compatibility: "90%",
-    bio: "Looking for a practical setup near campus with reliable utilities, focused evenings, and low-noise common spaces.",
-    tags: ["Budget-first", "Study-friendly", "Needs quick move-in"],
-  },
-];
-
 const filterOptions = {
   budget: ["Any budget", "Under INR 10k", "INR 10k - 15k", "INR 15k+"],
-  move: ["Any time", "Immediate", "This month", "Next month"],
+  move: ["Any time", "Flexible"],
   lifestyle: ["Any lifestyle", "Quiet", "Balanced", "Social"],
 };
 
@@ -111,27 +18,117 @@ const initialFilters = {
   lifestyle: "Any lifestyle",
 };
 
+const formatBudgetLabel = (minimumBudget, maximumBudget) => {
+  if (minimumBudget && maximumBudget) {
+    return `INR ${minimumBudget} - ${maximumBudget}`;
+  }
+
+  if (minimumBudget) {
+    return `INR ${minimumBudget}+`;
+  }
+
+  if (maximumBudget) {
+    return `Up to INR ${maximumBudget}`;
+  }
+
+  return "Budget not shared";
+};
+
+const getBudgetFilterValue = (minimumBudget, maximumBudget) => {
+  const effectiveBudget = maximumBudget ?? minimumBudget ?? 0;
+
+  if (effectiveBudget <= 10000) {
+    return "Under INR 10k";
+  }
+
+  if (effectiveBudget <= 15000) {
+    return "INR 10k - 15k";
+  }
+
+  return "INR 15k+";
+};
+
+const toTitleCase = (value) =>
+  value
+    ? value
+        .split("_")
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(" ")
+    : "";
+
+const normalizeRoommateProfile = (profile, index) => {
+  const budget = formatBudgetLabel(profile.budget_min, profile.budget_max);
+  const tags = [
+    profile.preferred_gender && `Prefers ${profile.preferred_gender}`,
+    profile.food_preference && toTitleCase(profile.food_preference),
+    profile.smoking_preference && toTitleCase(profile.smoking_preference),
+    profile.furnished_required ? "Needs furnished setup" : null,
+    profile.wants_shared_chores ? "Open to shared chores" : null,
+  ].filter(Boolean);
+
+  return {
+    id: profile.id ?? `${profile.name}-${index}`,
+    name: profile.name,
+    university: profile.university || "University not shared",
+    course: profile.course
+      ? `${profile.course}${profile.year ? `, Year ${profile.year}` : ""}`
+      : "Course not shared",
+    city: profile.city || profile.preferred_city || "City not shared",
+    budget,
+    budgetValue: getBudgetFilterValue(profile.budget_min, profile.budget_max),
+    move: "Flexible",
+    moveValue: "Flexible",
+    lifestyle: toTitleCase(profile.lifestyle_type) || "Balanced",
+    routine: toTitleCase(profile.sleep_schedule) || "Routine not shared",
+    compatibility: `${Math.max(84, 96 - index)}%`,
+    bio: profile.bio || "No bio shared yet.",
+    tags: tags.length ? tags : ["Profile details available"],
+  };
+};
+
 const ExploreRoomates = () => {
   const dispatch = useDispatch();
-  const user_city = useSelector((state) => state.user.city);
+  const user_id = useSelector((state) => state.user.id);
+  const storedRoommates = useSelector((state) => state.roommates);
+  const is_profile_completed = useSelector(
+    (state) => state.user.profile_listing_completed,
+  );
+  const [filters, setFilters] = useState(initialFilters);
+  const [isLoadingRoommates, setIsLoadingRoommates] = useState(false);
+  const [roommateError, setRoommateError] = useState("");
+
   useEffect(() => {
     const fetchRoommates = async () => {
-      try {
-        const roommates = await gettingRoommate(user_city);
-        dispatch(roommateActions.storeRoommateList(roommates));
-      } catch (err) {
-        console.error(err);
+      setIsLoadingRoommates(true);
+      setRoommateError("");
+
+      const response = await gettingRoommate(user_id);
+
+      if (!response.success) {
+        dispatch(roommateActions.storeRoommateList([]));
+        setRoommateError(response.message);
+        setIsLoadingRoommates(false);
+        return;
       }
+
+      const roommateList = Array.isArray(response.data)
+        ? response.data
+        : response.data
+          ? [response.data]
+          : [];
+
+      dispatch(roommateActions.storeRoommateList(roommateList));
+      setIsLoadingRoommates(false);
     };
 
-    if (user_city) {
+    if (user_id) {
       fetchRoommates();
     }
-  }, [dispatch, user_city]);
+  }, [dispatch, user_id]);
 
-  const [filters, setFilters] = useState(initialFilters);
+  const roommateProfilesToRender = storedRoommates.map(normalizeRoommateProfile);
 
-  const filteredProfiles = roommateProfiles.filter((profile) => {
+  const filteredProfiles = roommateProfilesToRender.filter((profile) => {
     const matchesBudget =
       filters.budget === "Any budget" || profile.budgetValue === filters.budget;
     const matchesMove =
@@ -147,10 +144,6 @@ const ExploreRoomates = () => {
     const { name, value } = event.target;
     setFilters((current) => ({ ...current, [name]: value }));
   };
-
-  const is_profile_completed = useSelector(
-    (state) => state.user.profile_listing_completed,
-  );
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-slate-950 text-white">
@@ -264,15 +257,30 @@ const ExploreRoomates = () => {
               </div>
 
               <div className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300">
-                Showing {filteredProfiles.length} of {roommateProfiles.length}
+                Showing {filteredProfiles.length} of {roommateProfilesToRender.length}
               </div>
             </div>
 
-            {filteredProfiles.length ? (
+            {isLoadingRoommates ? (
+              <div className="rounded-[1.45rem] border border-dashed border-white/15 bg-slate-950/40 px-6 py-10 text-center">
+                <h3 className="text-xl font-semibold text-white">
+                  Loading roommate profiles...
+                </h3>
+              </div>
+            ) : roommateError ? (
+              <div className="rounded-[1.45rem] border border-dashed border-rose-400/20 bg-rose-500/10 px-6 py-10 text-center">
+                <h3 className="text-xl font-semibold text-white">
+                  We could not load roommate profiles
+                </h3>
+                <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-rose-100/80 sm:text-base">
+                  {roommateError}
+                </p>
+              </div>
+            ) : filteredProfiles.length ? (
               <div className="grid gap-4 xl:grid-cols-2">
                 {filteredProfiles.map((profile) => (
                   <article
-                    key={profile.name}
+                    key={profile.id ?? profile.name}
                     className="rounded-[1.45rem] border border-white/10 bg-white/5 p-5 transition hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.07] sm:p-6"
                   >
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">

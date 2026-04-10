@@ -6,6 +6,7 @@ const app = express();
 const cors = require("cors");
 const verificationRouter = require("./routes/verificationRouter");
 const completeProfileRouter = require("./routes/completeProfileRouter");
+const sendingRoommateRouter = require("./routes/SendingRoommateRouter");
 
 const PORT = process.env.PORT;
 
@@ -20,6 +21,9 @@ app.use("/api", verificationRouter);
 
 // Router for completing user profile
 app.use("/api", completeProfileRouter);
+
+// router for getting roommates list
+app.use("/api", sendingRoommateRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

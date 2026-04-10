@@ -128,7 +128,7 @@ const CompleteProfile = () => {
     }
 
     const response = await CompleteProfileResponse(formData);
-    console.log(response);
+
     if (response.success) {
       setSubmitted(true);
       return;
@@ -188,9 +188,7 @@ const CompleteProfile = () => {
                 Your roommate profile is ready.
               </h1>
               <p className="mt-4 text-base leading-8 text-slate-300">
-                The final onboarding payload has been logged to the console for
-                now. You can wire this submit handler to your API whenever you
-                are ready.
+                You have successfully completed profile completion .
               </p>
 
               <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:justify-center">

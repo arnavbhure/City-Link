@@ -4,12 +4,8 @@ import { useSelector, useDispatch } from "react-redux";
 import HeroRoomateMatch from "./HeroRoomateMatch";
 import gettingRoommate from "../../../api/Roommate/gettingRoommate";
 import { roommateActions } from "../../../store/Roommate/roommateSlice";
-
-const filterOptions = {
-  budget: ["Any budget", "Under INR 10k", "INR 10k - 15k", "INR 15k+"],
-  move: ["Any time", "Flexible"],
-  lifestyle: ["Any lifestyle", "Quiet", "Balanced", "Social"],
-};
+import Is_Profile_Listing_completed from "./Is_Profile_Listing_completed";
+import RoommateFiltering from "./RoommateFiltering";
 
 const initialFilters = {
   city: "Any city",
@@ -59,9 +55,11 @@ const toTitleCase = (value) =>
 const normalizeRoommateProfile = (profile, index) => {
   const budget = formatBudgetLabel(profile.budget_min, profile.budget_max);
   const tags = [
-    profile.preferred_gender && `Prefers ${profile.preferred_gender}`,
-    profile.food_preference && toTitleCase(profile.food_preference),
-    profile.smoking_preference && toTitleCase(profile.smoking_preference),
+    `Prefers ${profile.preferred_gender} gender`,
+    `${toTitleCase(profile.food_preference)} Food Prefernce`,
+    profile.smoking_preference === "yes" || profile.smoking_preference === "no"
+      ? "Prefers Smoking"
+      : "No Smoking",
     profile.furnished_required ? "Needs furnished setup" : null,
     profile.wants_shared_chores ? "Open to shared chores" : null,
   ].filter(Boolean);
@@ -126,7 +124,9 @@ const ExploreRoomates = () => {
     }
   }, [dispatch, user_id]);
 
-  const roommateProfilesToRender = storedRoommates.map(normalizeRoommateProfile);
+  const roommateProfilesToRender = storedRoommates.map(
+    normalizeRoommateProfile,
+  );
 
   const filteredProfiles = roommateProfilesToRender.filter((profile) => {
     const matchesBudget =
@@ -140,110 +140,21 @@ const ExploreRoomates = () => {
     return matchesBudget && matchesMove && matchesLifestyle;
   });
 
-  const handleFilterChange = (event) => {
-    const { name, value } = event.target;
-    setFilters((current) => ({ ...current, [name]: value }));
-  };
-
   return (
     <div className="relative min-h-screen overflow-hidden bg-slate-950 text-white">
       <section className="relative px-4 pb-16 pt-28 sm:px-8 sm:pb-18 sm:pt-32 lg:px-10 lg:pt-36">
         <div className="mx-auto max-w-7xl space-y-6 sm:space-y-8">
           {/*Div for Completting profile if user not completed his profile to be listed on the roomate list  */}
-          {!is_profile_completed && (
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-[1.6rem] border border-white/10 bg-slate-900/60 p-5 backdrop-blur-sm sm:rounded-[2rem] sm:p-8">
-              <h2 className="text-2xl font-bold text-white sm:text-3xl">
-                Complete Your Profile so others can see your Profile below
-              </h2>
-              <div className="shrink-0">
-                <a
-                  href="/complete-profile"
-                  className="hover:cursor-pointer inline-flex items-center gap-2 rounded-full border border-white/10 bg-white px-4 py-2 text-sm text-black transition-transform duration-300 hover:scale-105"
-                >
-                  Complete Profile <ArrowRight className="h-4 w-4" />
-                </a>
-              </div>
-            </div>
-          )}
+          <Is_Profile_Listing_completed
+            is_profile_completed={is_profile_completed}
+          />
 
           {/* Section for filtering the roomates on the basis of prefernces*/}
-          <section className="grid gap-5 ">
-            <div className="rounded-[1.6rem] border border-white/10 bg-slate-900/60 p-5 backdrop-blur-sm sm:rounded-[2rem] sm:p-8">
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-indigo-300 sm:text-sm">
-                    Match filters
-                  </p>
-                  <h2 className="mt-2 text-2xl font-bold text-white sm:text-3xl">
-                    Narrow the list fast
-                  </h2>
-                </div>
-
-                <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300">
-                  <Search className="h-4 w-4 text-indigo-300" />
-                  {filteredProfiles.length} potential matches
-                </div>
-              </div>
-
-              <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                <label className="block">
-                  <span className="mb-2 block text-sm font-medium text-slate-300">
-                    Budget
-                  </span>
-                  <select
-                    name="budget"
-                    value={filters.budget}
-                    onChange={handleFilterChange}
-                    className="w-full rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-white outline-none transition focus:border-indigo-400/50 focus:bg-slate-950"
-                  >
-                    {filterOptions.budget.map((option) => (
-                      <option key={option}>{option}</option>
-                    ))}
-                  </select>
-                </label>
-
-                <label className="block">
-                  <span className="mb-2 block text-sm font-medium text-slate-300">
-                    Move timing
-                  </span>
-                  <select
-                    name="move"
-                    value={filters.move}
-                    onChange={handleFilterChange}
-                    className="w-full rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-white outline-none transition focus:border-indigo-400/50 focus:bg-slate-950"
-                  >
-                    {filterOptions.move.map((option) => (
-                      <option key={option}>{option}</option>
-                    ))}
-                  </select>
-                </label>
-
-                <label className="block">
-                  <span className="mb-2 block text-sm font-medium text-slate-300">
-                    Lifestyle
-                  </span>
-                  <select
-                    name="lifestyle"
-                    value={filters.lifestyle}
-                    onChange={handleFilterChange}
-                    className="w-full rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-white outline-none transition focus:border-indigo-400/50 focus:bg-slate-950"
-                  >
-                    {filterOptions.lifestyle.map((option) => (
-                      <option key={option}>{option}</option>
-                    ))}
-                  </select>
-                </label>
-                <button
-                  type="button"
-                  onClick={() => setFilters(initialFilters)}
-                  className="w-50 hover:cursor-pointer mt-6 inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
-                >
-                  Reset filters
-                </button>
-              </div>
-            </div>
-          </section>
-
+          <RoommateFiltering
+            filteredProfiles={filteredProfiles}
+            filters={filters}
+            setFilters={setFilters}
+          />
           {/*Section for displaying roomates list */}
           <section className="rounded-[1.6rem] border border-white/10 bg-slate-900/60 p-5 backdrop-blur-sm sm:rounded-[2rem] sm:p-8">
             <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -257,7 +168,8 @@ const ExploreRoomates = () => {
               </div>
 
               <div className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300">
-                Showing {filteredProfiles.length} of {roommateProfilesToRender.length}
+                Showing {filteredProfiles.length} of{" "}
+                {roommateProfilesToRender.length}
               </div>
             </div>
 
@@ -280,7 +192,7 @@ const ExploreRoomates = () => {
               <div className="grid gap-4 xl:grid-cols-2">
                 {filteredProfiles.map((profile) => (
                   <article
-                    key={profile.id ?? profile.name}
+                    key={profile.id}
                     className="rounded-[1.45rem] border border-white/10 bg-white/5 p-5 transition hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.07] sm:p-6"
                   >
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">

@@ -11,6 +11,7 @@ const {
   resendVerificationValidator,
 } = require("../validators/login/resendVerificationValidator");
 const sendUserInfoController = require("../controllers/sendUserInfoController");
+const updateOpenForListingController = require("../controllers/updateOpenForListingController");
 
 const authRouter = express.Router();
 
@@ -23,5 +24,6 @@ authRouter.post(
   resendVerificationController,
 );
 authRouter.get("/getUserInfo", sendUserInfoController);
+authRouter.patch("/open-for-listing", updateOpenForListingController);
 
 module.exports = authRouter;

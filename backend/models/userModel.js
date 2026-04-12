@@ -50,6 +50,14 @@ const getUserById = async (id) => {
   return result.rows[0];
 };
 
+const updateOpenForListing = async (id, openForListing) => {
+  const result = await pool.query(
+    `UPDATE users SET open_for_listing = $1 WHERE id = $2 RETURNING *`,
+    [openForListing, id],
+  );
+  return result.rows[0];
+};
+
 const updateVerificationToken = async (email, verificationToken) => {
   const result = await pool.query(
     `UPDATE users SET verification_token = $1 WHERE email = $2 RETURNING *`,
@@ -63,5 +71,6 @@ module.exports = {
   createUser,
   getUserByEmail,
   getUserById,
+  updateOpenForListing,
   updateVerificationToken,
 };

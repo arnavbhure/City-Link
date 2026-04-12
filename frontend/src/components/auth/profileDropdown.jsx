@@ -1,5 +1,6 @@
 import { createElement, useEffect, useRef, useState } from "react";
 import {
+  Check,
   ChevronDown,
   CircleUserRound,
   House,
@@ -8,7 +9,9 @@ import {
   LogOut,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import updateOpenForListing from "../../api/auth/updateOpenForListing";
+import { userInfoActions } from "../../store/user/userSlice";
 
 const navigationItems = [
   {
@@ -69,9 +72,52 @@ const MenuAction = ({ icon, title, tone, onClick, destructive = false }) => {
   );
 };
 
+const ListingVisibilityToggle = ({
+  checked,
+  helperText,
+  isSaving,
+  onToggle,
+}) => {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={checked}
+      aria-label="Open for listing"
+      disabled={isSaving}
+      onClick={onToggle}
+      className={`flex w-full items-center gap-3 rounded-[1rem] border px-3 py-3 text-left transition duration-200 ${
+        isSaving
+          ? "cursor-wait border-white/5 bg-white/[0.02] opacity-80"
+          : "border-emerald-400/15 bg-emerald-500/10 hover:border-emerald-300/30 hover:bg-emerald-400/10"
+      }`}
+    >
+      <div className="min-w-0 flex-1">
+        <p className="text-sm font-semibold text-white">Open for listing</p>
+        <p className="mt-1 text-xs leading-5 text-slate-400">
+          {isSaving ? "Saving your preference..." : helperText}
+        </p>
+      </div>
+
+      <span
+        className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-md border transition ${
+          checked
+            ? "border-emerald-300/40 bg-emerald-300 text-slate-950"
+            : "border-white/15 bg-slate-950/70 text-transparent"
+        }`}
+      >
+        <Check className="h-4 w-4" />
+      </span>
+    </button>
+  );
+};
+
 const ProfileDropdown = ({ handleOnLogout }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [isUpdatingListing, setIsUpdatingListing] = useState(false);
+  const [listingError, setListingError] = useState("");
   const dropdownRef = useRef(null);
 
   useEffect(() => {
@@ -105,7 +151,38 @@ const ProfileDropdown = ({ handleOnLogout }) => {
     setOpen(false);
     handleOnLogout();
   };
+
   const user = useSelector((state) => state.user);
+  const hasCompletedListingProfile = Boolean(user.profile_listing_completed);
+  const isOpenForListing = Boolean(user.open_for_listing);
+
+  const listingHelperText = !hasCompletedListingProfile && isOpenForListing
+    ? "You are opted in. Complete your roommate profile to appear in the roommates list."
+    : !hasCompletedListingProfile
+      ? "You are opted out for now. Turn this on when you want to appear in the roommates list."
+    : isOpenForListing
+      ? "Your profile can appear in the roommates list."
+      : "Stay hidden from the roommates list until you opt in.";
+
+  const handleListingToggle = async () => {
+    if (isUpdatingListing) {
+      return;
+    }
+
+    setListingError("");
+    setIsUpdatingListing(true);
+
+    const response = await updateOpenForListing(!isOpenForListing);
+
+    if (response.success && response.user) {
+      dispatch(userInfoActions.storeUserInfo(response.user));
+    } else {
+      setListingError(response.message);
+    }
+
+    setIsUpdatingListing(false);
+  };
+
   return (
     <div className="relative inline-flex" ref={dropdownRef}>
       <button
@@ -121,7 +198,9 @@ const ProfileDropdown = ({ handleOnLogout }) => {
         </div>
 
         <div className="hidden min-w-0 sm:block">
-          <p className="text-sm font-semibold text-white">{user.full_name}</p>
+          <p className="text-sm font-semibold text-white">
+            {user.full_name || "CityLink user"}
+          </p>
           <p className="mt-0.5 text-xs text-slate-400">Menu</p>
         </div>
 
@@ -142,14 +221,27 @@ const ProfileDropdown = ({ handleOnLogout }) => {
 
               <div className="min-w-0">
                 <p className="text-sm font-semibold text-white break-all">
-                  {user.email}
+                  {user.email || "Signed in user"}
                 </p>
                 <p className="mt-0.5 text-xs text-slate-400">Signed in</p>
               </div>
             </div>
           </div>
 
-          <div className="mt-2 space-y-1">
+          <div className="mt-2 space-y-2">
+            <ListingVisibilityToggle
+              checked={isOpenForListing}
+              helperText={listingHelperText}
+              isSaving={isUpdatingListing}
+              onToggle={handleListingToggle}
+            />
+
+            {listingError ? (
+              <p className="rounded-[0.95rem] border border-rose-400/20 bg-rose-500/10 px-3 py-2 text-xs leading-5 text-rose-100/90">
+                {listingError}
+              </p>
+            ) : null}
+
             {navigationItems.map((item) => (
               <MenuAction
                 key={item.title}

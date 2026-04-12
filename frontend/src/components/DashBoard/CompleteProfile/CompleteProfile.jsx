@@ -175,7 +175,7 @@ const CompleteProfile = () => {
         </div>
 
         <div className="relative mx-auto max-w-4xl">
-          <div className="rounded-[2rem] border border-white/10 bg-slate-900/75 p-8 shadow-[0_40px_120px_-50px_rgba(14,165,233,0.55)] backdrop-blur-xl sm:p-10">
+          <div className="rounded-4xl border border-white/10 bg-slate-900/75 p-8 shadow-[0_40px_120px_-50px_rgba(14,165,233,0.55)] backdrop-blur-xl sm:p-10">
             <div className="mx-auto max-w-2xl text-center">
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-emerald-300/20 bg-emerald-400/10 text-emerald-300">
                 <CheckCircle2 className="h-9 w-9" />
@@ -192,17 +192,6 @@ const CompleteProfile = () => {
               </p>
 
               <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:justify-center">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSubmitted(false);
-                    setCurrentStep(TOTAL_STEPS - 1);
-                  }}
-                  className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-white transition hover:border-white/20 hover:bg-white/[0.08]"
-                >
-                  Review answers
-                </button>
-
                 <Link
                   to="/dashboard"
                   className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-cyan-300 to-sky-400 px-5 py-3 text-sm font-semibold text-slate-950 shadow-[0_20px_50px_-25px_rgba(56,189,248,0.9)] transition hover:-translate-y-0.5"

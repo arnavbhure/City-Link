@@ -1,6 +1,7 @@
 const {
   userLifeStyleModel,
   userPreferencesModel,
+  updateProfileCompletionStatus,
 } = require("../models/completeProfileModel");
 const decodeUserId = require("../services/decodeUserId");
 
@@ -22,6 +23,7 @@ const completeProfileController = async (req, res) => {
       user_preferences,
       user_id,
     });
+    await updateProfileCompletionStatus({ user_id });
     return res.status(200).json({
       success: true,
       message: "Profile Submission Successful",

@@ -47,4 +47,16 @@ const userLifeStyleModel = async ({ user_lifestyle, user_id }) => {
   return response.rows[0];
 };
 
-module.exports = { userPreferencesModel, userLifeStyleModel };
+const updateProfileCompletionStatus = async ({ user_id }) => {
+  const response = await pool.query(
+    `UPDATE users SET profile_listing_completed = true WHERE id = $1 RETURNING *`,
+    [user_id],
+  );
+  return response.rows[0];
+};
+
+module.exports = {
+  userPreferencesModel,
+  userLifeStyleModel,
+  updateProfileCompletionStatus,
+};

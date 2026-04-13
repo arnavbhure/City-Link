@@ -57,7 +57,7 @@ const normalizeRoommateProfile = (profile, index) => {
   const tags = [
     `Prefers ${profile.preferred_gender} gender`,
     `${toTitleCase(profile.food_preference)} Food Prefernce`,
-    profile.smoking_preference === "yes" || profile.smoking_preference === "no"
+    profile.smoking_preference === "yes" || profile.smoking_preference === "any"
       ? "Prefers Smoking"
       : "No Smoking",
     profile.furnished_required ? "Needs furnished setup" : null,
@@ -91,6 +91,7 @@ const ExploreRoomates = () => {
   const is_profile_completed = useSelector(
     (state) => state.user.profile_listing_completed,
   );
+  console.log(is_profile_completed);
   const [filters, setFilters] = useState(initialFilters);
   const [isLoadingRoommates, setIsLoadingRoommates] = useState(false);
   const [roommateError, setRoommateError] = useState("");

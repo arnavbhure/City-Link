@@ -38,6 +38,7 @@ const sendNotificationToRoommateControlller = async (req, res) => {
        <p style="color: #777; font-size: 14px;">
         Send email to them if you are intrested in connecting with them.
       </p>
+      <br>
       <a href="mailto:${senderMail}"
          style="background-color: #4f46e5; color: white; padding: 12px 20px; text-decoration: none; border-radius: 6px;">
          Send Email 

@@ -6,6 +6,8 @@ import gettingRoommate from "../../../api/Roommate/gettingRoommate";
 import { roommateActions } from "../../../store/Roommate/roommateSlice";
 import Is_Profile_Listing_completed from "./Is_Profile_Listing_completed";
 import RoommateFiltering from "./RoommateFiltering";
+import LoadingSpinner from "../Loading/LoadingSpinner";
+import sendNotificationOnClick from "../../../api/Roommate/SendNotificationOnClick";
 
 const initialFilters = {
   city: "Any city",
@@ -56,7 +58,7 @@ const normalizeRoommateProfile = (profile, index) => {
   const budget = formatBudgetLabel(profile.budget_min, profile.budget_max);
   const tags = [
     `Prefers ${profile.preferred_gender} gender`,
-    `${toTitleCase(profile.food_preference)} Food Prefernce`,
+    `${toTitleCase(profile.food_preference)} Food Preference`,
     profile.smoking_preference === "yes" || profile.smoking_preference === "any"
       ? "Prefers Smoking"
       : "No Smoking",
@@ -87,13 +89,17 @@ const normalizeRoommateProfile = (profile, index) => {
 const ExploreRoomates = () => {
   const dispatch = useDispatch();
   const user_id = useSelector((state) => state.user.id);
+
+  /*for sending notification */
+  const email = useSelector((state) => state.user.email);
+  const senderName = useSelector((state) => state.user.full_name);
   const storedRoommates = useSelector((state) => state.roommates);
   const is_profile_completed = useSelector(
     (state) => state.user.profile_listing_completed,
   );
-  console.log(is_profile_completed);
   const [filters, setFilters] = useState(initialFilters);
   const [isLoadingRoommates, setIsLoadingRoommates] = useState(false);
+  const [isLoading, setisLoading] = useState(false);
   const [roommateError, setRoommateError] = useState("");
 
   useEffect(() => {
@@ -140,6 +146,34 @@ const ExploreRoomates = () => {
 
     return matchesBudget && matchesMove && matchesLifestyle;
   });
+
+  if (isLoadingRoommates || isLoading) {
+    return (
+      <center className="mt-40">
+        <LoadingSpinner />
+      </center>
+    );
+  }
+
+  const handleOnSendNotification = async (profileId) => {
+    try {
+      setisLoading(true);
+      const response = await sendNotificationOnClick({
+        profileId,
+        email,
+        senderName,
+      });
+      setisLoading(false);
+      if (response.success) {
+        alert("Notification sent successfully!");
+      } else {
+        alert("Failed to send notification. Please try again later.");
+      }
+    } catch {
+      setisLoading(false);
+      alert("An error occurred while sending the notification.");
+    }
+  };
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-slate-950 text-white">
@@ -253,8 +287,11 @@ const ExploreRoomates = () => {
                       ))}
                     </div>
 
-                    <button className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-slate-950/70 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10">
-                      View profile
+                    <button
+                      onClick={() => handleOnSendNotification(profile.id)}
+                      className="hover:cursor-pointer mt-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-slate-950/70 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+                    >
+                      Send Notification to {profile.name}
                       <ArrowRight className="h-4 w-4" />
                     </button>
                   </article>

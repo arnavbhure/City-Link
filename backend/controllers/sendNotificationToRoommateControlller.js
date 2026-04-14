@@ -22,6 +22,17 @@ const sendNotificationToRoommateControlller = async (req, res) => {
     
     <div style="max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
       
+            <tr>
+              <td align="center" style="padding-bottom: 20px">
+                <h1 style="color: #ffffff; margin: 0; font-size: 28px">
+                  CityLink
+                </h1>
+                <p style="color: #94a3b8; margin-top: 6px">
+                  Trusted student housing starts here
+                </p>
+              </td>
+            </tr>
+
       <h2 style="color: #2c3e50; margin-bottom: 10px;">
         New Roommate Request 👋
       </h2>

@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { signup } from "../../api/auth/signup";
+import { SyncLoader } from "react-spinners";
 
 const benefits = [
   {
@@ -47,6 +48,7 @@ const SignUp = () => {
   const [formData, setFormData] = useState(initialForm);
   const [error, setError] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [postSignup, setPostSignup] = useState("");
 
   const handleChange = (event) => {
@@ -74,12 +76,16 @@ const SignUp = () => {
     }
 
     try {
+      setLoading(true);
+      setError("");
       const response = await signup(formData);
+      setLoading(false);
       setPostSignup(response.message);
       setError("");
       setIsSubmitted(true);
       setFormData(initialForm);
     } catch (err) {
+      setLoading(false);
       setError(err.message || "Signup failed. Please try again later.");
       return;
     }
@@ -87,7 +93,7 @@ const SignUp = () => {
 
   return (
     <div className="relative overflow-hidden bg-slate-950 text-white">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[34rem]">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-136">
         <div className="absolute left-1/2 top-0 h-80 w-80 -translate-x-1/2 rounded-full bg-indigo-500/20 blur-3xl" />
         <div className="absolute left-12 top-28 h-56 w-56 rounded-full bg-cyan-400/10 blur-3xl" />
         <div className="absolute right-12 top-24 h-64 w-64 rounded-full bg-fuchsia-500/10 blur-3xl" />
@@ -339,14 +345,19 @@ const SignUp = () => {
                   {postSignup}
                 </div>
               ) : null}
-
-              <button
-                type="submit"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5 font-semibold text-slate-950 transition hover:bg-slate-200"
-              >
-                Create account
-                <ArrowRight className="h-4 w-4" />
-              </button>
+              {loading ? (
+                <center>
+                  <SyncLoader color="#724cf5" size={11} />
+                </center>
+              ) : (
+                <button
+                  type="submit"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5 font-semibold text-slate-950 transition hover:bg-slate-200"
+                >
+                  Create account
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+              )}
             </form>
 
             <div className="mt-6 flex flex-col gap-3 border-t border-white/10 pt-6 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between">

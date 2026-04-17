@@ -43,7 +43,7 @@ const sendVerificationEmail = async (email, token) => {
             <!-- Logo / Title -->
             <tr>
               <td align="center" style="padding-bottom: 20px">
-                <h1 style="color: #ffffff; margin: 0; font-size: 28px">
+                <h1 style="color: #7C86FF; margin: 0; font-size: 34px">
                   CityLink
                 </h1>
                 <p style="color: #94a3b8; margin-top: 6px">

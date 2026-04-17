@@ -13,12 +13,12 @@ import ForgotPassword from "./components/auth/ForgotPassword.jsx";
 import DashBoard from "./components/DashBoard/DashBoard.jsx";
 import ExploreHousing from "./components/DashBoard/Housing/ExploreHousing.jsx";
 import ExploreRoomates from "./components/DashBoard/Roomates/ExploreRoomates.jsx";
-import PostListing from "./components/DashBoard/PostListing.jsx";
 import ErrorPage, { RouteErrorBoundary } from "./ErrorPage.jsx";
 import ProtectedRoute from "./components/auth/ProtectedRoute.jsx";
 import CompleteProfile from "./components/DashBoard/CompleteProfile/CompleteProfile.jsx";
 import { Provider } from "react-redux";
 import store from "./store/index.js";
+import PostListing from "./components/DashBoard/PostListing/PostListing.jsx";
 
 if (typeof document !== "undefined") {
   document.documentElement.dataset.theme = "dark";

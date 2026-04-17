@@ -112,6 +112,7 @@ const PostListing = () => {
               <SubmitButton
                 submitState={submitState}
                 isSubmitting={isSubmitting}
+                submitMessage={submitMessage}
               />
             </form>
 

@@ -1,6 +1,6 @@
 import { ArrowRight } from "lucide-react";
 
-const SubmitButton = ({ submitState, isSubmitting }) => {
+const SubmitButton = ({ submitState, isSubmitting, submitMessage }) => {
   return (
     <>
       {submitState === "success" ? (

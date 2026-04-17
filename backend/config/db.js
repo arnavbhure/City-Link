@@ -8,11 +8,10 @@ const password = process.env.DB_PASSWORD;
 const port = process.env.DB_PORT;
 
 const pool = new Pool({
-  user,
-  host,
-  database,
-  password,
-  port,
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
 module.exports = pool;

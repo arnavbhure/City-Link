@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { initialForm } from "../constants/postListingConstants";
+import PostingHouseListing from "../../../../api/PostingHouseListing/PostingHouseListing";
 
 export const useHandleFunctions = () => {
   const [formData, setFormData] = useState(initialForm);
@@ -17,15 +18,28 @@ export const useHandleFunctions = () => {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
+    const owner_id = useSelector((state) => state.user.id);
     event.preventDefault();
     setIsSubmitting(true);
     setSubmitState("idle");
     setSubmitMessage("");
     console.log("Form data to submit:", formData);
+    try {
+      const response = await PostingHouseListing({ formData, owner_id });
+      if (response.success) {
+        setSubmitState("success");
+        setSubmitMessage(response.message || "Listing published successfully.");
+        return;
+      }
+    } catch {
+      setSubmitState("error");
+      setSubmitMessage("Failed to post the listing.");
+      return;
+    }
     setIsSubmitting(false);
-    setSubmitState("success");
-    setSubmitMessage("Listing published successfully." || response.message);
+    setSubmitState("error");
+    setSubmitMessage("Failed to post the listing.");
   };
 
   return {

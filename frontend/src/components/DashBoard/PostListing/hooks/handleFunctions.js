@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { initialForm } from "../constants/postListingConstants";
 import PostingHouseListing from "../../../../api/PostingHouseListing/PostingHouseListing";
+import { useSelector } from "react-redux";
 
 export const useHandleFunctions = () => {
+  const owner_id = useSelector((state) => state.user.id);
   const [formData, setFormData] = useState(initialForm);
   const [submitState, setSubmitState] = useState("idle");
   const [submitMessage, setSubmitMessage] = useState("");
@@ -19,27 +21,25 @@ export const useHandleFunctions = () => {
   };
 
   const handleSubmit = async (event) => {
-    const owner_id = useSelector((state) => state.user.id);
     event.preventDefault();
     setIsSubmitting(true);
     setSubmitState("idle");
     setSubmitMessage("");
-    console.log("Form data to submit:", formData);
     try {
       const response = await PostingHouseListing({ formData, owner_id });
-      if (response.success) {
+      if (response?.success) {
         setSubmitState("success");
         setSubmitMessage(response.message || "Listing published successfully.");
-        return;
+      } else {
+        setSubmitState("error");
+        setSubmitMessage(response?.message || "Failed to post the listing.");
       }
     } catch {
       setSubmitState("error");
       setSubmitMessage("Failed to post the listing.");
-      return;
+    } finally {
+      setIsSubmitting(false);
     }
-    setIsSubmitting(false);
-    setSubmitState("error");
-    setSubmitMessage("Failed to post the listing.");
   };
 
   return {

@@ -14,8 +14,8 @@ export const propertyTypeOptions = [
 
 export const sharingTypeOptions = [
   "Private room",
-  "Twin-sharing",
-  "Triple-sharing",
+  "Twin sharing",
+  "Triple sharing",
   "Entire place",
 ];
 
@@ -35,7 +35,7 @@ export const initialForm = {
   rent: "",
   deposit: "",
   availableFrom: "Immediate",
-  sharingType: "Twin-sharing",
+  sharingType: "Twin sharing",
   description: "",
   houseRules: "",
   furnished: true,

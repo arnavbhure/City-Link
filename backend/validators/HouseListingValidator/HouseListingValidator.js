@@ -1,7 +1,12 @@
 const { body } = require("express-validator");
 
 const HouseListingValidator = [
-  body("title").trim().notEmpty().withMessage("Title should not be empty"),
+  body("title")
+    .trim()
+    .notEmpty()
+    .withMessage("Title should not be empty")
+    .isLength({ min: 5 })
+    .withMessage("Title should be at least 5 characters long"),
   body("attachedWashroom")
     .isBoolean()
     .withMessage("Invalid value for attached washroom"),
@@ -19,12 +24,9 @@ const HouseListingValidator = [
   body("houseRules")
     .trim()
     .notEmpty()
-    .withMessage("House rules should not be empty"),
-  body("laundry").isBoolean().withMessage("Invalid value for laundry"),
-  body("location")
-    .trim()
-    .notEmpty()
-    .withMessage("Location should not be empty"),
+    .withMessage("House rules should not be empty")
+    .isLength({ min: 11 })
+    .withMessage("House rules should be at least 10 characters long"),
   body("laundry").isBoolean().withMessage("Invalid value for laundry"),
   body("locality")
     .trim()
@@ -43,7 +45,7 @@ const HouseListingValidator = [
     .trim()
     .notEmpty()
     .withMessage("Sharing type should not be empty")
-    .isIn(["Private room", "Twin-sharing", "Triple-sharing", "Entire place"])
+    .isIn(["Private room", "Twin sharing", "Triple sharing", "Entire place"])
     .withMessage("Invalid sharing type"),
   body("wifi").isBoolean().withMessage("Invalid value for wifi"),
 ];

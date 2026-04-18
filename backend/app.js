@@ -8,6 +8,7 @@ const verificationRouter = require("./routes/verificationRouter");
 const completeProfileRouter = require("./routes/completeProfileRouter");
 const sendingRoommateRouter = require("./routes/SendingRoommateRouter");
 const sendNotificationToRoommateRouter = require("./routes/sendNotificationToRoommate");
+const PostHouseListingRouter = require("./routes/PostHouseListingRouter");
 
 const PORT = process.env.PORT;
 
@@ -28,6 +29,9 @@ app.use("/api", sendingRoommateRouter);
 
 // router for sending notification after roomate matching
 app.use("/api", sendNotificationToRoommateRouter);
+
+//router for posting house listing
+app.use("/api", PostHouseListingRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

@@ -17,9 +17,9 @@ const SubmitButton = ({ submitState, isSubmitting, submitMessage }) => {
       ) : null}
 
       {isSubmitting ? (
-        <center>
-          <SyncLoader color="#724cf5" size={11} />
-        </center>
+        <div className="mt-6 text-center">
+          <SyncLoader color="#724cf5" size={16} />
+        </div>
       ) : (
         <div className="mt-6 flex flex-col gap-3 sm:flex-row">
           <button

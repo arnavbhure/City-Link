@@ -1,23 +1,5 @@
-import { createElement, useState } from "react";
 import { useSelector } from "react-redux";
-import {
-  ArrowRight,
-  BadgeCheck,
-  CalendarDays,
-  CheckCircle2,
-  House,
-  MapPin,
-  MessagesSquare,
-  Wallet,
-  Wifi,
-} from "lucide-react";
-import { Link } from "react-router-dom";
-import {
-  propertyTypeOptions,
-  initialForm,
-  inputClassName,
-  amenityOptions,
-} from "./constants/postListingConstants";
+import { CheckCircle2, House } from "lucide-react";
 import formatCurrency from "./utils/formatCurrency";
 import HeroPostListing from "./heroPostListing";
 import BasicDetails from "./BasicDetails";

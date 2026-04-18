@@ -2,8 +2,10 @@ import { useState } from "react";
 import { initialForm } from "../constants/postListingConstants";
 import PostingHouseListing from "../../../../api/PostingHouseListing/PostingHouseListing";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export const useHandleFunctions = () => {
+  const navigate = useNavigate();
   const owner_id = useSelector((state) => state.user.id);
   const [formData, setFormData] = useState(initialForm);
   const [submitState, setSubmitState] = useState("idle");
@@ -30,6 +32,8 @@ export const useHandleFunctions = () => {
       if (response?.success) {
         setSubmitState("success");
         setSubmitMessage(response.message || "Listing published successfully.");
+        setFormData(initialForm);
+        setTimeout(() => navigate("/dashboard/explore-housing"), 1400);
       } else {
         setSubmitState("error");
         setSubmitMessage(response?.message || "Failed to post the listing.");

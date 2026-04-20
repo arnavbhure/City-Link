@@ -8,6 +8,7 @@ import {
   Sparkles,
   Users,
 } from "lucide-react";
+import SubmitContactUs from "../../api/ContactUs/SubmitContactUs";
 
 const supportPoints = [
   {
@@ -34,6 +35,7 @@ const initialForm = {
 const ContactUs = () => {
   const [formData, setFormData] = useState(initialForm);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errormessage, setErrorMessage] = useState("");
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -45,10 +47,22 @@ const ContactUs = () => {
     }));
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    setIsSubmitted(true);
-    setFormData(initialForm);
+  const handleSubmit = async (event) => {
+    try {
+      event.preventDefault();
+      const response = await SubmitContactUs(formData);
+      if (response.success) {
+        setIsSubmitted(true);
+        setFormData(initialForm);
+        return;
+      }
+    } catch {
+      setErrorMessage(
+        "An error occurred while submitting the contact us form. Please try again later.",
+      );
+      setIsSubmitted(true);
+      return;
+    }
   };
 
   return (

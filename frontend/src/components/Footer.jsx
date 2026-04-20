@@ -59,7 +59,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  to="/contact"
+                  to="/contactus"
                   className="transition-colors hover:text-white"
                 >
                   Contact

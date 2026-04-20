@@ -1,4 +1,7 @@
-const { getUserByEmail, updateVerificationToken } = require("../models/userModel");
+const {
+  getUserByEmail,
+  updateVerificationToken,
+} = require("../models/userModel");
 const verificationToken = require("../services/verificationToken");
 const sendVerificationEmail = require("../services/emailService");
 
@@ -20,7 +23,8 @@ const resendVerificationController = async (req, res) => {
     await sendVerificationEmail(email, token);
 
     return res.status(200).json({
-      message: "A new verification email has been sent. Please check your inbox.",
+      message:
+        "A new verification email has been sent. Please check your inbox.",
     });
   } catch (error) {
     console.error("Resend Verification Failed:", error);

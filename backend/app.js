@@ -9,6 +9,7 @@ const completeProfileRouter = require("./routes/completeProfileRouter");
 const sendingRoommateRouter = require("./routes/SendingRoommateRouter");
 const sendNotificationToRoommateRouter = require("./routes/sendNotificationToRoommate");
 const PostHouseListingRouter = require("./routes/PostHouseListingRouter");
+const sendHouseListingsRouter = require("./routes/sendHouseListingsRouter");
 
 const PORT = process.env.PORT;
 
@@ -32,6 +33,9 @@ app.use("/api", sendNotificationToRoommateRouter);
 
 //router for posting house listing
 app.use("/api", PostHouseListingRouter);
+
+// router for getting house listings
+app.use("/api", sendHouseListingsRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

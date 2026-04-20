@@ -38,8 +38,7 @@ const loginController = async (req, res) => {
       expiresAt,
       user: safeUser,
     });
-  } catch (error) {
-    console.error("Login Failed:", error);
+  } catch {
     return res
       .status(500)
       .json({ success: false, message: "Internal server error" });

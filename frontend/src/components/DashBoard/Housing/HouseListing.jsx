@@ -10,6 +10,9 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import LoadingSpinner from "../Loading/LoadingSpinner";
+import getHouseListings from "../../../api/getHouseListings/getHouseListings";
+import ErrorMessage from "../../ErrorMessage";
+import { useSelector } from "react-redux";
 
 const propertyTypeOptions = [
   { label: "All", value: "all" },
@@ -32,8 +35,35 @@ const formatCurrency = (amount) =>
   }).format(Number(amount) || 0);
 
 const HouseListing = () => {
+  const userCity = useSelector((state) => state.user.city);
   const [housingListings, setHousingListings] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [fetchError, setFetchError] = useState("");
+
+  useEffect(() => {
+    const fetchListings = async () => {
+      try {
+        setIsLoading(true);
+        const response = await getHouseListings(userCity);
+        if (response.success) {
+          setHousingListings(response.data);
+        } else {
+          setIsError(true);
+          setFetchError(
+            response.message || "An error occurred while fetching listings",
+          );
+        }
+      } catch {
+        setIsError(true);
+        setFetchError(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchListings();
+  }, []);
+
   const [housingError, setHousingError] = useState("");
   const [selectedPropertyType, setSelectedPropertyType] = useState("all");
   const [showFurnishedOnly, setShowFurnishedOnly] = useState(false);
@@ -46,6 +76,14 @@ const HouseListing = () => {
 
     return matchesPropertyType && matchesFurnished;
   });
+
+  if (isError) {
+    return (
+      <>
+        <ErrorMessage error={fetchError} />
+      </>
+    );
+  }
 
   return (
     <section className="rounded-[1.6rem] border border-white/10 bg-slate-900/60 p-5 backdrop-blur-sm sm:rounded-[2rem] sm:p-8">
@@ -282,7 +320,7 @@ const HouseListing = () => {
                 setSelectedPropertyType("all");
                 setShowFurnishedOnly(false);
               }}
-              className="mt-6 inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+              className="hover:cursor-pointer mt-6 inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
             >
               Reset filters
             </button>

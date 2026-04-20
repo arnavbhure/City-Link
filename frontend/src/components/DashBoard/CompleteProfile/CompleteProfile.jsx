@@ -368,7 +368,7 @@ const CompleteProfile = () => {
                   Previous
                 </button>
 
-                <ErrorMessage message={errorMessage} />
+                <ErrorMessage error={errorMessage} />
 
                 <button
                   type="submit"

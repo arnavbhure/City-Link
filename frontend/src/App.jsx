@@ -7,7 +7,6 @@ import { checkIfTokenValid } from "./services/checkIfLoggedin";
 import { isLoginActions } from "./store/isLoggedIn";
 import loadUserInfo from "./utils/loadUserInfo";
 import { userInfoActions } from "./store/user/userSlice";
-import { Analytics } from "@vercel/analytics/next";
 
 function App() {
   const dispatch = useDispatch();

@@ -4,9 +4,11 @@ import {
   BadgeCheck,
   CalendarDays,
   Home,
+  ShieldCheck,
   MapPin,
   Sparkles,
   Wallet,
+  FileText,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import LoadingSpinner from "../Loading/LoadingSpinner";
@@ -282,9 +284,37 @@ const HouseListing = () => {
                     </div>
                   </div>
 
-                  <p className="mt-5 text-sm leading-7 text-slate-300">
-                    {listing.description}
-                  </p>
+                  <div className="mt-5 space-y-4">
+                    {/* Description */}
+                    <div className="rounded-2xl border border-white/10 bg-slate-950/50 p-4 backdrop-blur">
+                      <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-cyan-300">
+                        <FileText className="h-4 w-4" />
+                        Description
+                      </div>
+                      <p className="text-sm leading-relaxed text-slate-300">
+                        {listing.description}
+                      </p>
+                    </div>
+
+                    {/* House Rules */}
+                    <div className="rounded-2xl border border-white/10 bg-slate-950/50 p-4 backdrop-blur">
+                      <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-emerald-300">
+                        <ShieldCheck className="h-4 w-4" />
+                        House Rules
+                      </div>
+
+                      <ul className="space-y-1 text-sm text-slate-300 leading-relaxed">
+                        {listing.houserules.split(".").map((rule, i) =>
+                          rule.trim() ? (
+                            <li key={i} className="flex gap-2">
+                              <span className="mt-[6px] h-1.5 w-1.5 rounded-full bg-emerald-400 shrink-0" />
+                              <span>{rule.trim()}</span>
+                            </li>
+                          ) : null,
+                        )}
+                      </ul>
+                    </div>
+                  </div>
 
                   <div className="mt-5 flex flex-wrap gap-2">
                     {(featureTags.length

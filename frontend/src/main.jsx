@@ -19,6 +19,7 @@ import CompleteProfile from "./components/DashBoard/CompleteProfile/CompleteProf
 import { Provider } from "react-redux";
 import store from "./store/index.js";
 import PostListing from "./components/DashBoard/PostListing/PostListing.jsx";
+import UserProfilePage from "./components/Profile/UserProfilePage.jsx";
 
 if (typeof document !== "undefined") {
   document.documentElement.dataset.theme = "dark";
@@ -45,6 +46,7 @@ const router = createBrowserRouter([
           { path: "dashboard/explore-housing", element: <ExploreHousing /> },
           { path: "dashboard/post-listing", element: <PostListing /> },
           { path: "/complete-profile", element: <CompleteProfile /> },
+          { path: "/view-profile/:id", element: <UserProfilePage /> },
         ],
       },
       { path: "*", element: <ErrorPage embedded /> },

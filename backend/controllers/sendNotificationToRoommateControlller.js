@@ -54,6 +54,11 @@ const sendNotificationToRoommateControlller = async (req, res) => {
          style="background-color: #4f46e5; color: white; padding: 12px 20px; text-decoration: none; border-radius: 6px;">
          Send Email 
       </a>
+      <br>
+      <a href="mailto:${senderMail}"
+         style="background-color: #4f46e5; color: white; padding: 12px 20px; text-decoration: none; border-radius: 6px;">
+        View Profile
+      </a>
     </div>
 
       <hr style="border: none; border-top: 1px solid #eee;" />

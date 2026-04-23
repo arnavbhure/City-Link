@@ -27,7 +27,8 @@ const jwtController = async (req, res) => {
       });
     }
 
-    const { password_hash, verification_token, ...safeUser } = existingUser;
+    const { password_hash, verification_token, created_at, age, ...safeUser } =
+      existingUser;
 
     return res.status(200).json({
       success: true,

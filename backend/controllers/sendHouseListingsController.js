@@ -9,7 +9,10 @@ const sendHouseListingsController = async (req, res) => {
         .json({ success: false, message: "City is required" });
     }
     const houseListings = await getHouseListingModel(city);
-    return res.status(200).json({ success: true, data: houseListings });
+    const safeHouseListings = houseListings.map(
+      ({ created_at, ...rest }) => rest,
+    );
+    return res.status(200).json({ success: true, data: safeHouseListings });
   } catch (err) {
     console.log("Error fetching house listings:", err);
     return res

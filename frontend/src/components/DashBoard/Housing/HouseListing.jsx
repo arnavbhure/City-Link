@@ -72,10 +72,18 @@ const HouseListing = () => {
     const matchesPropertyType =
       selectedPropertyType === "all" ||
       listing.property_type === selectedPropertyType;
-    const matchesFurnished = !showFurnishedOnly || listing.is_furnished;
+    const matchesFurnished = !showFurnishedOnly || listing.furnished;
 
     return matchesPropertyType && matchesFurnished;
   });
+
+  const featureMap = {
+    wifi: "WiFi",
+    powerbackup: "Power Backup",
+    attachedwashroom: "Attached Washroom",
+    laundry: "Laundry",
+    meals: "Meals Included",
+  };
 
   if (isError) {
     return (
@@ -84,6 +92,8 @@ const HouseListing = () => {
       </>
     );
   }
+
+  const housingTags = "";
 
   return (
     <section className="rounded-[1.6rem] border border-white/10 bg-slate-900/60 p-5 backdrop-blur-sm sm:rounded-[2rem] sm:p-8">
@@ -173,7 +183,10 @@ const HouseListing = () => {
             {filteredListings.map((listing) => {
               const featureTags = [
                 ...(Array.isArray(listing.features) ? listing.features : []),
-                listing.is_furnished ? "Fully furnished" : null,
+                listing.furnished && "Fully furnished",
+                ...Object.entries(featureMap)
+                  .filter(([key]) => listing[key])
+                  .map(([, label]) => label),
               ].filter(Boolean);
 
               return (
@@ -185,7 +198,7 @@ const HouseListing = () => {
                     <div>
                       <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-200">
                         <BadgeCheck className="h-3.5 w-3.5" />
-                        {listing.tag}
+                        Verified
                       </div>
 
                       <h3 className="mt-4 text-2xl font-bold text-white">
@@ -194,14 +207,14 @@ const HouseListing = () => {
 
                       <div className="mt-3 flex flex-wrap gap-2 text-xs font-medium uppercase tracking-[0.16em] text-slate-300">
                         <span className="rounded-full border border-white/10 bg-slate-950/60 px-3 py-1">
-                          {propertyTypeLabelMap[listing.property_type] ||
+                          {propertyTypeLabelMap[listing.propertytype] ||
                             "Property"}
                         </span>
                         <span className="rounded-full border border-white/10 bg-slate-950/60 px-3 py-1">
-                          {listing.sharing_type}
+                          {listing.sharingtype}
                         </span>
                         <span className="rounded-full border border-white/10 bg-slate-950/60 px-3 py-1">
-                          {listing.is_furnished ? "Furnished" : "Unfurnished"}
+                          {listing.furnished ? "Furnished" : "Unfurnished"}
                         </span>
                       </div>
                     </div>
@@ -226,7 +239,7 @@ const HouseListing = () => {
 
                     <div className="flex items-center gap-2 rounded-2xl border border-white/10 bg-slate-950/55 px-4 py-3">
                       <CalendarDays className="h-4 w-4 text-indigo-300" />
-                      <span>{listing.available_from}</span>
+                      <span>{listing.availablefrom}</span>
                     </div>
                   </div>
 
@@ -251,7 +264,7 @@ const HouseListing = () => {
                         </span>
                       </div>
                       <p className="mt-3 text-sm font-semibold text-white">
-                        {propertyTypeLabelMap[listing.property_type] ||
+                        {propertyTypeLabelMap[listing.propertytype] ||
                           "Property"}
                       </p>
                     </div>

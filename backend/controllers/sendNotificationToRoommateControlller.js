@@ -3,6 +3,7 @@ const { sendEmail } = require("../services/EmailServices");
 
 const sendNotificationToRoommateControlller = async (req, res) => {
   try {
+    const FRONTEND_URL = process.env.FRONTEND_URL;
     const recieverId = req.body.profileId;
     const senderMail = req.body.email;
     const senderName = req.body.senderName;
@@ -53,6 +54,11 @@ const sendNotificationToRoommateControlller = async (req, res) => {
       <a href="mailto:${senderMail}"
          style="background-color: #4f46e5; color: white; padding: 12px 20px; text-decoration: none; border-radius: 6px;">
          Send Email 
+      </a>
+      <br>
+      <a href="${FRONTEND_URL}/view-profile/${recieverId}"
+         style="background-color: #4f46e5; color: white; padding: 12px 20px; text-decoration: none; border-radius: 6px;">
+         View Profile
       </a>
       <br>
     </div>

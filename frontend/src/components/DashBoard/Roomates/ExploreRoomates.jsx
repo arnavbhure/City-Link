@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
-import { ArrowRight, BadgeCheck, GraduationCap, Search } from "lucide-react";
+import {
+  ArrowRight,
+  BadgeCheck,
+  GraduationCap,
+  Search,
+  User,
+} from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import HeroRoomateMatch from "./HeroRoomateMatch";
 import gettingRoommate from "../../../api/Roommate/gettingRoommate";
@@ -250,14 +256,12 @@ const ExploreRoomates = () => {
                         {profile.compatibility} match
                       </div>
                     </div>
-
                     <div className="mt-5 grid gap-3 text-sm text-slate-300 sm:grid-cols-2">
                       <div className="flex items-center gap-2 rounded-2xl border border-white/10 bg-slate-950/55 px-4 py-3">
                         <GraduationCap className="h-4 w-4 text-indigo-300" />
                         <span>{profile.university}</span>
                       </div>
                     </div>
-
                     <div className="mt-4 flex flex-wrap gap-2">
                       <span className="rounded-full border border-white/10 bg-slate-950/70 px-3 py-1 text-xs font-medium text-slate-200">
                         {profile.budget}
@@ -272,11 +276,9 @@ const ExploreRoomates = () => {
                         {profile.routine}
                       </span>
                     </div>
-
                     <p className="mt-5 text-sm leading-7 text-slate-300">
                       {profile.bio}
                     </p>
-
                     <div className="mt-5 flex flex-wrap gap-2">
                       {profile.tags.map((tag) => (
                         <span
@@ -287,14 +289,23 @@ const ExploreRoomates = () => {
                         </span>
                       ))}
                     </div>
+                    <div className="mt-6 flex flex-col sm:flex-row items-stretch gap-4">
+                      <button
+                        onClick={() => handleOnSendNotification(profile.id)}
+                        className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-slate-950/70 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+                      >
+                        <span>Send Notification to {profile.name}</span>
+                        <ArrowRight className="h-4 w-4" />
+                      </button>
 
-                    <button
-                      onClick={() => handleOnSendNotification(profile.id)}
-                      className="hover:cursor-pointer mt-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-slate-950/70 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
-                    >
-                      Send Notification to {profile.name}
-                      <ArrowRight className="h-4 w-4" />
-                    </button>
+                      <a
+                        href={`/view-profile/${profile.id}`}
+                        className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-slate-950/70 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+                      >
+                        <User className="h-4 w-4" />
+                        <span>View Profile of {profile.name}</span>
+                      </a>
+                    </div>
                   </article>
                 ))}
               </div>

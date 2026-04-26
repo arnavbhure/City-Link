@@ -19,62 +19,60 @@ const sendNotificationToRoommateControlller = async (req, res) => {
       subject: "New Roommate Request on CityLink",
       text: "",
       html: `
-  <div style="font-family: Arial, sans-serif; background-color: #f4f6f8; padding: 20px;">
+ <div style="font-family: Arial, sans-serif; background-color: #f4f6f8; padding: 20px;">
+  
+  <div style="max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
     
-    <div style="max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-      
-            <tr>
-              <td align="center" style="padding-bottom: 20px">
-                <h1 style="color: #7C86FF; margin: 0; font-size: 28px">
-                  CityLink
-                </h1>
-                <p style="color: #94a3b8; margin-top: 6px">
-                  Trusted student housing starts here
-                </p>
-              </td>
-            </tr>
-
-      <h2 style="color: #2c3e50; margin-bottom: 10px;">
-        New Roommate Request 👋
-      </h2>
-
-      <p style="color: #555; font-size: 15px;">
-        <strong>${senderName}</strong> wants to connect with you on <strong>CityLink</strong>.
+    <!-- HEADER (fixed, no <tr>) -->
+    <div style="text-align: center; padding-bottom: 20px;">
+      <h1 style="color: #7C86FF; margin: 0; font-size: 28px;">
+        CityLink
+      </h1>
+      <p style="color: #94a3b8; margin-top: 6px;">
+        Trusted student housing starts here
       </p>
+    </div>
 
+    <h2 style="color: #2c3e50; margin-bottom: 10px;">
+      New Roommate Request 👋
+    </h2>
+
+    <p style="color: #555; font-size: 15px;">
+      <strong>${senderName}</strong> wants to connect with you on <strong>CityLink</strong>.
+    </p>
+
+    <p style="color: #777; font-size: 14px;">
+      Check their profile and decide if you'd like to connect.
+    </p>
+
+    <div style="text-align: center; margin: 25px 0;">
       <p style="color: #777; font-size: 14px;">
-        Check their profile and decide if you'd like to connect.
+        Send email to them if you are interested in connecting with them.
       </p>
 
-     <div style="text-align: center; margin: 25px 0;">
-       <p style="color: #777; font-size: 14px;">
-        Send email to them if you are intrested in connecting with them.
-      </p>
-      <br>
       <a href="mailto:${senderMail}"
-         style="background-color: #4f46e5; color: white; padding: 12px 20px; text-decoration: none; border-radius: 6px;">
-         Send Email 
+        style="display: block; width: 200px; margin: 10px auto; background-color: #4f46e5; color: white; padding: 12px 20px; text-decoration: none; border-radius: 6px;">
+        Send Email
       </a>
-      <br>
+
       <a href="${FRONTEND_URL}/view-profile/${recieverId}"
-         style="background-color: #4f46e5; color: white; padding: 12px 20px; text-decoration: none; border-radius: 6px;">
-         View Profile
+        style="display: block; width: 200px; margin: 10px auto; background-color: #4f46e5; color: white; padding: 12px 20px; text-decoration: none; border-radius: 6px;">
+        View Profile
       </a>
-      <br>
     </div>
 
-      <hr style="border: none; border-top: 1px solid #eee;" />
+    <hr style="border: none; border-top: 1px solid #eee;" />
 
-      <p style="font-size: 12px; color: #999; text-align: center;">
-        You're receiving this because someone showed interest in connecting with you on CityLink.
-      </p>
+    <p style="font-size: 12px; color: #999; text-align: center;">
+      You're receiving this because someone showed interest in connecting with you on CityLink.
+    </p>
 
-      <p style="font-size: 12px; color: #bbb; text-align: center;">
-        – Team CityLink
-      </p>
+    <p style="font-size: 12px; color: #bbb; text-align: center;">
+      – Team CityLink
+    </p>
 
-    </div>
   </div>
+</div>
 `,
     });
 

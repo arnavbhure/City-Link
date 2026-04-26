@@ -7,6 +7,7 @@ const sendNotificationToRoommateControlller = async (req, res) => {
     const recieverId = req.body.profileId;
     const senderMail = req.body.email;
     const senderName = req.body.senderName;
+    const { senderId } = req.body;
     const reciever = await getUserById(recieverId);
     if (!reciever || !senderMail) {
       return res
@@ -55,7 +56,7 @@ const sendNotificationToRoommateControlller = async (req, res) => {
         Send Email
       </a>
 
-      <a href="${FRONTEND_URL}/view-profile/${recieverId}"
+      <a href="${FRONTEND_URL}/view-profile/${senderId}"
         style="display: block; width: 200px; margin: 10px auto; background-color: #4f46e5; color: white; padding: 12px 20px; text-decoration: none; border-radius: 6px;">
         View Profile
       </a>

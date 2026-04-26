@@ -94,9 +94,9 @@ const ExploreRoomates = () => {
   const email = useSelector((state) => state.user.email);
   const senderName = useSelector((state) => state.user.full_name);
   const storedRoommates = useSelector((state) => state.roommates);
-  const is_profile_completed = useSelector(
-    (state) => state.user.profile_listing_completed,
-  );
+  const user = useSelector((state) => state.user);
+  const profile_listing_completed = user.profile_listing_completed;
+  const senderId = user.id;
   const [filters, setFilters] = useState(initialFilters);
   const [isLoadingRoommates, setIsLoadingRoommates] = useState(false);
   const [isLoading, setisLoading] = useState(false);
@@ -159,6 +159,7 @@ const ExploreRoomates = () => {
     try {
       setisLoading(true);
       const response = await sendNotificationOnClick({
+        senderId,
         profileId,
         email,
         senderName,

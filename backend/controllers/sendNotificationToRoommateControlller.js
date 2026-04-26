@@ -3,11 +3,12 @@ const { sendEmail } = require("../services/EmailServices");
 
 const sendNotificationToRoommateControlller = async (req, res) => {
   try {
+    console.log("Received request to send notification:", req.body);
     const FRONTEND_URL = process.env.FRONTEND_URL;
-    const recieverId = req.body.profileId;
+    const recieverId = req.body.profileId; // user which receive the notification
     const senderMail = req.body.email;
     const senderName = req.body.senderName;
-    const { senderId } = req.body;
+    const user_id = req.body.user_id; // user which send the notification
     const reciever = await getUserById(recieverId);
     if (!reciever || !senderMail) {
       return res
@@ -56,7 +57,7 @@ const sendNotificationToRoommateControlller = async (req, res) => {
         Send Email
       </a>
 
-      <a href="${FRONTEND_URL}/view-profile/${senderId}"
+      <a href="${FRONTEND_URL}/view-profile/${user_id}"
         style="display: block; width: 200px; margin: 10px auto; background-color: #4f46e5; color: white; padding: 12px 20px; text-decoration: none; border-radius: 6px;">
         View Profile
       </a>

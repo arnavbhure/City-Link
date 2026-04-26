@@ -94,9 +94,9 @@ const ExploreRoomates = () => {
   const email = useSelector((state) => state.user.email);
   const senderName = useSelector((state) => state.user.full_name);
   const storedRoommates = useSelector((state) => state.roommates);
-  const user = useSelector((state) => state.user);
-  const profile_listing_completed = user.profile_listing_completed;
-  const senderId = user.id;
+  const profile_listing_completed = useSelector(
+    (state) => state.user.profile_listing_completed,
+  );
   const [filters, setFilters] = useState(initialFilters);
   const [isLoadingRoommates, setIsLoadingRoommates] = useState(false);
   const [isLoading, setisLoading] = useState(false);
@@ -159,7 +159,7 @@ const ExploreRoomates = () => {
     try {
       setisLoading(true);
       const response = await sendNotificationOnClick({
-        senderId,
+        user_id,
         profileId,
         email,
         senderName,
@@ -182,7 +182,7 @@ const ExploreRoomates = () => {
         <div className="mx-auto max-w-7xl space-y-6 sm:space-y-8">
           {/*Div for Completting profile if user not completed his profile to be listed on the roomate list  */}
           <Is_Profile_Listing_completed
-            is_profile_completed={is_profile_completed}
+            is_profile_completed={profile_listing_completed}
           />
 
           {/* Section for filtering the roomates on the basis of prefernces*/}

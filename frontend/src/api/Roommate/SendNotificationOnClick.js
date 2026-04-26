@@ -1,11 +1,17 @@
 import api from "../axios";
 
-const sendNotificationOnClick = async ({ profileId, email, senderName }) => {
+const sendNotificationOnClick = async ({
+  profileId,
+  email,
+  senderName,
+  user_id,
+}) => {
   try {
     const response = await api.post("/roommate/send-notification", {
       profileId,
       email,
       senderName,
+      user_id,
     });
     return response.data;
   } catch {

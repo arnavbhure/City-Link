@@ -3,7 +3,6 @@ const { sendEmail } = require("../services/EmailServices");
 
 const sendNotificationToRoommateControlller = async (req, res) => {
   try {
-    console.log("Received request to send notification:", req.body);
     const FRONTEND_URL = process.env.FRONTEND_URL;
     const recieverId = req.body.profileId; // user which receive the notification
     const senderMail = req.body.email;

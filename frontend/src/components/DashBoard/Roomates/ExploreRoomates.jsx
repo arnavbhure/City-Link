@@ -294,7 +294,9 @@ const ExploreRoomates = () => {
                         onClick={() => handleOnSendNotification(profile.id)}
                         className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-slate-950/70 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
                       >
-                        <span>Send Notification to {profile.name}</span>
+                        <span>
+                          Send Notification to {profile.name.split(" ")[0]}
+                        </span>
                         <ArrowRight className="h-4 w-4" />
                       </button>
 
@@ -303,7 +305,9 @@ const ExploreRoomates = () => {
                         className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-slate-950/70 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
                       >
                         <User className="h-4 w-4" />
-                        <span>View Profile of {profile.name}</span>
+                        <span>
+                          View Profile of {profile.name.split(" ")[0]}
+                        </span>
                       </a>
                     </div>
                   </article>

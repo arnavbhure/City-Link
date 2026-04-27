@@ -8,6 +8,7 @@ import {
   Sparkles,
   Users,
 } from "lucide-react";
+import { SyncLoader } from "react-spinners";
 import SubmitContactUs from "../../api/ContactUs/SubmitContactUs";
 
 const supportPoints = [
@@ -35,7 +36,9 @@ const initialForm = {
 const ContactUs = () => {
   const [formData, setFormData] = useState(initialForm);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
   const [errormessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -50,18 +53,23 @@ const ContactUs = () => {
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
+      setLoading(true);
       const response = await SubmitContactUs(formData);
       if (response.success) {
         setIsSubmitted(true);
         setFormData(initialForm);
+        setSuccessMessage(response.message);
         return;
       }
+      setErrorMessage(response.message);
     } catch {
       setErrorMessage(
         "An error occurred while submitting the contact us form. Please try again later.",
       );
       setIsSubmitted(true);
       return;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -228,18 +236,24 @@ const ContactUs = () => {
               </label>
 
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <button
-                  type="submit"
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5 font-semibold text-slate-950 transition hover:bg-slate-200"
-                >
-                  Send message
-                  <ArrowRight className="h-4 w-4" />
-                </button>
+                {loading ? (
+                  <div className="w-full flex justify-center items-center">
+                    <SyncLoader size={15} color="#4f46e5" />
+                  </div>
+                ) : (
+                  <button
+                    type="submit"
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5 font-semibold text-slate-950 transition hover:bg-slate-200"
+                  >
+                    Send message
+                    <ArrowRight className="h-4 w-4" />
+                  </button>
+                )}
               </div>
 
               {isSubmitted ? (
                 <div className="rounded-2xl border border-emerald-400/20 bg-emerald-500/10 px-4 py-4 text-sm text-emerald-200">
-                  Thanks. Your Form is Submitted.
+                  {successMessage || "Your message has been sent successfully!"}
                 </div>
               ) : null}
             </form>

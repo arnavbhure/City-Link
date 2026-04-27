@@ -166,7 +166,7 @@ const UserProfilePage = () => {
   if (loading) {
     return (
       <div className="text-center mt-40">
-        <LoadingSpinner />;
+        <LoadingSpinner />
       </div>
     );
   }

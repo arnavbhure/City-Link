@@ -45,6 +45,11 @@ app.use("/api", viewProfileRouter);
 //router for contact us form
 app.use("/api", contactUsRouter);
 
+// to keep server running
+app.get("/ping", (req, res) => {
+  res.send("OK");
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });

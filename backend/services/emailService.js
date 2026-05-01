@@ -8,7 +8,7 @@ const sendVerificationEmail = async (email, token) => {
       {
         sender: {
           name: "CityLink",
-          email: "citylink1208@gmail.com",
+          email: process.env.EMAIL_USER,
         },
         to: [{ email }],
         subject: "Verify your email for CityLink",

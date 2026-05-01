@@ -67,10 +67,19 @@ const updateVerificationToken = async (email, verificationToken) => {
   return result.rows[0];
 };
 
+// model for sending notification to roommate
+const sendNotificationModel = async (id) => {
+  const result = await pool.query(`SELECT email FROM users WHERE id = $1`, [
+    id,
+  ]);
+  return result.rows[0];
+};
+
 module.exports = {
   createUser,
   getUserByEmail,
   getUserById,
   updateOpenForListing,
   updateVerificationToken,
+  sendNotificationModel,
 };

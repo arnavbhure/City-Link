@@ -1,98 +1,100 @@
-const { getUserById } = require("../models/userModel");
+const { sendNotificationModel } = require("../models/userModel");
 const { sendEmail } = require("../services/EmailServices");
+const validator = require("validator");
 
-const sendNotificationToRoommateControlller = async (req, res) => {
+const sendNotificationToRoommateController = async (req, res) => {
   try {
     const FRONTEND_URL = process.env.FRONTEND_URL;
-    const recieverId = req.body.profileId; // user which receive the notification
-    const senderMail = req.body.email;
+    console.log("Received notification request:", req.body);
+    const receiverId = req.body.profileId; // which recives email
     const senderName = req.body.senderName;
-    const user_id = req.body.user_id; // user which send the notification
-    const reciever = await getUserById(recieverId);
-    if (!reciever || !senderMail) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Something went wrong." });
-    }
-    const recieverMail = reciever.email;
-    const emailResponse = await sendEmail({
-      to: recieverMail,
-      subject: "New Roommate Request on CityLink",
-      text: "",
-      html: `
- <div style="font-family: Arial, sans-serif; background-color: #f4f6f8; padding: 20px;">
-  
-  <div style="max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-    
-    <!-- HEADER (fixed, no <tr>) -->
-    <div style="text-align: center; padding-bottom: 20px;">
-      <h1 style="color: #7C86FF; margin: 0; font-size: 28px;">
-        CityLink
-      </h1>
-      <p style="color: #94a3b8; margin-top: 6px;">
-        Trusted student housing starts here
-      </p>
-    </div>
+    const senderMail = req.body.email;
+    const senderId = req.body.user_id; // which sends email
 
-    <h2 style="color: #2c3e50; margin-bottom: 10px;">
-      New Roommate Request 👋
-    </h2>
-
-    <p style="color: #555; font-size: 15px;">
-      <strong>${senderName}</strong> wants to connect with you on <strong>CityLink</strong>.
-    </p>
-
-    <p style="color: #777; font-size: 14px;">
-      Check their profile and decide if you'd like to connect.
-    </p>
-
-    <div style="text-align: center; margin: 25px 0;">
-      <p style="color: #777; font-size: 14px;">
-        Send email to them if you are interested in connecting with them.
-      </p>
-
-      <a href="mailto:${senderMail}"
-        style="display: block; width: 200px; margin: 10px auto; background-color: #4f46e5; color: white; padding: 12px 20px; text-decoration: none; border-radius: 6px;">
-        Send Email
-      </a>
-
-      <a href="${FRONTEND_URL}/view-profile/${user_id}"
-        style="display: block; width: 200px; margin: 10px auto; background-color: #4f46e5; color: white; padding: 12px 20px; text-decoration: none; border-radius: 6px;">
-        View Profile
-      </a>
-    </div>
-
-    <hr style="border: none; border-top: 1px solid #eee;" />
-
-    <p style="font-size: 12px; color: #999; text-align: center;">
-      You're receiving this because someone showed interest in connecting with you on CityLink.
-    </p>
-
-    <p style="font-size: 12px; color: #bbb; text-align: center;">
-      – Team CityLink
-    </p>
-
-  </div>
-</div>
-`,
-    });
-
-    if (emailResponse) {
-      return res.status(200).json({
-        success: true,
-        message: "Notification sent successfully.",
+    if (!senderId || !senderName || !senderMail || !receiverId) {
+      return res.status(400).json({
+        success: false,
+        message: "Missing required fields.",
       });
     }
-    return res.status(500).json({
-      success: false,
-      message: "Failed to send notification. Please try again later.",
+    if (!validator.isEmail(senderMail)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid sender email.",
+      });
+    }
+
+    const receiver = await sendNotificationModel(receiverId);
+    console.log("Receiver details:", receiver);
+
+    if (!receiver || !receiver.email) {
+      return res.status(404).json({
+        success: false,
+        message: "Receiver not found.",
+      });
+    }
+
+    const receiverMail = receiver.email;
+    const htmlContent = `
+    <div style="font-family: Arial, sans-serif; background-color: #f4f6f8; padding: 20px;">
+      <div style="max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 10px;">
+        
+        <div style="text-align: center; padding-bottom: 20px;">
+          <h1 style="color: #7C86FF;">CityLink</h1>
+          <p style="color: #94a3b8;">Trusted student housing starts here</p>
+        </div>
+
+        <h2>New Roommate Request 👋</h2>
+
+        <p><strong>${senderName}</strong> wants to connect with you.</p>
+
+        <div style="text-align: center; margin: 20px 0;">
+          <a href="mailto:${senderMail}" target="_blank"
+            style="display:block; margin:10px auto; width:200px; background:#4f46e5; color:white; padding:12px; text-decoration:none; border-radius:6px;">
+            Contact via Email
+          </a>
+
+          <a href="${FRONTEND_URL}/view-profile/${senderId}" target="_blank"
+            style="display:block; margin:10px auto; width:200px; background:#4f46e5; color:white; padding:12px; text-decoration:none; border-radius:6px;">
+            View Profile
+          </a>
+        </div>
+
+        <p style="font-size:12px; color:#999; text-align:center;">
+          Someone showed interest in connecting with you on CityLink.
+        </p>
+
+      </div>
+    </div>
+    `;
+
+    const textContent = `${senderName} wants to connect with you on CityLink. Contact: ${senderMail}`;
+
+    const emailSent = await sendEmail({
+      to: receiverMail,
+      subject: "New Roommate Request on CityLink",
+      html: htmlContent,
+      text: textContent,
+    });
+
+    if (!emailSent) {
+      return res.status(500).json({
+        success: false,
+        message: "Failed to send email.",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Notification sent successfully.",
     });
   } catch (err) {
-    return res.status(400).json({
+    console.log("Error in sendNotificationToRoommateController:", err);
+    return res.status(500).json({
       success: false,
-      message: "Invalid request.",
+      message: "Internal server error.",
     });
   }
 };
 
-module.exports = sendNotificationToRoommateControlller;
+module.exports = sendNotificationToRoommateController;

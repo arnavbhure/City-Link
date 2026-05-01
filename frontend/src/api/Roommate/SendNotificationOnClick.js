@@ -14,7 +14,8 @@ const sendNotificationOnClick = async ({
       user_id,
     });
     return response.data;
-  } catch {
+  } catch (err) {
+    console.error("Error sending notification:", err);
     return {
       success: false,
       message: "Failed to send notification. Please try again later.",

@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { isLoginActions } from "../../store/isLoggedIn";
 import { userInfoActions } from "../../store/user/userSlice";
 import LoadingSpinner from "../DashBoard/Loading/LoadingSpinner";
+import { SyncLoader } from "react-spinners";
 
 const reasons = [
   {
@@ -276,13 +277,19 @@ const Login = () => {
                   </button>
                 ) : null}
 
-                <button
-                  type="submit"
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5 font-semibold text-slate-950 transition hover:bg-slate-200"
-                >
-                  Sign in
-                  <ArrowRight className="h-4 w-4" />
-                </button>
+                {Loading ? (
+                  <center>
+                    <SyncLoader color="#724cf5" size={11} />
+                  </center>
+                ) : (
+                  <button
+                    type="submit"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5 font-semibold text-slate-950 transition hover:bg-slate-200"
+                  >
+                    Sign in
+                    <ArrowRight className="h-4 w-4" />
+                  </button>
+                )}
               </form>
 
               <div className="mt-6 flex flex-col gap-3 border-t border-white/10 pt-6 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between">

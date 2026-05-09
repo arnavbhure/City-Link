@@ -2,7 +2,6 @@ const axios = require("axios");
 
 const sendEmail = async ({ to, subject, html, text }) => {
   try {
-    console.log(text);
     const response = await axios.post(
       "https://api.brevo.com/v3/smtp/email",
       {
@@ -22,7 +21,6 @@ const sendEmail = async ({ to, subject, html, text }) => {
         },
       },
     );
-    console.log("Email sent:", response.data?.messageId || "success");
     return true;
   } catch (err) {
     console.error("Email Error:", err.response?.data || err.message);

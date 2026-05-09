@@ -5,7 +5,6 @@ const validator = require("validator");
 const sendNotificationToRoommateController = async (req, res) => {
   try {
     const FRONTEND_URL = process.env.FRONTEND_URL;
-    console.log("Received notification request:", req.body);
     const receiverId = req.body.profileId; // which recives email
     const senderName = req.body.senderName;
     const senderMail = req.body.email;
@@ -25,7 +24,6 @@ const sendNotificationToRoommateController = async (req, res) => {
     }
 
     const receiver = await sendNotificationModel(receiverId);
-    console.log("Receiver details:", receiver);
 
     if (!receiver || !receiver.email) {
       return res.status(404).json({

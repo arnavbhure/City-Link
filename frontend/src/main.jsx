@@ -20,6 +20,7 @@ import { Provider } from "react-redux";
 import store from "./store/index.js";
 import PostListing from "./components/DashBoard/PostListing/PostListing.jsx";
 import UserProfilePage from "./components/Profile/UserProfilePage.jsx";
+import VendorOnboarding from "./pages/vendor/VendorOnboarding.jsx";
 
 if (typeof document !== "undefined") {
   document.documentElement.dataset.theme = "dark";
@@ -38,6 +39,7 @@ const router = createBrowserRouter([
       { path: "/signup", element: <SignUp /> },
       { path: "/login", element: <Login /> },
       { path: "/forgot-password", element: <ForgotPassword /> },
+      { path: "/vendor/onboarding", element: <VendorOnboarding /> },
       {
         element: <ProtectedRoute />,
         children: [

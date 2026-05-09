@@ -27,7 +27,8 @@ FROM users u
 LEFT JOIN user_preferences p ON u.id = p.user_id
 LEFT JOIN user_lifestyle l ON u.id = l.user_id
 
-WHERE u.id = $1;`,
+WHERE u.id = $1
+AND u.open_for_listing = true;`,
     [id],
   );
   return response.rows[0];

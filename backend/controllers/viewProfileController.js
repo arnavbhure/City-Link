@@ -23,7 +23,6 @@ const viewProfileController = async (req, res) => {
       data: response,
     });
   } catch (err) {
-    console.error("Error in viewProfileController:", err);
     return res.status(500).json({
       success: false,
       message: "Internal server error",

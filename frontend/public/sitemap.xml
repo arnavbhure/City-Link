@@ -3,25 +3,25 @@
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
     <url>
-        <loc>https://yourdomain.com/login</loc>
+        <loc>https://citylink-nine.vercel.app/login</loc>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>
 
     <url>
-        <loc>https://yourdomain.com/signup</loc>
+        <loc>https://citylink-nine.vercel.app/signup</loc>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
 
     <url>
-        <loc>https://yourdomain.com/explore-roommates</loc>
+        <loc>https://citylink-nine.vercel.app/explore-roommates</loc>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
     </url>
 
     <url>
-        <loc>https://yourdomain.com/contact-us</loc>
+        <loc>https://citylink-nine.vercel.app/contact-us</loc>
         <changefreq>yearly</changefreq>
         <priority>0.4</priority>
     </url>

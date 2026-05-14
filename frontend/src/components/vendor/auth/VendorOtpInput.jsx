@@ -4,7 +4,10 @@ const OTP_LENGTH = 6;
 
 const VendorOtpInput = ({ value, onChange, disabled = false }) => {
   const inputRefs = useRef([]);
-  const digits = Array.from({ length: OTP_LENGTH }, (_, index) => value[index] || "");
+  const digits = Array.from(
+    { length: OTP_LENGTH },
+    (_, index) => value[index] || "",
+  );
 
   const updateDigit = (index, nextValue) => {
     const nextDigit = nextValue.replace(/\D/g, "").slice(-1);
@@ -39,7 +42,7 @@ const VendorOtpInput = ({ value, onChange, disabled = false }) => {
       <p className="mb-3 text-sm font-medium text-slate-300">
         Enter verification code
       </p>
-      <div className="grid grid-cols-6 gap-2 sm:gap-3" onPaste={handlePaste}>
+      <div className="grid min-w-0 grid-cols-6 gap-1.5 sm:gap-3" onPaste={handlePaste}>
         {digits.map((digit, index) => (
           <input
             key={index}
@@ -54,7 +57,7 @@ const VendorOtpInput = ({ value, onChange, disabled = false }) => {
             onChange={(event) => updateDigit(index, event.target.value)}
             onKeyDown={(event) => handleKeyDown(event, index)}
             aria-label={`OTP digit ${index + 1}`}
-            className="aspect-square min-h-12 rounded-2xl border border-white/10 bg-slate-950/75 text-center text-xl font-bold text-white outline-none transition placeholder:text-slate-600 focus:border-emerald-300/60 focus:bg-slate-950 focus:shadow-[0_0_0_4px_rgba(16,185,129,0.12)] disabled:cursor-not-allowed disabled:opacity-60 sm:min-h-14"
+            className="aspect-square min-h-10 min-w-0 rounded-xl border border-white/10 bg-slate-950/75 text-center text-lg font-bold text-white outline-none transition placeholder:text-slate-600 focus:border-emerald-300/60 focus:bg-slate-950 focus:shadow-[0_0_0_4px_rgba(16,185,129,0.12)] disabled:cursor-not-allowed disabled:opacity-60 sm:min-h-14 sm:rounded-2xl sm:text-xl"
           />
         ))}
       </div>

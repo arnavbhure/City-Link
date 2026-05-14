@@ -12,6 +12,7 @@ const PostHouseListingRouter = require("./routes/PostHouseListingRouter");
 const sendHouseListingsRouter = require("./routes/sendHouseListingsRouter");
 const viewProfileRouter = require("./routes/viewprofileRouter");
 const contactUsRouter = require("./routes/contactUsRouter");
+const editProfileRouter = require("./routes/editProfileRouter");
 
 const PORT = process.env.PORT;
 
@@ -41,6 +42,9 @@ app.use("/api", sendHouseListingsRouter);
 
 // router for viewing user profile
 app.use("/api", viewProfileRouter);
+
+// router for editing user profile
+app.use("/api", editProfileRouter);
 
 //router for contact us form
 app.use("/api", contactUsRouter);

@@ -21,6 +21,7 @@ import store from "./store/index.js";
 import PostListing from "./components/DashBoard/PostListing/PostListing.jsx";
 import UserProfilePage from "./components/Profile/UserProfilePage.jsx";
 import VendorOnboarding from "./pages/vendor/VendorOnboarding.jsx";
+import EditProfile from "./pages/profile/EditProfile.jsx";
 
 if (typeof document !== "undefined") {
   document.documentElement.dataset.theme = "dark";
@@ -49,6 +50,7 @@ const router = createBrowserRouter([
           { path: "dashboard/post-listing", element: <PostListing /> },
           { path: "/complete-profile", element: <CompleteProfile /> },
           { path: "/view-profile/:id", element: <UserProfilePage /> },
+          { path: "/profile/edit", element: <EditProfile /> },
         ],
       },
       { path: "*", element: <ErrorPage embedded /> },

@@ -1,11 +1,11 @@
-const { getUserByEmail } = require("../models/userModel");
+const { getUserInfoDuringLogin } = require("../models/userModel");
 const { comparePassword, hashPassword } = require("./password_hash");
 const { createAuthToken } = require("../services/authToken");
 
 const loginController = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const existinguser = await getUserByEmail(email);
+    const existinguser = await getUserInfoDuringLogin(email);
 
     if (!existinguser) {
       return res
@@ -28,8 +28,10 @@ const loginController = async (req, res) => {
         .json({ success: false, message: "Incorrect password" });
     }
 
-    const { password_hash, verification_token, ...safeUser } = existinguser;
-    const { token, expiresAt } = createAuthToken(existinguser);
+    const { password_hash, verification_token, created_at, age, ...safeUser } =
+      existinguser;
+
+    const { token, expiresAt } = createAuthToken(safeUser);
 
     return res.status(200).json({
       success: true,
@@ -38,7 +40,8 @@ const loginController = async (req, res) => {
       expiresAt,
       user: safeUser,
     });
-  } catch {
+  } catch (err) {
+    console.log(err);
     return res
       .status(500)
       .json({ success: false, message: "Internal server error" });

@@ -410,12 +410,12 @@ const VendorOnboarding = () => {
           <VendorAuthCard
             isVerified={vendorAuth.phase === "verified"}
             footer={
-              <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex min-w-0 flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
                 {vendorAuth.phase === "otp" ? (
                   <button
                     type="button"
                     onClick={changeVerifiedNumber}
-                    className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-3 font-semibold text-white transition hover:bg-white/10"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-3 font-semibold text-white transition hover:bg-white/10 sm:w-auto"
                   >
                     <ArrowLeft className="h-4 w-4" />
                     Change number
@@ -424,7 +424,7 @@ const VendorOnboarding = () => {
                   <button
                     type="button"
                     onClick={goBack}
-                    className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-3 font-semibold text-white transition hover:bg-white/10"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-3 font-semibold text-white transition hover:bg-white/10 sm:w-auto"
                   >
                     <ArrowLeft className="h-4 w-4" />
                     Back
@@ -436,7 +436,7 @@ const VendorOnboarding = () => {
                     type="button"
                     onClick={sendOtp}
                     disabled={!isPhoneReady || vendorAuth.isSending}
-                    className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 font-semibold text-slate-950 transition hover:bg-slate-200 disabled:cursor-not-allowed disabled:bg-white/30 disabled:text-slate-600"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-6 py-3 font-semibold text-slate-950 transition hover:bg-slate-200 disabled:cursor-not-allowed disabled:bg-white/30 disabled:text-slate-600 sm:w-auto"
                   >
                     {vendorAuth.isSending ? (
                       <LoaderCircle className="h-4 w-4 animate-spin" />
@@ -453,7 +453,7 @@ const VendorOnboarding = () => {
                     type="button"
                     onClick={verifyOtp}
                     disabled={!isOtpReady || vendorAuth.isVerifying}
-                    className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 font-semibold text-slate-950 transition hover:bg-slate-200 disabled:cursor-not-allowed disabled:bg-white/30 disabled:text-slate-600"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-6 py-3 font-semibold text-slate-950 transition hover:bg-slate-200 disabled:cursor-not-allowed disabled:bg-white/30 disabled:text-slate-600 sm:w-auto"
                   >
                     {vendorAuth.isVerifying ? (
                       <LoaderCircle className="h-4 w-4 animate-spin" />
@@ -469,7 +469,7 @@ const VendorOnboarding = () => {
                   <button
                     type="button"
                     onClick={goNext}
-                    className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 font-semibold text-slate-950 transition hover:bg-slate-200"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-6 py-3 font-semibold text-slate-950 transition hover:bg-slate-200 sm:w-auto"
                   >
                     Continue
                     <ArrowRight className="h-4 w-4" />
@@ -525,7 +525,7 @@ const VendorOnboarding = () => {
                     disabled={vendorAuth.isVerifying}
                   />
 
-                  <div className="flex flex-col gap-3 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex min-w-0 flex-col gap-3 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between">
                     <span>Demo mode accepts any 6-digit OTP.</span>
                     <button
                       type="button"

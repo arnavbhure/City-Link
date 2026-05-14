@@ -9,6 +9,7 @@ const getViewProfileModel = async (id) => {
     u.course,
     u.clg_year,
     u.city,
+    u.email,
 
     p.budget_min,
     p.budget_max,

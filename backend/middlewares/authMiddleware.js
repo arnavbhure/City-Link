@@ -1,14 +1,21 @@
 const jwt = require("jsonwebtoken");
 const { getUserById } = require("../models/userModel");
 
-const jwtController = async (req, res) => {
+const authMiddleware = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
+
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return;
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
     }
+
     const token = authHeader.split(" ")[1];
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+
     const existingUser = await getUserById(decoded.userId);
 
     if (
@@ -18,24 +25,21 @@ const jwtController = async (req, res) => {
     ) {
       return res.status(401).json({
         success: false,
-        message: "Invalid or expired token",
+        message: "Unauthorized",
       });
     }
 
-    const { password_hash, verification_token, created_at, age, ...safeUser } =
-      existingUser;
+    req.user = existingUser;
 
-    return res.status(200).json({
-      success: true,
-      user: safeUser,
-    });
+    next();
   } catch (error) {
-    console.log(error);
+    console.error(error);
+
     return res.status(401).json({
       success: false,
-      message: "Invalid or expired token",
+      message: "Invalid token",
     });
   }
 };
 
-module.exports = jwtController;
+module.exports = authMiddleware;

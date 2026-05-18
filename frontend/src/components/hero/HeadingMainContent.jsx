@@ -56,20 +56,17 @@ const Heading = () => {
             <span className="h-2 w-2 rounded-full bg-indigo-400 shadow-[0_0_20px_rgba(129,140,248,0.9)]" />
             Introducing CityLink - Your Student Community Hub
           </div>
-
           <h1 className="max-w-4xl text-5xl font-black tracking-tight text-white sm:text-6xl lg:text-7xl">
             Find Your People,
             <span className="mt-2 block bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300 bg-clip-text text-transparent">
               Find Your Place.
             </span>
           </h1>
-
           <p className="mt-7 max-w-2xl text-lg leading-8 text-slate-300 sm:text-xl">
             Discover verified roommates, trusted housing, and community-powered
             services - all in one platform built for students moving to a new
             city.
           </p>
-
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <Button as={Link} to="/signup" size="lg">
               Get Started
@@ -79,7 +76,6 @@ const Heading = () => {
               Explore Community
             </Button>
           </div>
-
           <div className="mt-10 flex flex-wrap gap-x-5 gap-y-3 text-sm text-slate-400">
             {trustNotes.map((note) => (
               <span key={note} className="inline-flex items-center gap-2">
@@ -87,7 +83,7 @@ const Heading = () => {
                 {note}
               </span>
             ))}
-          </div>
+          </div>{" "}
         </MotionDiv>
 
         <MotionDiv

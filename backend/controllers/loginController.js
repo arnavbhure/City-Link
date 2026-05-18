@@ -8,9 +8,9 @@ const loginController = async (req, res) => {
     const existinguser = await getUserInfoDuringLogin(email);
 
     if (!existinguser) {
-      return res
-        .status(400)
-        .json({ message: "Account with this email does not exists" });
+      return res.status(400).json({
+        message: "Account with this email does not exists . Try Signing up",
+      });
     } else if (!existinguser.is_verified) {
       return res.status(400).json({
         message:

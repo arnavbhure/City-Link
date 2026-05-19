@@ -55,9 +55,9 @@ function App() {
 
   if (loading) {
     return (
-      <>
+      <div className="mt-10">
         <LoadingSpinner />
-      </>
+      </div>
     );
   }
 

@@ -2,12 +2,8 @@ require("dotenv").config();
 const { Pool } = require("pg");
 
 const isProduction = process.env.NODE_ENV === "production";
-const { Pool } = require("pg");
-
-const isProduction = process.env.NODE_ENV === "production";
 
 const baseConfig = {
-  max: 10, // max clients in pool
   idleTimeoutMillis: 30000, // close idle clients after 30s
   connectionTimeoutMillis: 10000, // fail fast if DB unavailable
   maxUses: 7500, // recycle clients to avoid stale connections

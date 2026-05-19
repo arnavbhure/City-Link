@@ -1,5 +1,4 @@
-const jwt = require("jsonwebtoken");
-const { getUserById } = require("../models/userModel");
+const verifyUserFromToken = require("../utils/verifyTokenFromUser");
 
 const authMiddleware = async (req, res, next) => {
   try {
@@ -14,30 +13,18 @@ const authMiddleware = async (req, res, next) => {
 
     const token = authHeader.split(" ")[1];
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    const user = await verifyUserFromToken(token);
 
-    const existingUser = await getUserById(decoded.userId);
+    console.log("Authenticated user added to req:", user);
 
-    if (
-      !existingUser ||
-      !existingUser.is_verified ||
-      existingUser.email !== decoded.email
-    ) {
-      return res.status(401).json({
-        success: false,
-        message: "Unauthorized",
-      });
-    }
-
-    req.user = existingUser;
+    req.user = user;
 
     next();
   } catch (error) {
-    console.error(error);
-
+    console.error("Authentication error:", error);
     return res.status(401).json({
       success: false,
-      message: "Invalid token",
+      message: "Unauthorized",
     });
   }
 };

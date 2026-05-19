@@ -26,10 +26,6 @@ const pool = isProduction
       port: Number(process.env.DB_PORT),
     });
 
-pool.on("connect", () => {
-  console.log("PostgreSQL connected");
-});
-
 pool.on("error", (err) => {
   console.error("Unexpected PostgreSQL error:", err);
 });

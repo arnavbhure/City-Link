@@ -7,16 +7,20 @@ import { checkIfTokenValid } from "./services/checkIfLoggedin";
 import { isLoginActions } from "./store/isLoggedIn";
 import loadUserInfo from "./utils/loadUserInfo";
 import { userInfoActions } from "./store/user/userSlice";
+import LoadingSpinner from "./components/DashBoard/Loading/LoadingSpinner";
+import { useState } from "react";
 
 function App() {
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
+    setLoading(true);
 
     const syncAuthState = async () => {
       const response = await checkIfTokenValid();
-
+      setLoading(false);
       if (!isMounted) {
         return;
       }
@@ -39,13 +43,23 @@ function App() {
   // useEffect for getting user info after user refreshes page
   useEffect(() => {
     const fetchUser = async () => {
+      setLoading(true);
       const user = await loadUserInfo();
+      setLoading(false);
       if (user) {
         dispatch(userInfoActions.storeUserInfo(user));
       }
     };
     fetchUser();
   }, [dispatch]);
+
+  if (loading) {
+    return (
+      <>
+        <LoadingSpinner />
+      </>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-950 text-slate-50 font-sans selection:bg-indigo-500/30">

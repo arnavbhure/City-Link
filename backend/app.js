@@ -2,7 +2,8 @@ require("dotenv").config();
 const express = require("express");
 const authRouter = require("./routes/authRouter");
 const jwtRouter = require("./routes/jwtTokenVerificationRouter");
-const app = express();
+const { app, server } = require("./config/socket");
+const { connectDB } = require("./config/mongodb");
 const cors = require("cors");
 const verificationRouter = require("./routes/verificationRouter");
 const completeProfileRouter = require("./routes/completeProfileRouter");
@@ -13,6 +14,11 @@ const sendHouseListingsRouter = require("./routes/sendHouseListingsRouter");
 const viewProfileRouter = require("./routes/viewprofileRouter");
 const contactUsRouter = require("./routes/contactUsRouter");
 const editProfileRouter = require("./routes/editProfileRouter");
+const dotenv = require("dotenv");
+const cookieParser = require("cookie-parser");
+
+dotenv.config();
+app.use(cookieParser());
 
 const PORT = process.env.PORT;
 
@@ -54,6 +60,7 @@ app.get("/ping", (req, res) => {
   res.send("OK");
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
+  connectDB();
 });

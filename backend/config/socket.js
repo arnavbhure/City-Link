@@ -15,7 +15,6 @@ const io = new Server(server, {
     origin: BASE_URL,
     credentials: true,
   },
-  transports: ["websocket"],
 });
 
 const userSocketMap = {};
@@ -25,7 +24,7 @@ const getReceiverSocketId = (receiverId) => {
 };
 
 io.on("connection", (socket) => {
-  const userId = socket.handshake.auth.userId;
+  const userId = socket.user.userId;
 
   if (userId) {
     userSocketMap[userId] = socket.id;

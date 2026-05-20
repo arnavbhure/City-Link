@@ -2,8 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const authRouter = require("./routes/authRouter");
 const jwtRouter = require("./routes/jwtTokenVerificationRouter");
-const { app, server } = require("./config/socket");
-const { connectDB } = require("./config/mongodb");
+const { app, server, io } = require("./config/socket");
 const cors = require("cors");
 const verificationRouter = require("./routes/verificationRouter");
 const completeProfileRouter = require("./routes/completeProfileRouter");
@@ -16,6 +15,8 @@ const contactUsRouter = require("./routes/contactUsRouter");
 const editProfileRouter = require("./routes/editProfileRouter");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
+const { socketAuthMiddleware } = require("./middlewares/socketMiddleware");
+const chatRouter = require("./routes/chat/chatRouter");
 
 dotenv.config();
 app.use(cookieParser());
@@ -24,6 +25,9 @@ const PORT = process.env.PORT;
 
 app.use(express.json());
 app.use(cors());
+
+io.use(socketAuthMiddleware);
+
 // auth router use
 app.use("/api/auth", authRouter);
 app.use("/api/auth", jwtRouter);
@@ -52,15 +56,17 @@ app.use("/api", viewProfileRouter);
 // router for editing user profile
 app.use("/api", editProfileRouter);
 
+// router for chat
+app.use("/api", chatRouter);
+
 //router for contact us form
 app.use("/api", contactUsRouter);
 
 // to keep server running
 app.get("/ping", (req, res) => {
-  res.send("OK");
+  return res.send("OK");
 });
 
 server.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
-  connectDB();
 });

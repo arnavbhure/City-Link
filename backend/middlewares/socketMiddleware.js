@@ -1,17 +1,23 @@
-const { io } = require("../config/socket");
 const verifyUserFromToken = require("../utils/verifyTokenFromUser");
 
-io.use(async (socket, next) => {
+const socketAuthMiddleware = async (socket, next) => {
   try {
-    const token = socket.handshake.auth.token;
+    const token = socket.handshake.auth?.token;
+
+    if (!token) {
+      return next(new Error("Unauthorized"));
+    }
 
     const user = await verifyUserFromToken(token);
 
     socket.user = user;
-    console.log("Authenticated user added to socket:", user);
+
     next();
   } catch (error) {
     console.error("Socket authentication error:", error);
+
     next(new Error("Unauthorized"));
   }
-});
+};
+
+module.exports = { socketAuthMiddleware };

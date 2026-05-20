@@ -1,10 +1,11 @@
 import { io } from "socket.io-client";
 
-const BASE_URL =
-  process.env.NODE_ENV === "development"
+const VITE_API_URL =
+  import.meta.env.MODE === "development"
     ? "http://localhost:3000"
-    : process.env.VITE_API_URL;
-
-export const socket = io(BASE_URL, {
+    : import.meta.env.VITE_API_URL;
+console.log("Environment Mode:", import.meta.env.MODE);
+console.log("Socket BASE_URL:", VITE_API_URL);
+export const socket = io(VITE_API_URL, {
   autoConnect: false,
 });

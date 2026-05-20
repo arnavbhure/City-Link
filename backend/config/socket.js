@@ -8,7 +8,7 @@ const server = http.createServer(app);
 const BASE_URL =
   process.env.NODE_ENV === "development"
     ? "http://localhost:5173"
-    : process.env.BASE_URL;
+    : process.env.FRONTEND_URL;
 
 const io = new Server(server, {
   cors: {

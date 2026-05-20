@@ -2,20 +2,16 @@ const verifyUserFromToken = require("../utils/verifyTokenFromUser");
 
 const authMiddleware = async (req, res, next) => {
   try {
-    const authHeader = req.headers.authorization;
-
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({
-        success: false,
-        message: "Unauthorized",
-      });
-    }
-
-    const token = authHeader.split(" ")[1];
+    const token = req.cookies.token;
 
     const user = await verifyUserFromToken(token);
 
-    console.log("Authenticated user added to req:", user);
+    if (!user.profile_listing_completed) {
+      return res.status(403).json({
+        success: false,
+        message: "Profile listing not completed",
+      });
+    }
 
     req.user = user;
 

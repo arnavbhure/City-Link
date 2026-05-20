@@ -18,13 +18,22 @@ const cookieParser = require("cookie-parser");
 const { socketAuthMiddleware } = require("./middlewares/socketMiddleware");
 const chatRouter = require("./routes/chat/chatRouter");
 
+app.use(
+  cors({
+    origin:
+      process.env.NODE_ENV === "production"
+        ? process.env.FRONTEND_URL
+        : process.env.FRONTEND_URL_DEV,
+    credentials: true,
+  }),
+);
+
 dotenv.config();
-app.use(cookieParser());
 
 const PORT = process.env.PORT;
 
 app.use(express.json());
-app.use(cors());
+app.use(cookieParser());
 
 io.use(socketAuthMiddleware);
 

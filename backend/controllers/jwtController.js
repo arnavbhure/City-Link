@@ -3,11 +3,13 @@ const { getUserById } = require("../models/userModel");
 
 const jwtController = async (req, res) => {
   try {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return;
+    const token = req.cookies.token;
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized. No token provided.",
+      });
     }
-    const token = authHeader.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
     const existingUser = await getUserById(decoded.userId);
 

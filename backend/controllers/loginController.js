@@ -1,50 +1,67 @@
 const { getUserInfoDuringLogin } = require("../models/userModel");
-const { comparePassword, hashPassword } = require("./password_hash");
+const { comparePassword } = require("./password_hash");
 const { createAuthToken } = require("../services/authToken");
 
 const loginController = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const existinguser = await getUserInfoDuringLogin(email);
 
-    if (!existinguser) {
-      return res.status(400).json({
-        message: "Account with this email does not exists . Try Signing up",
+    const existingUser = await getUserInfoDuringLogin(email);
+
+    if (!existingUser) {
+      return res.status(401).json({
+        success: false,
+        message: "Account with this email does not exist",
       });
-    } else if (!existinguser.is_verified) {
-      return res.status(400).json({
+    }
+
+    if (!existingUser.is_verified) {
+      return res.status(403).json({
+        success: false,
         message:
           "Email not verified. Please verify your email before logging in.",
       });
     }
+
     const isPasswordValid = await comparePassword(
       password,
-      existinguser.password_hash,
+      existingUser.password_hash,
     );
 
     if (!isPasswordValid) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Incorrect password" });
+      return res.status(401).json({
+        success: false,
+        message: "Incorrect password",
+      });
     }
 
     const { password_hash, verification_token, created_at, age, ...safeUser } =
-      existinguser;
+      existingUser;
 
     const { token, expiresAt } = createAuthToken(safeUser);
+
+    // store JWT in secure httpOnly cookie
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      path: "/",
+    });
 
     return res.status(200).json({
       success: true,
       message: "Login successful",
-      token,
       expiresAt,
       user: safeUser,
     });
   } catch (err) {
     console.log(err);
-    return res
-      .status(500)
-      .json({ success: false, message: "Internal server error" });
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
   }
 };
 

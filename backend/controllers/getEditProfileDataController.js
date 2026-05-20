@@ -1,9 +1,9 @@
-const getViewProfileModel = require("../models/getViewProfileModel");
+const getEditProfileModel = require("../models/edit-profile-model/getEditProfileModel");
 
 const getEditProfileDataController = async (req, res) => {
   try {
     const id = req.user.id;
-    const response = await getViewProfileModel(id);
+    const response = await getEditProfileModel(id);
     if (!response) {
       return res
         .status(500)

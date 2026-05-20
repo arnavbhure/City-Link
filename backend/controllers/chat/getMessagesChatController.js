@@ -19,6 +19,7 @@ const getMessagesChatController = async (req, res) => {
     // update messages as read
     await readAllMessagesModel(senderId, receiverId);
 
+    // sending all messages between sender and receiver
     const response = await getAllMessagesModel(receiverId, senderId);
     if (!response) {
       return res

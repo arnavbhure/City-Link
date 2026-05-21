@@ -18,6 +18,8 @@ const cookieParser = require("cookie-parser");
 const { socketAuthMiddleware } = require("./middlewares/socketMiddleware");
 const chatRouter = require("./routes/chat/chatRouter");
 
+dotenv.config();
+
 app.use(
   cors({
     origin:
@@ -27,8 +29,6 @@ app.use(
     credentials: true,
   }),
 );
-
-dotenv.config();
 
 const PORT = process.env.PORT;
 

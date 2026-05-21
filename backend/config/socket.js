@@ -24,6 +24,7 @@ const getReceiverSocketId = (receiverId) => {
 };
 
 io.on("connection", (socket) => {
+  console.log("A user connected:", socket.id);
   const userId = socket.user.userId;
 
   if (userId) {

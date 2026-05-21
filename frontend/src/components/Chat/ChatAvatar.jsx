@@ -7,7 +7,11 @@ const getInitials = (name = "") =>
     .join("")
     .toUpperCase();
 
-const ChatAvatar = ({ name, color = "from-indigo-400 to-cyan-300", size = "md" }) => {
+const ChatAvatar = ({
+  name,
+  color = "from-indigo-400 to-cyan-300",
+  size = "md",
+}) => {
   const sizes = {
     sm: "h-9 w-9 text-xs",
     md: "h-11 w-11 text-sm",

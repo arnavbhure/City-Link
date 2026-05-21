@@ -4,6 +4,7 @@ const authRouter = require("./routes/authRouter");
 const jwtRouter = require("./routes/jwtTokenVerificationRouter");
 const { app, server, io } = require("./config/socket");
 const cors = require("cors");
+const { corsOptions } = require("./config/corsOptions");
 const verificationRouter = require("./routes/verificationRouter");
 const completeProfileRouter = require("./routes/completeProfileRouter");
 const sendingRoommateRouter = require("./routes/SendingRoommateRouter");
@@ -20,15 +21,7 @@ const chatRouter = require("./routes/chat/chatRouter");
 
 dotenv.config();
 
-app.use(
-  cors({
-    origin:
-      process.env.NODE_ENV === "production"
-        ? process.env.FRONTEND_URL
-        : process.env.FRONTEND_URL_DEV,
-    credentials: true,
-  }),
-);
+app.use(cors(corsOptions));
 
 const PORT = process.env.PORT;
 

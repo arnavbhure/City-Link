@@ -1,19 +1,15 @@
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
+const { corsOptions, isOriginAllowed } = require("./corsOptions");
 
 const app = express();
 const server = http.createServer(app);
 
-const BASE_URL =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:5173"
-    : process.env.FRONTEND_URL;
-
 const io = new Server(server, {
-  cors: {
-    origin: BASE_URL,
-    credentials: true,
+  cors: corsOptions,
+  allowRequest: (req, callback) => {
+    callback(null, isOriginAllowed(req.headers.origin));
   },
 });
 

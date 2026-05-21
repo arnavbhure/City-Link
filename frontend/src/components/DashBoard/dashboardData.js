@@ -92,7 +92,9 @@ export const getWorkspaceLinks = (user = {}) => [
   {
     icon: PencilLine,
     label: user.profile_listing_completed ? "Edit profile" : "Complete profile",
-    href: user.profile_listing_completed ? "/profile/edit" : "/complete-profile",
+    href: user.profile_listing_completed
+      ? "/profile/edit"
+      : "/complete-profile",
   },
 ];
 
@@ -115,19 +117,23 @@ export const getQuickActions = (user = {}) => [
   },
   {
     icon: Building2,
-    title: "Post a listing",
-    description: "Publish an available space for students looking nearby.",
-    href: "/dashboard/post-listing",
-    cta: "Create listing",
+    title: "Chat with reccommended matches",
+    description: "Chat with students who are a great fit fot you.",
+    href: "/dashboard/chat/:id",
+    cta: "Chat with matches",
     tone: "from-emerald-300/80 via-cyan-300/60 to-transparent",
   },
   {
     icon: user.profile_listing_completed ? PencilLine : CheckCircle2,
-    title: user.profile_listing_completed ? "Refine profile" : "Complete profile",
+    title: user.profile_listing_completed
+      ? "Refine profile"
+      : "Complete profile",
     description: user.profile_listing_completed
       ? "Keep your student details, budget, and lifestyle signals current."
       : "Finish your profile so roommate matching can work properly.",
-    href: user.profile_listing_completed ? "/profile/edit" : "/complete-profile",
+    href: user.profile_listing_completed
+      ? "/profile/edit"
+      : "/complete-profile",
     cta: user.profile_listing_completed ? "Edit profile" : "Finish setup",
     tone: "from-violet-300/80 via-indigo-300/60 to-transparent",
   },

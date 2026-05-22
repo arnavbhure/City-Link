@@ -9,7 +9,7 @@ WITH latest_messages AS (
     )
         sender_id,
         receiver_id,
-        message,
+        TRIM(message) AS message,
         created_at
     FROM messages
     ORDER BY
@@ -21,11 +21,11 @@ WITH latest_messages AS (
 SELECT
     u.id,
 
-    u.full_name AS name,
+    TRIM(u.full_name) AS name,
 
-    u.city as city,
+    LOWER(TRIM(u.city)) AS city,
 
-    lm.message AS "lastMessage",
+    COALESCE(lm.message, '') AS "lastMessage",
 
     lm.created_at AS "lastMessageTime",
 
@@ -61,22 +61,24 @@ AND m.receiver_id = $1
 AND m.is_seen = false
 
 WHERE
-    u.city = (
-        SELECT city
+    LOWER(TRIM(u.city)) = (
+        SELECT LOWER(TRIM(city))
         FROM users
         WHERE id = $1
     )
+
 AND u.id != $1
 
 GROUP BY
     u.id,
     u.full_name,
+    u.city,
     lm.message,
     lm.created_at
 
 ORDER BY
     lm.created_at DESC NULLS LAST,
-    u.full_name ASC;
+    TRIM(u.full_name) ASC;
 `;
   const response = await pool.query(query, [id]);
   return response.rows;

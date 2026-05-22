@@ -1,13 +1,8 @@
 import jwtTokenVerify from "../api/jwtTokenverify";
-import { clearStoredAuth, getAuthToken } from "../utils/auth";
-import { isAuthTokenValid } from "../utils/auth";
+import { clearStoredAuth } from "../utils/auth";
 
 const checkifLoggedIn = async () => {
-  if (!isAuthTokenValid()) {
-    return false;
-  }
-  const token = getAuthToken();
-  const response = await jwtTokenVerify(token);
+  const response = await jwtTokenVerify();
   if (response.success) {
     return true;
   }
@@ -16,11 +11,7 @@ const checkifLoggedIn = async () => {
 };
 
 export const checkIfTokenValid = async () => {
-  if (!isAuthTokenValid()) {
-    return { success: false, user: null };
-  }
-  const token = getAuthToken();
-  const response = await jwtTokenVerify(token);
+  const response = await jwtTokenVerify();
   if (!response.success) {
     clearStoredAuth();
     return { success: false, user: null };

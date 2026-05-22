@@ -12,6 +12,7 @@ const {
 } = require("../validators/login/resendVerificationValidator");
 const sendUserInfoController = require("../controllers/sendUserInfoController");
 const updateOpenForListingController = require("../controllers/updateOpenForListingController");
+const logoutController = require("../controllers/auth/logoutController");
 
 const authRouter = express.Router();
 
@@ -25,6 +26,6 @@ authRouter.post(
 );
 authRouter.get("/getUserInfo", sendUserInfoController);
 authRouter.patch("/open-for-listing", updateOpenForListingController);
-authRouter.post("/logout", (req, res) => {});
+authRouter.post("/logout", logoutController);
 
 module.exports = authRouter;

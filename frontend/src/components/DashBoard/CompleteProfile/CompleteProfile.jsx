@@ -23,8 +23,7 @@ const CompleteProfile = () => {
   const is_profile_completed = useSelector(
     (state) => state.user.profile_listing_completed,
   );
-  console.log(user);
-  console.log("is_profile_completed:", is_profile_completed);
+
   useEffect(() => {
     if (is_profile_completed) {
       navigate("/dashboard");

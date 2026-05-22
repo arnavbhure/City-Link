@@ -5,6 +5,7 @@ import ChatEmptyState from "./ChatEmptyState";
 import ChatSidebar from "./ChatSidebar";
 import { chatMessages } from "./chatMockData";
 import getSidebarUsers from "../../api/chat/getSidebarUsers";
+import LoadingSpinner from "../DashBoard/Loading/LoadingSpinner";
 
 const MotionDiv = motion.div;
 
@@ -16,10 +17,15 @@ const getCurrentTime = () =>
 
 const ChatPage = () => {
   const [chatContacts, setChatContacts] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  // for getting sidebar users;
   useEffect(() => {
     const fetchContacts = async () => {
+      setLoading(true);
       const response = await getSidebarUsers();
       setChatContacts(response.data);
+      setLoading(false);
     };
 
     fetchContacts();
@@ -35,7 +41,7 @@ const ChatPage = () => {
     if (!query) return chatContacts;
 
     return chatContacts.filter((chat) =>
-      [chat.name, chat.role, chat.location, chat.lastMessage]
+      [(chat.name, chat.role, chat.city, chat.lastMessage)]
         .join(" ")
         .toLowerCase()
         .includes(query),
@@ -65,6 +71,14 @@ const ChatPage = () => {
     }));
     setDraft("");
   };
+
+  if (loading) {
+    return (
+      <>
+        <LoadingSpinner />
+      </>
+    );
+  }
 
   return (
     <div className="relative flex h-[100dvh] overflow-hidden bg-slate-950 px-4 pb-4 pt-28 text-white sm:px-6 sm:pt-32 lg:px-8">

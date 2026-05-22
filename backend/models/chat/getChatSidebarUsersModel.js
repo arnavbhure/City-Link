@@ -23,6 +23,8 @@ SELECT
 
     u.full_name AS name,
 
+    u.city as city,
+
     lm.message AS "lastMessage",
 
     lm.created_at AS "lastMessageTime",

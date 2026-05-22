@@ -1,7 +1,4 @@
-const {
-  getUserById,
-  updateOpenForListing,
-} = require("../models/userModel");
+const { getUserById, updateOpenForListing } = require("../models/userModel");
 const decodeUserId = require("../services/decodeUserId");
 
 const updateOpenForListingController = async (req, res) => {
@@ -34,12 +31,15 @@ const updateOpenForListingController = async (req, res) => {
 
     const updatedUser = await updateOpenForListing(userId, open_for_listing);
 
+    const { password_hash, created_at, age, verification_token, ...safeUser } =
+      updatedUser;
+
     return res.status(200).json({
       success: true,
       message: open_for_listing
         ? "Your profile is now visible in the roommates list"
         : "Your profile is now hidden from the roommates list",
-      user: updatedUser,
+      user: safeUser,
     });
   } catch (err) {
     return res.status(500).json({

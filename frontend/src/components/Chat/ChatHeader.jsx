@@ -2,8 +2,6 @@ import { ArrowLeft, MoreHorizontal } from "lucide-react";
 import ChatAvatar from "./ChatAvatar";
 
 const ChatHeader = ({ chat, onBack }) => {
-  const isOnline = chat.status.toLowerCase() === "online";
-
   return (
     <header className="flex items-center justify-between gap-3 border-b border-white/10 bg-slate-900/80 px-4 py-3 backdrop-blur-sm sm:px-5">
       <div className="flex min-w-0 items-center gap-3">
@@ -23,15 +21,9 @@ const ChatHeader = ({ chat, onBack }) => {
             <h2 className="truncate text-base font-black text-white sm:text-lg">
               {chat.name}
             </h2>
-            <span
-              className={`h-2.5 w-2.5 shrink-0 rounded-full ${
-                isOnline ? "bg-emerald-300" : "bg-slate-500"
-              }`}
-              aria-hidden="true"
-            />
           </div>
           <p className="mt-0.5 truncate text-xs font-medium text-slate-400 sm:text-sm">
-            {chat.status} - {chat.location}
+            {chat.city}
           </p>
         </div>
       </div>

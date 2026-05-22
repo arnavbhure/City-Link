@@ -2,8 +2,10 @@ import { useLayoutEffect, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
 import ChatBubble from "./ChatBubble";
 
-const ChatMessageList = ({ messages }) => {
+const ChatMessageList = () => {
   const scrollRef = useRef(null);
+
+  let messages = [];
 
   useLayoutEffect(() => {
     const scrollElement = scrollRef.current;

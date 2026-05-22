@@ -6,13 +6,6 @@ const authMiddleware = async (req, res, next) => {
 
     const user = await verifyUserFromToken(token);
 
-    if (!user.profile_listing_completed) {
-      return res.status(403).json({
-        success: false,
-        message: "Profile listing not completed",
-      });
-    }
-
     req.user = user;
 
     next();

@@ -119,7 +119,7 @@ export const getQuickActions = (user = {}) => [
     icon: Building2,
     title: "Chat with reccommended matches",
     description: "Chat with students who are a great fit fot you.",
-    href: "/dashboard/chat/:id",
+    href: "/dashboard/chat",
     cta: "Chat with matches",
     tone: "from-emerald-300/80 via-cyan-300/60 to-transparent",
   },

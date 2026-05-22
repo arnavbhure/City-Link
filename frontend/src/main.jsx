@@ -49,7 +49,7 @@ const router = createBrowserRouter([
           { path: "dashboard/explore-roomates", element: <ExploreRoomates /> },
           { path: "dashboard/explore-housing", element: <ExploreHousing /> },
           { path: "dashboard/post-listing", element: <PostListing /> },
-          { path: "dashboard/chat/:id", element: <ChatPage /> },
+          { path: "dashboard/chat", element: <ChatPage /> },
           { path: "/complete-profile", element: <CompleteProfile /> },
           { path: "/view-profile/:id", element: <UserProfilePage /> },
           { path: "/profile/edit", element: <EditProfile /> },

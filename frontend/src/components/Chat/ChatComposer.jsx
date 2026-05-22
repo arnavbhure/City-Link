@@ -6,6 +6,17 @@ const ChatComposer = ({ value, onChange, onSend, disabled = false }) => {
     onSend();
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key !== "Enter") return;
+    if (event.shiftKey || event.isComposing) return;
+
+    event.preventDefault();
+
+    if (disabled || !value.trim()) return;
+
+    onSend();
+  };
+
   return (
     <form
       onSubmit={handleSubmit}
@@ -15,6 +26,7 @@ const ChatComposer = ({ value, onChange, onSend, disabled = false }) => {
         <textarea
           value={value}
           onChange={(event) => onChange(event.target.value)}
+          onKeyDown={handleKeyDown}
           rows={1}
           placeholder="Type a message"
           className="p-4 max-h-32 min-h-10 flex-1 resize-none bg-transparent py-2 text-sm leading-6 text-white outline-none placeholder:text-slate-500"

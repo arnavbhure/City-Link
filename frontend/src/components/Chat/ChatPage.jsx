@@ -1,83 +1,94 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import ChatConversation from "./ChatConversation";
 import ChatEmptyState from "./ChatEmptyState";
 import ChatSidebar from "./ChatSidebar";
-import { chatMessages } from "./chatMockData";
-import getSidebarUsers from "../../api/chat/getSidebarUsers";
 import LoadingSpinner from "../DashBoard/Loading/LoadingSpinner";
+import useChatContacts from "./hooks/useChatContacts";
+import useChatMessages from "./hooks/useChatMessages";
+import useChatSocket from "./hooks/useChatSocket";
+import { parseChatId } from "./utils/chatHelpers";
 
 const MotionDiv = motion.div;
 
-const getCurrentTime = () =>
-  new Intl.DateTimeFormat("en", {
-    hour: "numeric",
-    minute: "2-digit",
-  }).format(new Date());
-
 const ChatPage = () => {
-  const [chatContacts, setChatContacts] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  // for getting sidebar users;
-  useEffect(() => {
-    const fetchContacts = async () => {
-      setLoading(true);
-      const response = await getSidebarUsers();
-      setChatContacts(response.data);
-      setLoading(false);
-    };
-
-    fetchContacts();
-  }, []);
-
+  const { id: routeChatId } = useParams();
+  const currentUserId = useSelector((state) => state.isLoggedIn.user_id);
+  const { chatContacts, loadingContacts } = useChatContacts();
   const [selectedChatId, setSelectedChatId] = useState(null);
   const [searchValue, setSearchValue] = useState("");
   const [draft, setDraft] = useState("");
-  const [localMessages, setLocalMessages] = useState(chatMessages);
+  const { messagesByChatId, loadingMessages } = useChatMessages({
+    selectedChatId,
+    currentUserId,
+  });
+  const { sendMessage } = useChatSocket({ selectedChatId, currentUserId });
+
+  const chatKey = selectedChatId ? String(selectedChatId) : null;
+
+  useEffect(() => {
+    const parsedRouteId = parseChatId(routeChatId);
+    if (!parsedRouteId) return;
+
+    const match = chatContacts.find(
+      (chat) => String(chat.id) === String(parsedRouteId),
+    );
+
+    if (match) {
+      setSelectedChatId(match.id);
+    }
+  }, [routeChatId, chatContacts]);
+
+  const sortedChats = useMemo(() => {
+    const next = [...chatContacts];
+
+    next.sort((a, b) => {
+      const aUnread = (a.unreadCount || 0) > 0;
+      const bUnread = (b.unreadCount || 0) > 0;
+
+      if (aUnread !== bUnread) return aUnread ? -1 : 1;
+
+      const aTime = a.lastMessageAt ? new Date(a.lastMessageAt).getTime() : 0;
+      const bTime = b.lastMessageAt ? new Date(b.lastMessageAt).getTime() : 0;
+
+      if (aTime !== bTime) return bTime - aTime;
+
+      return a.name.localeCompare(b.name);
+    });
+
+    return next;
+  }, [chatContacts]);
 
   const filteredChats = useMemo(() => {
     const query = searchValue.trim().toLowerCase();
-    if (!query) return chatContacts;
+    if (!query) return sortedChats;
 
-    return chatContacts.filter((chat) =>
-      [(chat.name, chat.role, chat.city, chat.lastMessage)]
+    return sortedChats.filter((chat) =>
+      [chat.name, chat.city, chat.lastMessage]
+        .filter(Boolean)
         .join(" ")
         .toLowerCase()
         .includes(query),
     );
-  }, [searchValue, chatContacts]);
+  }, [searchValue, sortedChats]);
 
-  const activeChat = chatContacts.find((chat) => chat.id === selectedChatId);
-  const activeMessages = selectedChatId
-    ? localMessages[selectedChatId] || []
-    : [];
+  const activeChat = chatContacts.find(
+    (chat) => String(chat.id) === String(selectedChatId),
+  );
+  const activeMessages = chatKey ? messagesByChatId[chatKey] || [] : [];
 
-  const handleSend = () => {
+  const handleSend = useCallback(() => {
     const text = draft.trim();
     if (!selectedChatId || !text) return;
 
-    setLocalMessages((currentMessages) => ({
-      ...currentMessages,
-      [selectedChatId]: [
-        ...(currentMessages[selectedChatId] || []),
-        {
-          id: `${selectedChatId}-${Date.now()}`,
-          sender: "me",
-          text,
-          time: getCurrentTime(),
-        },
-      ],
-    }));
+    sendMessage(selectedChatId, text);
     setDraft("");
-  };
+  }, [draft, selectedChatId, sendMessage]);
 
-  if (loading) {
-    return (
-      <>
-        <LoadingSpinner />
-      </>
-    );
+  if (loadingContacts && chatContacts.length === 0) {
+    return <LoadingSpinner />;
   }
 
   return (
@@ -106,6 +117,7 @@ const ChatPage = () => {
             onSelectChat={setSelectedChatId}
             searchValue={searchValue}
             onSearchChange={setSearchValue}
+            isLoading={loadingContacts}
             className={activeChat ? "hidden md:flex" : "flex"}
           />
 
@@ -117,7 +129,7 @@ const ChatPage = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.18 }}
-                className="min-h-0 min-w-0 flex-1 md:h-full"
+                className="relative min-h-0 min-w-0 flex-1 md:h-full"
               >
                 <ChatConversation
                   chat={activeChat}
@@ -127,6 +139,11 @@ const ChatPage = () => {
                   onSend={handleSend}
                   onBack={() => setSelectedChatId(null)}
                 />
+                {loadingMessages && activeMessages.length === 0 ? (
+                  <div className="absolute inset-x-0 top-20 mx-auto w-fit rounded-full border border-white/10 bg-slate-950/70 px-3 py-1 text-xs font-semibold text-slate-400">
+                    Loading messages...
+                  </div>
+                ) : null}
               </MotionDiv>
             ) : (
               <MotionDiv

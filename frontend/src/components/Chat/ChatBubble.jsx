@@ -29,7 +29,6 @@ const ChatBubble = ({ message }) => {
           )}
         >
           <span>{message.time}</span>
-          {message.status && <span>{message.status}</span>}
         </div>
       </div>
     </MotionDiv>

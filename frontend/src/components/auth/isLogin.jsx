@@ -4,13 +4,15 @@ import { isLoginActions } from "../../store/isLoggedIn";
 import { clearStoredAuth } from "../../utils/auth";
 import { useNavigate } from "react-router-dom";
 import ProfileDropdown from "./profileDropdown";
+import api from "../../api/axios";
 
 export const LoggedInUserMenu = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleOnLogout = () => {
+  const handleOnLogout = async () => {
     dispatch(isLoginActions.removeLoginState());
+    await api.post("/auth/logout");
     clearStoredAuth();
     navigate("/login");
   };

@@ -25,5 +25,6 @@ authRouter.post(
 );
 authRouter.get("/getUserInfo", sendUserInfoController);
 authRouter.patch("/open-for-listing", updateOpenForListingController);
+authRouter.post("/logout", (req, res) => {});
 
 module.exports = authRouter;

@@ -1,6 +1,7 @@
 import { Search, SlidersHorizontal } from "lucide-react";
 import ChatListItem from "./ChatListItem";
 import ChatSkeleton from "./ChatSkeleton";
+import { gradients } from "./utils/util";
 
 const ChatSidebar = ({
   chats,
@@ -51,12 +52,13 @@ const ChatSidebar = ({
         {isLoading ? (
           <ChatSkeleton />
         ) : chats.length > 0 ? (
-          chats.map((chat) => (
+          chats.map((chat, index) => (
             <ChatListItem
               key={chat.id}
               chat={chat}
               isActive={chat.id === selectedChatId}
               onSelect={onSelectChat}
+              gradient={gradients[index % gradients.length]}
             />
           ))
         ) : (

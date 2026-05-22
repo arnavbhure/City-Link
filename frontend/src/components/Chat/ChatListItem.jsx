@@ -4,7 +4,7 @@ import ChatAvatar from "./ChatAvatar";
 
 const MotionButton = motion.button;
 
-const ChatListItem = ({ chat, isActive, onSelect }) => {
+const ChatListItem = ({ chat, isActive, onSelect, gradient }) => {
   return (
     <MotionButton
       type="button"
@@ -17,15 +17,12 @@ const ChatListItem = ({ chat, isActive, onSelect }) => {
           : "border-transparent bg-transparent hover:border-white/10 hover:bg-white/[0.06]",
       )}
     >
-      <ChatAvatar name={chat.name} color={chat.avatarColor} />
+      <ChatAvatar name={chat.name} color={gradient} />
 
       <div className="min-w-0 flex-1">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <p className="truncate text-sm font-bold text-white">{chat.name}</p>
-            <p className="mt-0.5 truncate text-xs font-medium text-indigo-200/80">
-              {chat.role}
-            </p>
           </div>
           <span className="shrink-0 text-xs font-medium text-slate-500">
             {chat.lastMessageTime}

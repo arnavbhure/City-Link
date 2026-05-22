@@ -1,9 +1,10 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import ChatConversation from "./ChatConversation";
 import ChatEmptyState from "./ChatEmptyState";
 import ChatSidebar from "./ChatSidebar";
-import { chatContacts, chatMessages } from "./chatMockData";
+import { chatMessages } from "./chatMockData";
+import getSidebarUsers from "../../api/chat/getSidebarUsers";
 
 const MotionDiv = motion.div;
 
@@ -14,6 +15,16 @@ const getCurrentTime = () =>
   }).format(new Date());
 
 const ChatPage = () => {
+  const [chatContacts, setChatContacts] = useState([]);
+  useEffect(() => {
+    const fetchContacts = async () => {
+      const response = await getSidebarUsers();
+      setChatContacts(response.data);
+    };
+
+    fetchContacts();
+  }, []);
+
   const [selectedChatId, setSelectedChatId] = useState(null);
   const [searchValue, setSearchValue] = useState("");
   const [draft, setDraft] = useState("");
@@ -29,7 +40,7 @@ const ChatPage = () => {
         .toLowerCase()
         .includes(query),
     );
-  }, [searchValue]);
+  }, [searchValue, chatContacts]);
 
   const activeChat = chatContacts.find((chat) => chat.id === selectedChatId);
   const activeMessages = selectedChatId
@@ -67,9 +78,6 @@ const ChatPage = () => {
               Messages
             </h1>
           </div>
-          <p className="max-w-xl text-sm leading-6 text-slate-400 sm:text-right">
-            Keep roommate and housing conversations organized in one calm space.
-          </p>
         </div>
 
         <MotionDiv

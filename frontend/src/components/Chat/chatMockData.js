@@ -9,7 +9,7 @@ export const chatContacts = [
     lastMessage: "The flat near FC Road looks good. Should we shortlist it?",
     lastMessageTime: "2m",
     avatarColor: "from-indigo-400 to-cyan-300",
-  },
+  }, // todo:id,name,unreadCount,lastMessage,lastMessageTime,
   {
     id: "aarav",
     name: "Aarav Mehta",

@@ -11,7 +11,7 @@ const QuickActions = ({ user }) => {
     <SectionCard
       eyebrow="Primary actions"
       title="Start with the next useful step"
-      description="."
+      description=""
     >
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {actions.map((action) => (

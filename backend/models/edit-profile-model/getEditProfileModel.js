@@ -10,6 +10,7 @@ const getEditProfileModel = async (id) => {
     u.clg_year,
     u.city,
     u.email,
+    u.profile_listing_completed,
 
     p.budget_min,
     p.budget_max,

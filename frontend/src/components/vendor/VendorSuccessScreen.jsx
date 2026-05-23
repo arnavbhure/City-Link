@@ -40,25 +40,15 @@ const VendorSuccessScreen = ({ onViewListing, shareUrl }) => {
         WhatsApp.
       </p>
 
-      <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-        <button
-          type="button"
-          onClick={onViewListing}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5 font-semibold text-slate-950 transition hover:bg-slate-200 sm:w-auto"
-        >
-          View Listing
-          <ArrowRight className="h-4 w-4" />
-        </button>
-        <a
-          href={shareUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-7 py-3.5 font-semibold text-white transition hover:bg-white/10 sm:w-auto"
-        >
-          <MessageCircle className="h-4 w-4" />
-          Share on WhatsApp
-        </a>
-      </div>
+      <a
+        href={shareUrl}
+        target="_blank"
+        rel="noreferrer"
+        className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-7 py-3.5 font-semibold text-white transition hover:bg-white/10 sm:w-auto"
+      >
+        <MessageCircle className="h-4 w-4" />
+        Share on WhatsApp
+      </a>
     </MotionDiv>
   );
 };

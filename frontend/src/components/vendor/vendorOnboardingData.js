@@ -1,11 +1,4 @@
-import {
-  Bike,
-  Home,
-  Shirt,
-  Truck,
-  Utensils,
-  Wifi,
-} from "lucide-react";
+import { Bike, Home, Shirt, Truck, Utensils, Wifi } from "lucide-react";
 
 export const vendorSteps = [
   "Welcome",
@@ -36,7 +29,7 @@ export const vendorCategories = [
     accent: "from-cyan-300/20 to-indigo-400/10",
   },
   {
-    id: "pg",
+    id: "pg_hostel",
     name: "PG/Hostel",
     shortName: "PG",
     icon: Home,
@@ -60,7 +53,7 @@ export const vendorCategories = [
     accent: "from-blue-300/20 to-violet-400/10",
   },
   {
-    id: "bike",
+    id: "bike_rental",
     name: "Bike Rental",
     shortName: "Bike",
     icon: Bike,
@@ -79,29 +72,46 @@ export const initialBusinessInfo = {
   description: "",
 };
 
-export const initialCategoryDetails = {
-  mealType: "Veg only",
-  pricing: "",
-  mealTimings: "",
-  deliveryAreas: "",
-  pickupDrop: "Both pickup and drop",
-  pricePerKg: "",
-  turnaroundTime: "",
-  laundryServices: "",
-  rentRange: "",
-  occupancy: "Co-ed",
-  furnished: "Fully furnished",
-  sharingType: "Single and sharing",
-  vehicleType: "Mini truck",
-  startingPrice: "",
-  cityCoverage: "",
-  helpersAvailable: "Helpers available",
-  planSpeed: "",
-  monthlyPrice: "",
-  installationTime: "",
-  serviceAreas: "",
-  vehicleOptions: "",
-  pricingModel: "",
-  documentsNeeded: "",
-  availabilityAreas: "",
+export const categoryDetailDefaults = {
+  tiffin: {
+    mealType: "Veg only",
+    pricing: "",
+    mealTimings: "",
+    deliveryAreas: "",
+  },
+  laundry: {
+    pickupDrop: "Both pickup and drop",
+    pricePerKg: "",
+    turnaroundTime: "",
+    laundryServices: "",
+  },
+  pg_hostel: {
+    rentRange: "",
+    occupancy: "Co-ed",
+    furnished: "Fully furnished",
+    sharingType: "Single and sharing",
+  },
+  movers: {
+    vehicleType: "Mini truck",
+    startingPrice: "",
+    cityCoverage: "",
+    helpersAvailable: "Helpers available",
+  },
+  wifi: {
+    planSpeed: "",
+    monthlyPrice: "",
+    installationTime: "",
+    serviceAreas: "",
+  },
+  bike_rental: {
+    vehicleOptions: "",
+    pricingModel: "",
+    documentsNeeded: "",
+    availabilityAreas: "",
+  },
+};
+
+export const getCategoryDefaultDetails = (categoryId) => {
+  const defaults = categoryDetailDefaults[categoryId] || {};
+  return { ...defaults };
 };

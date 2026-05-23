@@ -9,6 +9,9 @@ import {
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import { toast } from "react-hot-toast";
+import createVendorListing from "../../api/vendor/createVendorListing";
 import VendorAuthCard from "../../components/vendor/auth/VendorAuthCard";
 import VendorAuthHeader from "../../components/vendor/auth/VendorAuthHeader";
 import VendorOtpInput from "../../components/vendor/auth/VendorOtpInput";
@@ -22,8 +25,8 @@ import VendorStepIndicator from "../../components/vendor/VendorStepIndicator";
 import VendorSuccessScreen from "../../components/vendor/VendorSuccessScreen";
 import VendorTextarea from "../../components/vendor/VendorTextarea";
 import {
+  getCategoryDefaultDetails,
   initialBusinessInfo,
-  initialCategoryDetails,
   vendorCategories,
   vendorSteps,
 } from "../../components/vendor/vendorOnboardingData";
@@ -33,22 +36,19 @@ import MoversForm from "../../components/vendor/categoryForms/MoversForm";
 import PGForm from "../../components/vendor/categoryForms/PGForm";
 import TiffinForm from "../../components/vendor/categoryForms/TiffinForm";
 import WifiForm from "../../components/vendor/categoryForms/WifiForm";
+import { auth } from "../../services/firebase";
 
 const categoryForms = {
   tiffin: TiffinForm,
   laundry: LaundryForm,
-  pg: PGForm,
+  pg_hostel: PGForm,
   movers: MoversForm,
   wifi: WifiForm,
-  bike: BikeRentalForm,
+  bike_rental: BikeRentalForm,
 };
 
 const MotionDiv = motion.div;
-
-const authDelay = (duration = 700) =>
-  new Promise((resolve) => {
-    window.setTimeout(resolve, duration);
-  });
+const recaptchaContainerId = "vendor-recaptcha";
 
 const formatVerifiedPhone = (countryCode, phoneNumber) =>
   `${countryCode} ${phoneNumber}`.trim();
@@ -130,10 +130,13 @@ const VendorOnboarding = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState("tiffin");
   const [businessInfo, setBusinessInfo] = useState(initialBusinessInfo);
   const [categoryDetails, setCategoryDetails] = useState(
-    initialCategoryDetails,
+    getCategoryDefaultDetails("tiffin"),
   );
   const [photos, setPhotos] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const photosRef = useRef(photos);
+  const recaptchaRef = useRef(null);
+  const confirmationRef = useRef(null);
 
   useEffect(() => {
     photosRef.current = photos;
@@ -168,6 +171,18 @@ const VendorOnboarding = () => {
   );
 
   const CategoryForm = categoryForms[selectedCategoryId];
+
+  useEffect(() => {
+    setCategoryDetails(getCategoryDefaultDetails(selectedCategoryId));
+  }, [selectedCategoryId]);
+
+  useEffect(() => {
+    return () => {
+      if (recaptchaRef.current?.clear) {
+        recaptchaRef.current.clear();
+      }
+    };
+  }, []);
 
   const handleBusinessChange = (event) => {
     const { name, value } = event.target;
@@ -205,6 +220,19 @@ const VendorOnboarding = () => {
     }));
   };
 
+  const initRecaptcha = () => {
+    if (recaptchaRef.current) {
+      return recaptchaRef.current;
+    }
+
+    recaptchaRef.current = new RecaptchaVerifier(auth, recaptchaContainerId, {
+      size: "invisible",
+    });
+
+    recaptchaRef.current.render();
+    return recaptchaRef.current;
+  };
+
   const sendOtp = async () => {
     if (vendorAuth.phoneNumber.length < 8 || vendorAuth.isSending) {
       return;
@@ -215,15 +243,31 @@ const VendorOnboarding = () => {
       isSending: true,
     }));
 
-    await authDelay();
+    try {
+      const appVerifier = initRecaptcha();
+      const fullNumber = `${vendorAuth.countryCode}${vendorAuth.phoneNumber}`;
+      confirmationRef.current = await signInWithPhoneNumber(
+        auth,
+        fullNumber,
+        appVerifier,
+      );
 
-    setVendorAuth((current) => ({
-      ...current,
-      otp: "",
-      phase: "otp",
-      isSending: false,
-      resendSeconds: 30,
-    }));
+      setVendorAuth((current) => ({
+        ...current,
+        otp: "",
+        phase: "otp",
+        isSending: false,
+        resendSeconds: 30,
+      }));
+      toast.success("OTP sent successfully");
+    } catch (error) {
+      console.error("OTP send failed:", error);
+      setVendorAuth((current) => ({
+        ...current,
+        isSending: false,
+      }));
+      toast.error("Failed to send OTP. Please try again.");
+    }
   };
 
   const resendOtp = async () => {
@@ -236,18 +280,39 @@ const VendorOnboarding = () => {
       isSending: true,
     }));
 
-    await authDelay(500);
+    try {
+      const appVerifier = initRecaptcha();
+      const fullNumber = `${vendorAuth.countryCode}${vendorAuth.phoneNumber}`;
+      confirmationRef.current = await signInWithPhoneNumber(
+        auth,
+        fullNumber,
+        appVerifier,
+      );
 
-    setVendorAuth((current) => ({
-      ...current,
-      otp: "",
-      isSending: false,
-      resendSeconds: 30,
-    }));
+      setVendorAuth((current) => ({
+        ...current,
+        otp: "",
+        isSending: false,
+        resendSeconds: 30,
+      }));
+      toast.success("OTP resent");
+    } catch (error) {
+      console.error("OTP resend failed:", error);
+      setVendorAuth((current) => ({
+        ...current,
+        isSending: false,
+      }));
+      toast.error("Failed to resend OTP. Please try again.");
+    }
   };
 
   const verifyOtp = async () => {
     if (vendorAuth.otp.length !== 6 || vendorAuth.isVerifying) {
+      return;
+    }
+
+    if (!confirmationRef.current) {
+      toast.error("Please request an OTP first");
       return;
     }
 
@@ -256,33 +321,44 @@ const VendorOnboarding = () => {
       isVerifying: true,
     }));
 
-    await authDelay();
+    try {
+      await confirmationRef.current.confirm(vendorAuth.otp);
 
-    const verifiedPhone = formatVerifiedPhone(
-      vendorAuth.countryCode,
-      vendorAuth.phoneNumber,
-    );
+      const verifiedPhone = formatVerifiedPhone(
+        vendorAuth.countryCode,
+        vendorAuth.phoneNumber,
+      );
 
-    setVendorAuth((current) => ({
-      ...current,
-      phase: "verified",
-      isVerifying: false,
-      verifiedPhone,
-    }));
+      setVendorAuth((current) => ({
+        ...current,
+        phase: "verified",
+        isVerifying: false,
+        verifiedPhone,
+      }));
 
-    setBusinessInfo((current) => ({
-      ...current,
-      phone: current.phone || verifiedPhone,
-      whatsapp: verifiedPhone,
-    }));
+      setBusinessInfo((current) => ({
+        ...current,
+        phone: current.phone || verifiedPhone,
+        whatsapp: verifiedPhone,
+      }));
 
-    window.setTimeout(() => {
-      setCurrentStep(3);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }, 700);
+      toast.success("Phone verified");
+      window.setTimeout(() => {
+        setCurrentStep(3);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }, 700);
+    } catch (error) {
+      console.error("OTP verification failed:", error);
+      setVendorAuth((current) => ({
+        ...current,
+        isVerifying: false,
+      }));
+      toast.error("Invalid OTP. Please try again.");
+    }
   };
 
   const changeVerifiedNumber = () => {
+    confirmationRef.current = null;
     setVendorAuth((current) => ({
       ...current,
       phase: "phone",
@@ -339,23 +415,45 @@ const VendorOnboarding = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const submitListing = () => {
-    const submittedData = {
-      verifiedPhone: vendorAuth.verifiedPhone,
+  const submitListing = async () => {
+    if (isSubmitting) {
+      return;
+    }
+
+    const verifiedPhone =
+      vendorAuth.verifiedPhone || businessInfo.whatsapp || businessInfo.phone;
+
+    const payload = {
       category: selectedCategoryId,
-      categoryName: selectedCategory.name,
-      businessInfo,
-      categoryDetails,
-      photos: photos.map((photo) => ({
-        name: photo.file.name,
-        type: photo.file.type,
-        size: photo.file.size,
-        file: photo.file,
-      })),
+      business_name: businessInfo.businessName,
+      owner_name: businessInfo.ownerName,
+      phone: businessInfo.phone,
+      whatsapp: businessInfo.whatsapp || verifiedPhone,
+      city: businessInfo.city,
+      area: businessInfo.area,
+      description: businessInfo.description,
+      verified_phone: verifiedPhone,
+      category_details: categoryDetails,
+      photos: photos
+        .map((photo) => photo.file?.name || photo.name)
+        .filter(Boolean),
     };
 
-    console.log("Vendor listing submitted:", submittedData);
+    setIsSubmitting(true);
+    const response = await createVendorListing(payload);
 
+    if (!response?.success) {
+      const message =
+        response?.errors?.[0]?.msg ||
+        response?.message ||
+        "Failed to submit listing";
+      toast.error(message);
+      setIsSubmitting(false);
+      return;
+    }
+
+    toast.success("Listing submitted");
+    setIsSubmitting(false);
     setCurrentStep(8);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -526,7 +624,7 @@ const VendorOnboarding = () => {
                   />
 
                   <div className="flex min-w-0 flex-col gap-3 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between">
-                    <span>Demo mode accepts any 6-digit OTP.</span>
+                    <span>Enter the 6-digit code sent to your phone.</span>
                     <button
                       type="button"
                       onClick={resendOtp}
@@ -567,6 +665,10 @@ const VendorOnboarding = () => {
               ) : null}
             </AnimatePresence>
           </VendorAuthCard>
+          <div
+            id={recaptchaContainerId}
+            className="absolute -left-2499.75 top-0"
+          />
         </>
       );
     }
@@ -606,7 +708,7 @@ const VendorOnboarding = () => {
           <StepHeader
             eyebrow="Business information"
             title="Add the details students need first."
-            description="Keep it direct and human. This is what students will see before they message you."
+            description=""
           />
           <div className="grid gap-5 sm:grid-cols-2">
             <VendorFormInput
@@ -745,7 +847,7 @@ const VendorOnboarding = () => {
           <StepHeader
             eyebrow="Listing preview"
             title="Review how your service will appear."
-            description="This preview is local for now. No backend changes are made from this onboarding flow."
+            description="Confirm the details before publishing your live listing."
           />
           <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
             <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.04] p-6">
@@ -782,8 +884,15 @@ const VendorOnboarding = () => {
             currentStep={currentStep}
             onBack={goBack}
             onNext={submitListing}
-            nextLabel="Publish listing"
-            nextIcon={<Send className="h-4 w-4" />}
+            nextLabel={isSubmitting ? "Publishing..." : "Publish listing"}
+            nextIcon={
+              isSubmitting ? (
+                <LoaderCircle className="h-4 w-4 animate-spin" />
+              ) : (
+                <Send className="h-4 w-4" />
+              )
+            }
+            disabled={isSubmitting}
           />
         </>
       );

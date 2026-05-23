@@ -7,10 +7,10 @@ const getDetailTags = (categoryId, details) => {
   const detailMap = {
     tiffin: [details.mealType, details.pricing],
     laundry: [details.pickupDrop, details.turnaroundTime],
-    pg: [details.occupancy, details.rentRange],
+    pg_hostel: [details.occupancy, details.rentRange],
     movers: [details.vehicleType, details.startingPrice],
     wifi: [details.planSpeed, details.monthlyPrice],
-    bike: [details.vehicleOptions, details.pricingModel],
+    bike_rental: [details.vehicleOptions, details.pricingModel],
   };
 
   return (detailMap[categoryId] || []).filter(Boolean).slice(0, 2);
@@ -30,14 +30,21 @@ const getWhatsAppUrl = (phoneNumber) => {
   return `https://wa.me/${digits.length === 10 ? `91${digits}` : digits}`;
 };
 
-const VendorPreviewCard = ({ businessInfo, category, categoryDetails, photos }) => {
+const VendorPreviewCard = ({
+  businessInfo,
+  category,
+  categoryDetails,
+  photos,
+}) => {
   const Icon = category?.icon;
   const imageUrl = photos[0]?.url;
   const tags = [
     category?.shortName || "Service",
     ...getDetailTags(category?.id, categoryDetails),
   ];
-  const location = [businessInfo.area, businessInfo.city].filter(Boolean).join(", ");
+  const location = [businessInfo.area, businessInfo.city]
+    .filter(Boolean)
+    .join(", ");
   const whatsappUrl = getWhatsAppUrl(businessInfo.whatsapp);
 
   return (

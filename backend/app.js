@@ -17,6 +17,7 @@ const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 const { socketAuthMiddleware } = require("./middlewares/socketMiddleware");
 const chatRouter = require("./routes/chat/chatRouter");
+const vendorRoutes = require("./routes/vendor/vendorRoutes");
 
 dotenv.config();
 
@@ -62,6 +63,9 @@ app.use("/api", chatRouter);
 
 //router for contact us form
 app.use("/api", contactUsRouter);
+
+// router for vendor listings
+app.use("/api/vendors", vendorRoutes);
 
 // to keep server running
 app.get("/ping", (req, res) => {

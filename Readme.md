@@ -6,9 +6,7 @@
 
 ---
 
-## 🔗 Live Demo
-
-:contentReference[oaicite:0]{index=0}
+## 🔗 Live Demo: [CityLink](https://citylink-nine.vercel.app/)
 
 ---
 

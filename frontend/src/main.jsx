@@ -23,6 +23,7 @@ import UserProfilePage from "./components/Profile/UserProfilePage.jsx";
 import VendorOnboarding from "./pages/vendor/VendorOnboarding.jsx";
 import EditProfile from "./pages/profile/EditProfile.jsx";
 import ChatPage from "./components/Chat/ChatPage.jsx";
+import BlockedUsers from "./components/DashBoard/BlockedUsers/BlockedUsers.jsx";
 
 if (typeof document !== "undefined") {
   document.documentElement.dataset.theme = "dark";
@@ -50,6 +51,7 @@ const router = createBrowserRouter([
           { path: "dashboard/explore-housing", element: <ExploreHousing /> },
           { path: "dashboard/post-listing", element: <PostListing /> },
           { path: "dashboard/chat", element: <ChatPage /> },
+          { path: "dashboard/blocked-users", element: <BlockedUsers /> },
           { path: "/complete-profile", element: <CompleteProfile /> },
           { path: "/view-profile/:id", element: <UserProfilePage /> },
           { path: "/profile/edit", element: <EditProfile /> },

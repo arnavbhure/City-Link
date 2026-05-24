@@ -69,6 +69,22 @@ WHERE
 
 AND u.id != $1
 
+-- EXCLUDE BLOCKED USERS
+AND NOT EXISTS (
+    SELECT 1
+    FROM blocked_users bu
+    WHERE
+        (
+            bu.blocker_id = $1
+            AND bu.blocked_id = u.id
+        )
+        OR
+        (
+            bu.blocker_id = u.id
+            AND bu.blocked_id = $1
+        )
+)
+
 GROUP BY
     u.id,
     u.full_name,

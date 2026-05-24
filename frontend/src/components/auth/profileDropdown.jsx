@@ -8,6 +8,7 @@ import {
   LifeBuoy,
   LogOut,
   PencilLine,
+  UserX,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -28,6 +29,12 @@ const navigationItems = [
     tone: "cyan",
   },
   {
+    icon: UserX,
+    title: "Blocked users",
+    to: "/dashboard/blocked-users",
+    tone: "rose",
+  },
+  {
     icon: House,
     title: "Home",
     to: "/",
@@ -45,6 +52,7 @@ const iconToneClasses = {
   indigo: "border-indigo-400/20 bg-indigo-500/10 text-indigo-300",
   cyan: "border-cyan-400/20 bg-cyan-500/10 text-cyan-300",
   violet: "border-fuchsia-400/20 bg-fuchsia-500/10 text-fuchsia-300",
+  rose: "border-rose-400/20 bg-rose-500/10 text-rose-300",
 };
 
 const MenuAction = ({ icon, title, tone, onClick, destructive = false }) => {

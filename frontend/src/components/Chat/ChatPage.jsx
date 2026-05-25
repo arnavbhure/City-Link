@@ -88,7 +88,11 @@ const ChatPage = () => {
   }, [draft, selectedChatId, sendMessage]);
 
   if (loadingContacts && chatContacts.length === 0) {
-    return <LoadingSpinner />;
+    return (
+      <div className="mt-20 flex justify-center items-center h-screen">
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   return (

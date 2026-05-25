@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, MoreHorizontal } from "lucide-react";
 import ChatAvatar from "./ChatAvatar";
 import toggleBlockUser from "../../api/chat/BlockUser";
+import { Link } from "react-router-dom";
 
 const ChatHeader = ({ chat, onBack }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -120,6 +121,15 @@ const ChatHeader = ({ chat, onBack }) => {
                 {isBlocking ? "Blocking..." : "Block user"}
               </span>
             </button>
+
+            <Link
+              to={`/view-profile/${chat.id}`}
+              role="menuitem"
+              className="mt-1 block w-full rounded-xl px-3 py-2 text-left text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              View Profile
+            </Link>
           </div>
         )}
       </div>

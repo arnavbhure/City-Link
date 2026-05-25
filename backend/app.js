@@ -17,6 +17,7 @@ const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 const { socketAuthMiddleware } = require("./middlewares/socketMiddleware");
 const chatRouter = require("./routes/chat/chatRouter");
+const { globalLimiter } = require("./middlewares/rateLimiter");
 
 dotenv.config();
 
@@ -28,6 +29,11 @@ app.use(express.json());
 app.use(cookieParser());
 
 io.use(socketAuthMiddleware);
+
+app.set("trust proxy", 1);
+
+//global rate limiter
+app.use(globalLimiter);
 
 // auth router use
 app.use("/api/auth", authRouter);

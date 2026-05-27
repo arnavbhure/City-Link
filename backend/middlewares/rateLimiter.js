@@ -1,13 +1,13 @@
 const rateLimit = require("express-rate-limit");
 
 const globalLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
+  windowMs: 10 * 60 * 1000,
   max: 100,
 });
 
 const authLimiter = rateLimit({
-  windowMs: 10 * 60 * 1000,
-  max: 5,
+  windowMs: 7 * 60 * 1000,
+  max: 6,
 });
 
 const chatLimiter = rateLimit({
@@ -16,7 +16,7 @@ const chatLimiter = rateLimit({
 });
 
 const listingLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000,
+  windowMs: 20 * 60 * 1000,
   max: 5,
 });
 

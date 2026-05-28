@@ -4,11 +4,8 @@ const getMessagesChatController = require("../../controllers/chat/getMessagesCha
 const sendSidebarUsersContoller = require("../../controllers/chat/sendSidebarUsersContoller");
 const blockUserController = require("../../controllers/chat/blockUserController");
 const getBlockedUsersController = require("../../controllers/chat/getBlockedUsersController");
-const { chatLimiter } = require("../../middlewares/rateLimiter");
 
 const chatRouter = express.Router();
-
-chatRouter.use(chatLimiter);
 
 // for sending sidebar users based on their city
 chatRouter.get(

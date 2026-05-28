@@ -13,11 +13,9 @@ const {
 const sendUserInfoController = require("../controllers/sendUserInfoController");
 const updateOpenForListingController = require("../controllers/updateOpenForListingController");
 const logoutController = require("../controllers/auth/logoutController");
-const { authLimiter } = require("../middlewares/rateLimiter");
 
 const authRouter = express.Router();
 
-authRouter.use(authLimiter);
 authRouter.post("/signup", signupValidator, validateRequest, signupController);
 authRouter.post("/login", loginValidator, validateRequest, loginController);
 authRouter.post(

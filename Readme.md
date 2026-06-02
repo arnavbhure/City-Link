@@ -167,7 +167,6 @@ Built using Socket.IO + WebSockets with:
 - 📎 Media & file sharing in chat
 - 🔔 Real-time notifications
 
----
 
 # ❗ Current Limitations
 

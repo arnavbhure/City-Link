@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { Analytics } from "@vercel/analytics/react";
 import Footer from "./components/Footer";
 import { Navbar } from "./components/Navbar";
 import { checkIfTokenValid } from "./services/checkIfLoggedin";
@@ -68,6 +69,7 @@ function App() {
         <Outlet />
       </main>
       <Footer />
+      <Analytics />
     </div>
   );
 }
